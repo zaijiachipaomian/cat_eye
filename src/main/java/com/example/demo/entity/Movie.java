@@ -24,13 +24,13 @@ public class Movie {
 	private String name;
 	//海报
 	private String poster;
-	//导演
-	private String director;
-	//编剧
-	private String writer;
-	//主演
-	private String mainActor;
-	//类型
+//	//导演
+//	private String director;
+//	//编剧
+//	private String writer;
+//	//主演
+//	private String mainActor;
+//	类型
 	//国家区域
 	private String area;
 	//上映日期
@@ -82,12 +82,13 @@ public class Movie {
 	@Fetch(FetchMode.SELECT)
 	private List<MovieRole> movieRoles = new ArrayList<>();
 	
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     private List<Person> persons = new ArrayList<>();
    
-	
-    @ManyToMany(cascade = {CascadeType.PERSIST})
-    private List<Type> tpyes = new ArrayList<>();
+	//类型
+    @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    private List<Type> types = new ArrayList<>();
     
 	public void addPrize(Prize prize) {
 		prize.setMovie(this);
@@ -109,7 +110,7 @@ public class Movie {
     }
 	
     public void addType(Type type) {
-    	tpyes.add(type);
+    	types.add(type);
     }
 	
 	public void addPhoto(Photo photo) {
@@ -136,8 +137,6 @@ public class Movie {
 	public List<Person> getPersons() {
 		return persons;
 	}
-
-	@JsonBackReference
 	public void setPersons(List<Person> persons) {
 		this.persons = persons;
 	}
@@ -160,13 +159,15 @@ public class Movie {
 		this.comments = comments;
 	}
 
-	public List<Type> getTpyes() {
-		return tpyes;
+	
+
+
+	public List<Type> getTypes() {
+		return types;
 	}
 
-	@JsonBackReference
-	public void setTpyes(List<Type> tpyes) {
-		this.tpyes = tpyes;
+	public void setTypes(List<Type> types) {
+		this.types = types;
 	}
 
 	public List<News> getNewsList() {
@@ -210,31 +211,6 @@ public class Movie {
 		this.poster = poster;
 	}
 
-	public String getDirector() {
-		return director;
-	}
-
-	public void setDirector(String director) {
-		this.director = director;
-	}
-
-
-	public String getWriter() {
-		return writer;
-	}
-
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-
-	public String getMainActor() {
-		return mainActor;
-	}
-
-	public void setMainActor(String mainActor) {
-		this.mainActor = mainActor;
-	}
-
 	public String getArea() {
 		return area;
 	}
@@ -275,14 +251,11 @@ public class Movie {
 		this.photos = photos;
 	}
 
-	public Movie(String name, String poster, String director, String writer, String mainActor, String area,
+	public Movie(String name, String poster, String area,
 			String releaseDate, String length, String introduction, String status) {
 		super();
 		this.name = name;
 		this.poster = poster;
-		this.director = director;
-		this.writer = writer;
-		this.mainActor = mainActor;
 		this.area = area;
 		this.releaseDate = releaseDate;
 		this.length = length;
@@ -293,6 +266,19 @@ public class Movie {
 	public Movie() {
 		super();
 	}
+
+
+	@Override
+	public String toString() {
+		return "Movie [Id=" + Id + ", name=" + name + ", poster=" + poster + ", area=" + area + ", releaseDate="
+				+ releaseDate + ", length=" + length + ", introduction=" + introduction + ", status=" + status + "]";
+	}
+
+	
+	
+	
+	
+	
 	
 
 

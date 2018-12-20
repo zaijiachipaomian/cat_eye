@@ -46,5 +46,21 @@ public class Prize {
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
+	public Prize(String name, String logoUrl, String detail) {
+		super();
+		this.name = name;
+		this.logoUrl = logoUrl;
+		this.detail = detail;
+	}
+	public Prize() {
+		super();
+	}
+	@Override
+	public String toString() {
+		return "Prize [id=" + id + ", name=" + name + ", logoUrl=" + logoUrl + ", detail=" + detail + "]";
+	}
+	
+	
+	
 	
 }

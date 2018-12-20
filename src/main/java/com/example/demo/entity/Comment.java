@@ -76,6 +76,26 @@ public class Comment {
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
+
+	
+	
+
+	public Comment(Date date, Float score, String content) {
+		super();
+		this.date = date;
+		this.score = score;
+		this.content = content;
+	}
+
+	public Comment() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", date=" + date + ", score=" + score + ", content=" + content + "]";
+	}
+	
 	
 	
 }
