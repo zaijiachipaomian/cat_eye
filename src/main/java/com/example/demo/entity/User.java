@@ -121,6 +121,12 @@ public class User {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
+
+	@Override
+	public String toString() {
+		return "User [Id=" + Id + ", avator=" + avator + ", username=" + username + ", password=" + password
+				+ ", email=" + email + ", phone=" + phone + ", regDate=" + regDate + ", statu=" + statu + "]";
+	}
 	
 	
 }

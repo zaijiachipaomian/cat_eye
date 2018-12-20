@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +11,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Movie;
+import com.example.demo.entity.MovieRole;
 import com.example.demo.entity.News;
 import com.example.demo.entity.Person;
 import com.example.demo.entity.Photo;
+import com.example.demo.entity.Prize;
 import com.example.demo.entity.Type;
+import com.example.demo.entity.User;
+import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.MovieRepository;
+import com.example.demo.repository.MovieRoleRepository;
+import com.example.demo.repository.NewsRepository;
+import com.example.demo.repository.PhotoRepository;
+import com.example.demo.repository.PrizeRepository;
+import com.example.demo.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,47 +32,149 @@ public class MovieReviewApplicationTests {
 
 	@Autowired
 	MovieRepository movieRepository;
+	@Autowired
+	PhotoRepository photoRepository;
+	@Autowired
+	PrizeRepository prizeRepository;
+	@Autowired
+	NewsRepository newsRepository;
+	@Autowired
+	CommentRepository commentRepository;
+	@Autowired
+	MovieRoleRepository movieRoleRepository;
+	@Autowired
+	UserRepository userRepository;
 	
+	@Test  //多对多测试
+	public void contextLoads6() {
+		//从电影获得类型
+		System.out.println("从电影获得类型");
+		Movie movie = movieRepository.findById(1L).get();
+		System.out.println(movie.getTypes());
+		//从类型获得电影
+		System.out.println("从类型获得电影");
+		Type type = movie.getTypes().get(0);
+		System.out.println(type);
+		List<Movie> movies = type.getMovies();
+		System.out.println(movies);
+		//从电影获得人物
+		System.out.println("从电影获得人物");
+		System.out.println(movie.getPersons());
+		//从人物获得电影
+		System.out.println("从人物获得电影");
+		System.out.println(movie.getPersons().get(0).getMovies());
+	}
+	
+	@Test  //一对多测试
+	public void contextLoads4() {
+		System.out.println("照片");
+		Photo photo = photoRepository.findById(10L).get();
+		System.out.println(photo);
+		System.out.println(photo.getMovie());
+		System.out.println(photo.getMovie().getPhotos());
+		System.out.println("奖项");
+		Prize prize = prizeRepository.findById(20L).get();
+		System.out.println(prize);
+		System.out.println(prize.getMovie());
+		System.out.println(prize.getMovie().getPrizes());
+		System.out.println("资讯");
+		News news = newsRepository.findById(6L).get();
+		System.out.println(news);
+		System.out.println(news.getMovie());
+		System.out.println(news.getMovie().getNewsList());
+		System.out.println("评论");
+		Comment comment = commentRepository.findById(2L).get();
+		System.out.println(comment);
+		System.out.println(comment.getMovie());
+		System.out.println(comment.getMovie().getComments());
+		System.out.println("电影角色");
+		MovieRole movieRole = movieRoleRepository.findById(4L).get();
+		System.out.println(movieRole);
+		System.out.println(movieRole.getMovie());
+		System.out.println(movieRole.getMovie().getMovieRoles());
+		
+	}
+	
+	@Test
+	public void contextLoads5() {
+		//用户、电影、评论，这样可以保证数据是这样的
+		//  id   content  date              score movie_id  user_id
+     //		29	很不错	2018-12-20 17:00:08	10	   1  	     28
+		Movie movie = movieRepository.findById(1L).get();
+		User user = new User();
+		user.setUsername("13538628500");
+		user.setPassword("123456");
+		Comment comment = new Comment(new Date(), 10F, "很不错");
+		user.addComment(comment);
+		user = userRepository.save(user);
+		movie.addComment(comment);
+		movieRepository.save(movie);
+//		
+//		movie.addComment(comment);
+//		userRepository.save(user);
+	}
+	
+	
+	//得到电影后，调用GET方法测试
+	@Test
+	public void contextLoads3() {
+		Movie movie = movieRepository.findById(1L).get();
+		System.out.println(movie.getComments());
+		System.out.println(movie.getNewsList());
+		System.out.println(movie.getPhotos());
+		System.out.println(movie.getPrizes());
+		System.out.println(movie.getMovieRoles());
+		System.out.println(movie.getTypes());
+		System.out.println(movie.getPersons());
+	}
+	
+	//级联插入测试
 	@Test
 	public void contextLoads2() {
 		
 		Movie movie = new Movie("海王",
 				"https://p0.meituan.net/movie/c106904da68edd848afd4a320976d051346321.jpg",
-				"温子仁",
-				"乔夫·琼斯",
-				"李路迪",
 				"美国",
 				"2018-12-18",
 				"134分钟",
 				"海王爸爸好厉害",
 				"正在热映");
-//		movie.setPhotos(photos);
-//		movie.setNewsList(newsList);
-//		movie.setComments(comments);
-//		movie.setPrizes(prizes);
-//		movie.setMovieRoles(movieRoles);
-//		movie.setPersons(persons);
-//		movie.setTpyes(tpyes);
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/9403fa3dba59733ae508c288c3314dd0439945.jpg"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/5d08cde7241c47c29098fb4f6e412454431755.jpg@126w_126h_1e_1c"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/1a7c3163e69bbea88d4a376e1989a750448007.jpg@126w_126h_1e_1c"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/67c1b11171efce62bddd38fa3b45e932462532.jpg@126w_126h_1e_1c"));
 		movie.addPhoto(new Photo("https://p0.meituan.net/movie/a2dd21ca43c5293d9bbbe665942d3d05411150.jpg@126w_126h_1e_1c"));
-		movie.addNews(new News("《海王》劈浪斩海狂收13亿，环保主义备受热议", "/films/news/53168"));
-		movie.addNews(new News("《海王》劈浪斩海狂收13亿，饭制海报惊艳眼球！环保主义备受热议", "/films/news/53130"));
-		movie.addNews(new News("海王金装人偶长这样，像穿玉米装的徐锦江", "/films/news/53092"));
+		movie.addNews(new News("《海王》劈浪斩海狂收13亿，环保主义备受热议", "/films/news/53168","https://p1.meituan.net/movie/0d73818502a3949cb4aa279e75000f4f215026.jpg@140w_86h_1e_1c"));
+		movie.addNews(new News("《海王》劈浪斩海狂收13亿，饭制海报惊艳眼球！环保主义备受热议", "/films/news/53130","https://p1.meituan.net/movie/0d73818502a3949cb4aa279e75000f4f215026.jpg@140w_86h_1e_1c"));
+		movie.addNews(new News("海王金装人偶长这样，像穿玉米装的徐锦江", "/films/news/53092","https://p1.meituan.net/movie/0d73818502a3949cb4aa279e75000f4f215026.jpg@140w_86h_1e_1c"));
 		movie.addPerson(new Person("https://p1.meituan.net/moviemachine/c40fd02a43037cdc83003d0c6a019456195561.jpg@128w_170h_1e_1c",
-							"温子仁", "男", "中国", new Date(), ""));
+							"温子仁", "男", "中国", new Date(), "印尼导演"));
+		movie.addPhoto(new Photo("https://p1.meituan.net/movie/9403fa3dba59733ae508c288c3314dd0439945.jpg@465w_258h_1e_1c"));
+		movie.addPhoto(new Photo("https://p1.meituan.net/movie/5d08cde7241c47c29098fb4f6e412454431755.jpg@126w_126h_1e_1c"));
+		movie.addPhoto(new Photo("https://p1.meituan.net/movie/9403fa3dba59733ae508c288c3314dd0439945.jpg@465w_258h_1e_1c"));
+		movie.addPhoto(new Photo("https://p1.meituan.net/movie/67c1b11171efce62bddd38fa3b45e932462532.jpg@126w_126h_1e_1c"));
+		movie.addPhoto(new Photo("https://p0.meituan.net/movie/a2dd21ca43c5293d9bbbe665942d3d05411150.jpg@126w_126h_1e_1c"));
+		movie.addPrize(new Prize("第67届奥斯卡金像奖", "https://p1.meituan.net/movie/ae0de4faa2366f9c23405c361387fe6f4358.jpg@50w_50h_1e_1c", "提名：最佳影片 / 最佳男主角 / 最佳改编剧本 / 最佳摄影 / 最佳音响效果 / 最佳剪辑 / 最佳原创音乐"));
+		movie.addPrize(new Prize("第19届日本电影学院奖", "https://p0.meituan.net/movie/04d8bf2467f29ea0b72491587f8b34f95687.jpg@50w_50h_1e_1c", "获奖：最佳外语片"));
+		movie.addPrize(new Prize("第42届土星奖", "https://p1.meituan.net/movie/346b977c9348f0c13dc74415ca8294ed4945.jpg@50w_50h_1e_1c", "提名：最佳DVD/蓝光套装"));
+		movie.addType(new Type("剧情"));
+		movie.addType(new Type("爱情"));
+		movie.addMovieRole(new MovieRole("导演", 11L));
+		movie.addMovieRole(new MovieRole("编辑", 11L));
+		movie.addComment(new Comment(new Date(),9.5F, "好看"));
+		movie.addComment(new Comment(new Date(),10F, "不错"));
+		movieRepository.save(movie);
 	}
 	
+	//无视我
 	@Test
 	public void contextLoads() {
 		Movie movie = new Movie();
 		movie.setName("海王");
 		movie.setPoster("https://p0.meituan.net/movie/c106904da68edd848afd4a320976d051346321.jpg");
-		movie.setDirector("温子仁");
-		movie.setWriter("乔夫·琼斯");
-		movie.setMainActor("李路迪");
+//		movie.setDirector("温子仁");
+//		movie.setWriter("乔夫·琼斯");
+//		movie.setMainActor("李路迪");
 		Type type = new Type();
 		Type type2 = new Type();
 		type.setName("虚幻");

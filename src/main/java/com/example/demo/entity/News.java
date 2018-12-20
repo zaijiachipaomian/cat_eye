@@ -33,6 +33,7 @@ public class News {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public String getUrl() {
 		return url;
 	}
@@ -53,14 +54,17 @@ public class News {
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "News [id=" + id + ", url=" + url + ", movie=" + movie + "]";
+		return "News [id=" + id + ", name=" + name + ", url=" + url + ", pic=" + pic + "]";
 	}
-	public News(String name, String url) {
+	public News(String name, String url, String pic) {
 		super();
 		this.name = name;
 		this.url = url;
+		this.pic = pic;
 	}
 	public News() {
 		super();

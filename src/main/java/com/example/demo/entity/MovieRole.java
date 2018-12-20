@@ -17,7 +17,7 @@ public class MovieRole {
 	//角色 -> 导演 、 剪辑等等
 	private String role;
 	
-	//可能一对一
+	//可能多对一
 	private Long personId;
 
 	public Long getId() {
@@ -52,6 +52,24 @@ public class MovieRole {
 	public void setPersonId(Long personId) {
 		this.personId = personId;
 	}
+
+	public MovieRole(String role, Long personId) {
+		super();
+		this.role = role;
+		this.personId = personId;
+	}
+
+	public MovieRole() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "MovieRole [id=" + id + ", role=" + role + ", personId=" + personId + "]";
+	}
+	
+	
+	
 	
 	
 }

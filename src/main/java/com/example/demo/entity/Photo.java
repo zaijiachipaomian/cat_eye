@@ -39,7 +39,7 @@ public class Photo {
 	}
 	@Override
 	public String toString() {
-		return "Photo [id=" + id + ", url=" + url + ", movie=" + movie + "]";
+		return "Photo [id=" + id + ", url=" + url + "]";
 	}
 	public Photo(String url) {
 		super();
