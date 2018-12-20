@@ -78,8 +78,6 @@ public class MovieReviewApplicationTests {
 		movie.addComment(comment);
 		movie.addComment(comment2);
 		movieRepository.save(movie);
-		//movie.set
-		//movieRepository.save();
 	}
 
 }
