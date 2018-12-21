@@ -84,6 +84,7 @@ public class MovieReviewApplicationTests {
 		}
     
 	}
+
 	@Test  //多对多测试
 	public void contextLoads6() {
 		//从电影获得类型
@@ -134,6 +135,20 @@ public class MovieReviewApplicationTests {
 		
 	}
 	
+	//得到电影后，调用GET方法测试
+	@Test
+	public void contextLoads3() {
+		Movie movie = movieRepository.findById(1L).get();
+		System.out.println(movie.getComments());
+		System.out.println(movie.getNewsList());
+		System.out.println(movie.getPhotos());
+		System.out.println(movie.getPrizes());
+		System.out.println(movie.getMovieRoles());
+		System.out.println(movie.getTypes());
+		System.out.println(movie.getPersons());
+	}
+	
+	//级联插入测试
 	@Test
 	public void contextLoads5() {
 		//用户、电影、评论，这样可以保证数据是这样的
@@ -153,19 +168,6 @@ public class MovieReviewApplicationTests {
 //		userRepository.save(user);
 	}
 	
-	
-	//得到电影后，调用GET方法测试
-	@Test
-	public void contextLoads3() {
-		Movie movie = movieRepository.findById(1L).get();
-		System.out.println(movie.getComments());
-		System.out.println(movie.getNewsList());
-		System.out.println(movie.getPhotos());
-		System.out.println(movie.getPrizes());
-		System.out.println(movie.getMovieRoles());
-		System.out.println(movie.getTypes());
-		System.out.println(movie.getPersons());
-	}
 	
 	//级联插入测试
 	@Test
@@ -229,8 +231,6 @@ public class MovieReviewApplicationTests {
 		movie.addComment(comment);
 		movie.addComment(comment2);
 		movieRepository.save(movie);
-		//movie.set
-		//movieRepository.save();
 	}
 
 }
