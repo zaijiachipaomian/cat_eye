@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -23,9 +24,9 @@ public class Person {
 	private String nation;
 	private Date birthday;
 	private String introduction;
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany(mappedBy = "persons",fetch = FetchType.EAGER)
     private List<Movie> movies = new ArrayList<>();
-    public void addPersion(Movie movie) {
+    public void addMovie(Movie movie) {
     	movies.add(movie);
     }
 	public Long getId() {
@@ -73,7 +74,7 @@ public class Person {
 	public List<Movie> getMovies() {
 		return movies;
 	}
-	@JsonBackReference
+	
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
 	}
@@ -88,6 +89,11 @@ public class Person {
 	}
 	public Person() {
 		super();
+	}
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", avator=" + avator + ", name=" + name + ", gender=" + gender + ", nation="
+				+ nation + ", birthday=" + birthday + ", introduction=" + introduction + "]";
 	}
     
 }
