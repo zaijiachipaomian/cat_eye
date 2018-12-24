@@ -138,6 +138,7 @@ public class Movie {
 	public List<Person> getPersons() {
 		return persons;
 	}
+	@JsonBackReference
 	public void setPersons(List<Person> persons) {
 		this.persons = persons;
 	}
@@ -166,7 +167,7 @@ public class Movie {
 	public List<Type> getTypes() {
 		return types;
 	}
-
+	@JsonBackReference
 	public void setTypes(List<Type> types) {
 		this.types = types;
 	}
@@ -174,7 +175,7 @@ public class Movie {
 	public List<News> getNewsList() {
 		return newsList;
 	}
-
+	@JsonBackReference
 	public void setNewsList(List<News> newsList) {
 		this.newsList = newsList;
 	}
@@ -248,6 +249,7 @@ public class Movie {
 		return photos;
 	}
 
+	@JsonBackReference
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
