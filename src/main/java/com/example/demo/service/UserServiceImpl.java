@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import java.nio.file.attribute.UserPrincipal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +28,28 @@ public class UserServiceImpl implements UserService {
 			users=userRepository.save(user);
 		}
 		return users;
+	}
+
+	@Override
+	public void delUser(Long id) {
+		// TODO Auto-generated method stub
+		userRepository.deleteById(id);
+	}
+
+	@Override
+	public User updateUser(User user) {
+		// TODO Auto-generated method stub
+		User users=null;
+		users=userRepository.save(user);
+		return users;
+	}
+
+	@Override
+	public User getUser(Long id) {
+		// TODO Auto-generated method stub
+		User user=null;
+		user=userRepository.findById(id).get();
+		return user;
 	}
 
 }
