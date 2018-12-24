@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Movie;
 import com.example.demo.repository.MovieRepository;
-
+@Service
 public class MovieServiceImpl implements MovieService {
 	
 	@Autowired
