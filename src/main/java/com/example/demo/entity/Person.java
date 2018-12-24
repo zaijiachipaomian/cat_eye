@@ -8,20 +8,24 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Person {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String avator;
 	private String name;
 	private String gender;
 	private String nation;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 	private String introduction;
     @ManyToMany(mappedBy = "persons",fetch = FetchType.EAGER)
