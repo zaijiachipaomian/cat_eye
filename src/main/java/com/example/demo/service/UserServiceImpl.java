@@ -52,4 +52,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public User getUserByPhone(String phone) {
+		// TODO Auto-generated method stub
+		User user=null;
+		user=userRepository.findByPhone(phone);
+		return user;
+	}
+
 }

@@ -7,5 +7,5 @@ import com.example.demo.entity.TodayBoxOffice;
 public interface BoxOfficeService {
 	
 	public List<TodayBoxOffice> getTodayBoxOffice();
-
+	
 }
