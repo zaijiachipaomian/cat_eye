@@ -1,21 +1,13 @@
 package com.example.demo.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
@@ -26,11 +18,19 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	//个人主页
+	@GetMapping("")
+	public String getMe(HttpServletRequest request) {
+		return "login";
+	}
+	
+	//获取登陆页面
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 	
+	//用户登陆
 	@PostMapping("/login")
 	public String login(HttpServletRequest request,String phone,String password,String yzm) {
 		User user=null;
@@ -46,11 +46,13 @@ public class UserController {
 		}
 	}
 	
+	//获取注册页面
 	@GetMapping("/reg")
 	public String register(){
 		return "register";
 	}
 	
+	//用户注册
 	@PostMapping("/reg")
 	public String register(HttpServletRequest request,User user,String yzm) {
 		if(userService.register(user)!=null) {
@@ -63,28 +65,13 @@ public class UserController {
 		}
 	}
 	
-	//个人主页
-	@GetMapping("me")
-	public ModelAndView getMe(HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView("me");
-		HttpSession session=request.getSession();
-		User user=null;
-		user=(User) session.getAttribute("user");
-		modelAndView.addObject("user", user);
-		return modelAndView;
-	}
+	
 	
 	@GetMapping("loginOut")
-	public ModelAndView loginOut() {
-		ModelAndView modelAndView=new ModelAndView("index");
-		
-		return modelAndView;
+	public String loginOut(HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		session.removeAttribute("user");
+		return "index";
 	}
 	
-	@GetMapping("/test1")
-	public ModelAndView test1() {
-		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("key", 12345);
-		return modelAndView;
-	}
 }
