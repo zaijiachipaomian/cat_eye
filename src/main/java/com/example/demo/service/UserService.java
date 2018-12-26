@@ -8,6 +8,7 @@ public interface UserService {
 	public User login(String phone,String password);
 	public User register(User user);
 	public User getUser(Long id);
+	public User getUserByPhone(String phone);
 	public void delUser(Long id);
 	public User updateUser(User user);
 }
