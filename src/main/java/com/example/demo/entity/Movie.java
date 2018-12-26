@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -90,6 +91,8 @@ public class Movie {
    
 	//类型
     @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = { @JoinColumn(name = "type_id")},
+    			inverseJoinColumns = {@JoinColumn(name = "movie_id")})
     private List<Type> types = new ArrayList<>();
     
 	public void addPrize(Prize prize) {
@@ -139,7 +142,7 @@ public class Movie {
 	public List<Person> getPersons() {
 		return persons;
 	}
-	@JsonBackReference
+	//@JsonBackReference
 	public void setPersons(List<Person> persons) {
 		this.persons = persons;
 	}
@@ -168,7 +171,7 @@ public class Movie {
 	public List<Type> getTypes() {
 		return types;
 	}
-	@JsonBackReference
+	//@JsonBackReference
 	public void setTypes(List<Type> types) {
 		this.types = types;
 	}

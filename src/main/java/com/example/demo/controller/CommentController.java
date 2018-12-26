@@ -39,7 +39,7 @@ public class CommentController {
 		Movie movie=null;
 		String result="false";
 		user=(User) session.getAttribute("user");
-		movie=movieService.findById(movie_id);
+		movie=movieService.findMovieById(movie_id);
 		if(commentService.addComment(comment,user,movie)) {
 			result="true";
 		}

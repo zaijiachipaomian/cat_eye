@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Comment {
 	@Id
@@ -74,6 +76,7 @@ public class Comment {
 		return movie;
 	}
 
+	@JsonBackReference
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}

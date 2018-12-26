@@ -20,7 +20,7 @@ public class Type {
 	private Long id;
 	private String name;
     
-    @ManyToMany(mappedBy = "types", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "types", fetch = FetchType.LAZY)
     private List<Movie> movies = new ArrayList<>();
     
     public void addMovie(Movie movie) {
@@ -47,7 +47,7 @@ public class Type {
 		return movies;
 	}
 	
-	//@JsonBackReference
+	@JsonBackReference
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
 	}

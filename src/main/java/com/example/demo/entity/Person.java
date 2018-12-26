@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.Columns;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -25,10 +27,11 @@ public class Person {
 	private String name;
 	private String gender;
 	private String nation;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date birthday;
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String birthday;
+	@Column(length = 1200)
 	private String introduction;
-    @ManyToMany(mappedBy = "persons",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "persons",fetch = FetchType.LAZY)
     private List<Movie> movies = new ArrayList<>();
     public void addMovie(Movie movie) {
     	movies.add(movie);
@@ -63,12 +66,7 @@ public class Person {
 	public void setNation(String nation) {
 		this.nation = nation;
 	}
-	public Date getBirthday() {
-		return birthday;
-	}
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
+	
 	public String getIntroduction() {
 		return introduction;
 	}
@@ -78,11 +76,11 @@ public class Person {
 	public List<Movie> getMovies() {
 		return movies;
 	}
-	
+	@JsonBackReference
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
 	}
-	public Person(String avator, String name, String gender, String nation, Date birthday, String introduction) {
+	public Person(String avator, String name, String gender, String nation, String birthday, String introduction) {
 		super();
 		this.avator = avator;
 		this.name = name;
