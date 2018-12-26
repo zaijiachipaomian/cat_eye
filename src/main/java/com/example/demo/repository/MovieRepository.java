@@ -17,10 +17,18 @@ public interface MovieRepository extends JpaRepository<Movie, Long>{
 	//通过影片状态查询电影
 	public List<Movie> findByStatus(String status);
 	
-	//@Query(nativeQuery = true , value = "select * from type where id = ? ")
-	//@Query(" select t from Type t where t.id = ?1")
-	@Query(nativeQuery = true , value =" select type_id from movie_types where movie_id = ?1  ")
-	Object[] findTypeByMovieId(Long id);
-	//List<Type> findTypesByMovieId(Long id);
+	
+	/**
+	 * 多对多查询，从类型到电影，需要按顺序调用这两个方法
+	 * @param id
+	 * @return
+	 */
+	@Query(nativeQuery = true , value ="select movie_id from movie_types where type_id = ?1")
+	Long[] findMovidIdByTypeId(Long id);
+	
+	@Query(value =" select m from Movie m where m.id in ?1 ")
+	List<Movie> findMovieByMovieId(Long[] ids);
+	
+	
 	
 }
