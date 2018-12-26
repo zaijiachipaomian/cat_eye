@@ -31,7 +31,7 @@ public class Person {
 	private String birthday;
 	@Column(length = 1200)
 	private String introduction;
-    @ManyToMany(mappedBy = "persons",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "persons",fetch = FetchType.LAZY)
     private List<Movie> movies = new ArrayList<>();
     public void addMovie(Movie movie) {
     	movies.add(movie);
@@ -76,7 +76,7 @@ public class Person {
 	public List<Movie> getMovies() {
 		return movies;
 	}
-	
+	@JsonBackReference
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
 	}
