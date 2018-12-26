@@ -65,9 +65,7 @@ public class UserController {
 		}
 	}
 	
-	
-	
-	@GetMapping("loginOut")
+	@GetMapping("/loginOut")
 	public String loginOut(HttpServletRequest request) {
 		HttpSession session=request.getSession();
 		session.removeAttribute("user");

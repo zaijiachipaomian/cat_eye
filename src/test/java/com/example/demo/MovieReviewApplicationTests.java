@@ -14,6 +14,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JsonbTester;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alibaba.fastjson.JSON;
@@ -53,6 +58,30 @@ public class MovieReviewApplicationTests {
 	MovieRoleRepository movieRoleRepository;
 	@Autowired
 	UserRepository userRepository;
+	
+	@Test
+	public void contextLoads9() {
+		Movie movie = movieRepository.findById(248215L).get();
+		Page<Comment> comment;
+		Pageable pageable = new PageRequest(0,5);
+		comment=commentRepository.findByMovie(movie, pageable);
+		System.out.println(comment.getContent());
+	}
+	
+	//分页测试
+	@SuppressWarnings("deprecation")
+	@Test
+	public void contextLoads8() {
+		Page<Comment> comment;
+		Pageable pageable = new PageRequest(0,5);
+		int size=pageable.getPageSize();
+		int pageNumber=pageable.getPageNumber();
+		Movie movie=movieRepository.findById(248215L).get();
+		comment=commentRepository.findByMovie(movie, pageable);
+		System.out.println("size="+size);
+		System.out.println("pageNumber="+pageNumber);
+		System.out.println("comment="+comment.getContent());
+	}
 	
 	//网络请求
 	@Test
@@ -189,8 +218,7 @@ public class MovieReviewApplicationTests {
 		movie.addNews(new News("《海王》劈浪斩海狂收13亿，环保主义备受热议", "/films/news/53168","https://p1.meituan.net/movie/0d73818502a3949cb4aa279e75000f4f215026.jpg@140w_86h_1e_1c"));
 		movie.addNews(new News("《海王》劈浪斩海狂收13亿，饭制海报惊艳眼球！环保主义备受热议", "/films/news/53130","https://p1.meituan.net/movie/0d73818502a3949cb4aa279e75000f4f215026.jpg@140w_86h_1e_1c"));
 		movie.addNews(new News("海王金装人偶长这样，像穿玉米装的徐锦江", "/films/news/53092","https://p1.meituan.net/movie/0d73818502a3949cb4aa279e75000f4f215026.jpg@140w_86h_1e_1c"));
-		movie.addPerson(new Person("https://p1.meituan.net/moviemachine/c40fd02a43037cdc83003d0c6a019456195561.jpg@128w_170h_1e_1c",
-							"温子仁", "男", "中国", "2018-12-26", "印尼导演"));
+		movie.addPerson(new Person("https://p1.meituan.net/moviemachine/c40fd02a43037cdc83003d0c6a019456195561.jpg@128w_170h_1e_1c","温子仁", "男", "中国", "2018-12-26", "印尼导演"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/9403fa3dba59733ae508c288c3314dd0439945.jpg@465w_258h_1e_1c"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/5d08cde7241c47c29098fb4f6e412454431755.jpg@126w_126h_1e_1c"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/9403fa3dba59733ae508c288c3314dd0439945.jpg@465w_258h_1e_1c"));

@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Comment;
@@ -24,12 +24,13 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	MovieRepository movieRepository;
 	@Override
-	public boolean addComment(Comment comment) {
+	public boolean addComment(Comment comment,User user,Movie movie) {
 		// TODO Auto-generated method stub
 		boolean isFlag=false;
-		Comment c=null;
-		c=commentRepository.save(comment);
-		if(c!=null) {
+		if(user!=null&&movie!=null) {
+			user.addComment(comment);
+			movie.addComment(comment);
+			commentRepository.save(comment);
 			isFlag=true;
 		}
 		return isFlag;
@@ -42,51 +43,42 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public Map<String,Object> findCommentByUserId(Long id) {
+	public Page<Comment> findCommentByUserId(Long id,Pageable pageable) {
 		// TODO Auto-generated method stub
-		Map<String,Object> map=new HashMap<String,Object>();
+		Page<Comment> comment=null;
 		User user=null;
-		List<Comment> ls=new ArrayList<Comment>();
 		user=userRepository.findById(id).get();
 		if(user!=null) {
-			ls=commentRepository.findByUser(user);
-			if(ls.size()>0) {
-				map.put("comment",ls);
-			}
+			comment=commentRepository.findByUser(user, pageable);
 		}
-		return map;
+		return comment;
 	}
 
 	@Override
-	public Map<String,Object> findCommentByMovieId(Long id) {
+	public Page<Comment> findCommentByMovieId(Long id,Pageable pageable) {
 		// TODO Auto-generated method stub
-		Map<String,Object> map=new HashMap<String,Object>();
+		Page<Comment> comment=null;
 		Movie movie=null;
 		List<Comment> ls=new ArrayList<Comment>();
 		movie=movieRepository.findById(id).get();
 		if(movie!=null) {
-			ls=commentRepository.findByMovie(movie);
-			if(ls.size()>0) {
-				map.put("comment",ls);
-			}
+			comment= commentRepository.findByMovie(movie,pageable);
+			
 		}
-		return map;
+		return comment;
 	}
 
 	@Override
-	public Map<String, Object> findByMovieOrderByDate(Long id) {
+	public Page<Comment> findByMovieOrderByDate(Long id,Pageable pageable) {
 		// TODO Auto-generated method stub
-		Map<String,Object> map=new HashMap<String,Object>();
+		Page<Comment> comment=null;
 		Movie movie=null;
-		List<Comment> ls=new ArrayList<Comment>();
 		movie=movieRepository.findById(id).get();
 		if(movie!=null) {
-			ls=commentRepository.findByMovieOrderByDate(movie);
-			if(ls.size()>0) {
-				map.put("comment", ls);
-			}
+			comment=commentRepository.findByMovieOrderByDate(movie,pageable);
+			
 		}
-		return null;
+		return comment;
 	}
 
 }
