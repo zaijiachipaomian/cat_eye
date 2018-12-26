@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Movie;
+import com.example.demo.entity.Photo;
 import com.example.demo.repository.MovieRepository;
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -16,11 +17,19 @@ public class MovieServiceImpl implements MovieService {
 	@Autowired
 	MovieRepository movieRepository;
 	@Override
-	public boolean addMovie(Movie movie) {
+	public boolean addMovie(Movie movie , List<String> photoUrlList,String posterUrl) {
 		// TODO Auto-generated method stub
 		boolean isFlag=false;
 		Movie m=null;
+		//List<Photo> photoList = new ArrayList<>();
+		for(String photoUrl : photoUrlList) {
+			movie.addPhoto(new Photo(photoUrl));
+		}
+		movie.setPoster(posterUrl);
+		System.out.println(movie);
+		System.out.println(movie.getPhotos());
 		m=movieRepository.save(movie);
+		System.out.println(m);
 		if(m!=null) {
 			isFlag=true;
 		}
@@ -78,6 +87,12 @@ public class MovieServiceImpl implements MovieService {
 			map.put("movie", ls);
 		}
 		return map;
+	}
+
+	@Override
+	public Movie findMovieById(Long id) {
+		// TODO Auto-generated method stub
+		return movieRepository.findById(id).get();
 	}
 
 }

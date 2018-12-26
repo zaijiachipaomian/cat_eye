@@ -7,7 +7,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -20,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 public class Movie {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 	private String name;
 	//海报
@@ -89,6 +91,8 @@ public class Movie {
    
 	//类型
     @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = { @JoinColumn(name = "type_id")},
+    			inverseJoinColumns = {@JoinColumn(name = "movie_id")})
     private List<Type> types = new ArrayList<>();
     
 	public void addPrize(Prize prize) {
