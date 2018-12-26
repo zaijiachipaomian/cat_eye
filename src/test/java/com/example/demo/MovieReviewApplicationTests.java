@@ -14,6 +14,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JsonbTester;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alibaba.fastjson.JSON;
@@ -53,6 +58,30 @@ public class MovieReviewApplicationTests {
 	MovieRoleRepository movieRoleRepository;
 	@Autowired
 	UserRepository userRepository;
+	
+	@Test
+	public void contextLoads9() {
+		Movie movie = movieRepository.findById(248215L).get();
+		Page<Comment> comment;
+		Pageable pageable = new PageRequest(0,5);
+		comment=commentRepository.findByMovie(movie, pageable);
+		System.out.println(comment.getContent());
+	}
+	
+	//分页测试
+	@SuppressWarnings("deprecation")
+	@Test
+	public void contextLoads8() {
+		Page<Comment> comment;
+		Pageable pageable = new PageRequest(0,5);
+		int size=pageable.getPageSize();
+		int pageNumber=pageable.getPageNumber();
+		Movie movie=movieRepository.findById(248215L).get();
+		comment=commentRepository.findByMovie(movie, pageable);
+		System.out.println("size="+size);
+		System.out.println("pageNumber="+pageNumber);
+		System.out.println("comment="+comment.getContent());
+	}
 	
 	//网络请求
 	@Test
@@ -138,7 +167,7 @@ public class MovieReviewApplicationTests {
 	//得到电影后，调用GET方法测试
 	@Test
 	public void contextLoads3() {
-		Movie movie = movieRepository.findById(1L).get();
+		Movie movie = movieRepository.findById(248215L).get();
 		System.out.println(movie.getComments());
 		System.out.println(movie.getNewsList());
 		System.out.println(movie.getPhotos());

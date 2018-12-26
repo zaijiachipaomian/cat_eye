@@ -80,4 +80,12 @@ public class MovieServiceImpl implements MovieService {
 		return map;
 	}
 
+	@Override
+	public Movie findById(Long id) {
+		// TODO Auto-generated method stub
+		Movie movie=null;
+		movie=movieRepository.findById(id).get();
+		return movie;
+	}
+
 }

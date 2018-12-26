@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		User users=null;
 		User u=null;
+		//判断号码是否已注册
 		u=userRepository.findByPhone(user.getPhone());
 		if(u==null) {
 			users=userRepository.save(user);
