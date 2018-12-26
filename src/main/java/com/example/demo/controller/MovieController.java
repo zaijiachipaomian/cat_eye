@@ -108,15 +108,8 @@ public class MovieController {
 	}
 	@GetMapping("/test/{id}")
 	public Object getMovie2(@PathVariable Long id) {
-		Movie movie = movieRepository.findById(id).get();
-		System.out.println(movie);
-		System.out.println(movie.getComments());
-		System.out.println(movie.getNewsList());
-		System.out.println(movie.getPhotos());
-		System.out.println(movie.getPrizes());
-		System.out.println(movie.getMovieRoles());
-		System.out.println(movie.getTypes());
-		System.out.println(movie.getPersons());
-		return movie;
+		Map<String,Object> map = new HashMap<>();
+		map.put("type", movieRepository.findTypeByMovieId(id));
+		return map;
 	}
 }
