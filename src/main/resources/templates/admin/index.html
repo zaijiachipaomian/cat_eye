@@ -46,106 +46,12 @@
                 <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                     <span class="ng-scope">分类</span>
                 </li>
-                <!-- <li>
-                    <a class="J_menuItem" href="index_v1.html">
-                        <i class="fa fa-home"></i>
-                        <span class="nav-label">主页</span>
-                    </a>
-                </li> -->
+
 
                 <li class="line dk"></li>
 
 
 
-                <!-- <li>
-                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">页面</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="contacts.html">联系人</a>
-                        </li>
-                        <li><a class="J_menuItem" href="profile.html">个人资料</a>
-                        </li>
-                        <li>
-                            <a href="#">项目管理 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="projects.html">项目</a>
-                                </li>
-                                <li><a class="J_menuItem" href="project_detail.html">项目详情</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="J_menuItem" href="teams_board.html">团队管理</a>
-                        </li>
-                        <li><a class="J_menuItem" href="social_feed.html">信息流</a>
-                        </li>
-                        <li><a class="J_menuItem" href="clients.html">客户管理</a>
-                        </li>
-                        <li><a class="J_menuItem" href="file_manager.html">文件管理器</a>
-                        </li>
-                        <li><a class="J_menuItem" href="calendar.html">日历</a>
-                        </li>
-                        <li>
-                            <a href="#">博客 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="blog.html">文章列表</a>
-                                </li>
-                                <li><a class="J_menuItem" href="article.html">文章详情</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="J_menuItem" href="faq.html">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="#">时间轴 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="timeline.html">时间轴</a>
-                                </li>
-                                <li><a class="J_menuItem" href="timeline_v2.html">时间轴v2</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="J_menuItem" href="pin_board.html">标签墙</a>
-                        </li>
-                        <li>
-                            <a href="#">单据 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="invoice.html">单据</a>
-                                </li>
-                                <li><a class="J_menuItem" href="invoice_print.html">单据打印</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="J_menuItem" href="search_results.html">搜索结果</a>
-                        </li>
-                        <li><a class="J_menuItem" href="forum_main.html">论坛</a>
-                        </li>
-                        <li>
-                            <a href="#">即时通讯 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="chat_view.html">聊天窗口</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">登录注册相关 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a href="login.html" target="_blank">登录页面</a>
-                                </li>
-                                <li><a href="login_v2.html" target="_blank">登录页面v2</a>
-                                </li>
-                                <li><a href="register.html" target="_blank">注册页面</a>
-                                </li>
-                                <li><a href="lockscreen.html" target="_blank">登录超时</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="J_menuItem" href="404.html">404页面</a>
-                        </li>
-                        <li><a class="J_menuItem" href="500.html">500页面</a>
-                        </li>
-                        <li><a class="J_menuItem" href="empty_page.html">空白页</a>
-                        </li>
-                    </ul>
-                </li> -->
                 <li class="line dk"></li>
 
 
@@ -167,9 +73,6 @@
                 </li>
 
 
-
-
-
             </ul>
         </div>
     </nav>
@@ -186,6 +89,9 @@
                     </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
+                    <li><a id="login" data-target="#exampleModal" data-toggle="modal">登陆</a>
+                        <li><span id="name"></span><a id="logout">退出</a></li>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                             <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
@@ -290,6 +196,67 @@
 <!-- 第三方插件 -->
 <script src="/static/js/plugins/pace/pace.min.js"></script>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">管理员登陆</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <!--用户名-->
+                    <div class="form-group">
+                        <label for="user-phone" class="control-label col-sm-2">手机号码:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="user-phone" maxlength="20">
+                        </div>
+                    </div>
+                    <br/>
+
+                    <!---密码-->
+                    <div class="form-group">
+                        <label for="user-pwd" class="control-label col-sm-2">密码:</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="user-pwd" maxlength="20">
+                        </div>
+                    </div>
+                    <br/>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="admin-login">登陆</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#admin-login").click(function(){
+            let phone = $("#user-phone").val();
+            let pwd = $("#user-pwd").val();
+
+            let data = {"phone":phone,"pwd":pwd};
+            console.log("data"+data);
+
+            $.post("/admin/login",data, function(data,res){
+                console.log(data .data + res+data.code);
+                if (data.code != 200){
+                    alert(data.data);
+                } else {
+                    $("")
+                }
+
+            });
+
+
+
+        });
+    });
+</script>
 </body>
 
 </html>
