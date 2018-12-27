@@ -81,4 +81,10 @@ public class CommentServiceImpl implements CommentService {
 		return comment;
 	}
 
+	@Override
+	public Comment findCommentById(Long id) {
+		// TODO Auto-generated method stub
+		return commentRepository.findById(id).get();
+	}
+
 }
