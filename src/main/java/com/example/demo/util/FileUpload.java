@@ -28,8 +28,10 @@ public class FileUpload {
         int size = (int) file.getSize();
         System.out.println(fileName + "-->" + size);
         
-        String path = "F:/test" ;
-        File dest = new File(path + "/" + fileName);
+        //String path = "F:/test" ;
+        
+        String path = System.getProperty("user.dir");
+        File dest = new File(path + "/images/" + fileName);
         //System.out.println(dest.getAbsolutePath());
         if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
             dest.getParentFile().mkdir();
@@ -57,7 +59,7 @@ public class FileUpload {
         if(files.isEmpty()){
             return urlList;
         }
-        String path = "F:/test";
+        String path = System.getProperty("user.dir");
         for(MultipartFile file:files){
             int fileType = file.getOriginalFilename().lastIndexOf(".");
             String fileTypeStr = file.getOriginalFilename().substring(fileType, file.getOriginalFilename().length());
@@ -67,7 +69,7 @@ public class FileUpload {
             if(file.isEmpty()){
                 return null;
             }else{        
-                File dest = new File(path + "/" + fileName);
+            	 File dest = new File(path + "/images/" + fileName);
                 if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
                     dest.getParentFile().mkdir();
                 }
