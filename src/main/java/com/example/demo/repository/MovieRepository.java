@@ -3,6 +3,8 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,6 +18,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long>{
 	public List<Movie> findByTypesAndAreaAndReleaseDateOrderByReleaseDate(String types,String area,String relase_date);
 	//通过影片状态查询电影
 	public List<Movie> findByStatus(String status);
+	//通过名字和分页来查询电影
+	public Page<Movie> findByNameContains(String name, Pageable pageable);
+	
+	public Page<Movie> findByTypesId(Long typeId , Pageable pageable);
 	
 	
 	/**
