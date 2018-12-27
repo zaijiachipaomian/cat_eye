@@ -25,8 +25,7 @@ public class IndexController {
 	
 	@ResponseBody
 	@GetMapping("/index_data/todayBoxOffice")
-	public Map<String, Object> getIndexInfor() {
-		Map<String , Object> map = new HashMap<String , Object>();
+	public Object getIndexInfor() {
 		//猫眼票房API
 		String url = "https://box.maoyan.com/promovie/api/box/second.json";
         Connection con = Jsoup.connect(url);
@@ -42,8 +41,7 @@ public class IndexController {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		map.put("todayBoxOffice", resp.body());
-		return map;
+		return resp.body();
 	}
 	
 	@GetMapping("/")

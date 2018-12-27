@@ -22,12 +22,12 @@ public interface MovieRepository extends JpaRepository<Movie, Long>{
 	 * 多对多查询，从类型到电影，需要按顺序调用这两个方法
 	 * @param id
 	 * @return
-	 */
-	@Query(nativeQuery = true , value ="select movie_id from movie_types where type_id = ?1")
-	Long[] findMovidIdByTypeId(Long id);
-	
-	@Query(value =" select m from Movie m where m.id in ?1 ")
-	List<Movie> findMovieByMovieId(Long[] ids);
+	 *///弃用
+//	@Query(nativeQuery = true , value ="select movie_id from movie_types where type_id = ?1")
+//	Long[] findMovidIdByTypeId(Long id);
+//	
+//	@Query(value =" select m from Movie m where m.id in ?1 ")
+//	List<Movie> findMovieByMovieId(Long[] ids);
 	
 	
 	

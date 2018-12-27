@@ -55,11 +55,19 @@ public class MovieControllerAdmin {
 	 * 			length			text		134分钟
 	 * 			introduction	text		我们在这个屯立长大
 	 * 			filesName(图片) 	file		文件		
+	 * 			typeIds(电影类型的ID)text	1,2,3,4,5
 	 */
 	@PostMapping("/add")
 	public String insertOrUpdateMovie(Movie movie ,
 			@RequestParam("fileName")  MultipartFile file,
-			@RequestParam("filesName") List<MultipartFile> files){
+			@RequestParam("filesName") List<MultipartFile> files,
+			@RequestParam("typeIds") List<Long> typeIds,
+			@RequestParam("personRoles") List<Object> movieRoles ){
+		System.out.println(movieRoles);
+		
+		List<Type> types = typeRepository.findAllById(typeIds);
+		movie.setTypes(types);
+		
 		//批量文件上传成功，返回文件的路径加名字的List,否则返回null
 		List<String> urlList = FileUpload.multifileUpload(files);
 		String result = FileUpload.fileUpload(file);
@@ -114,11 +122,11 @@ public class MovieControllerAdmin {
 	@GetMapping("/test/{id}")
 	public Object getMovie2(@PathVariable Long id) {
 		Map<String,Object> map = new HashMap<>();
-		Long[] ids = typeRepository.findTypeIdByMovieId(id);
-		map.put("data",typeRepository.findTypeByTypeId(ids));
-		
-		Long[] ids2 = movieRepository.findMovidIdByTypeId(1L);
-		map.put("data2",movieRepository.findMovieByMovieId(ids2));
+//		Long[] ids = typeRepository.findTypeIdByMovieId(id);
+//		map.put("data",typeRepository.findTypeByTypeId(ids));
+//		
+//		Long[] ids2 = movieRepository.findMovidIdByTypeId(1L);
+//		map.put("data2",movieRepository.findMovieByMovieId(ids2));
 		
 		return map;
 	}

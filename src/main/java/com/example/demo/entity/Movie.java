@@ -49,7 +49,7 @@ public class Movie {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.EAGER)
+	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<Photo> photos = new ArrayList<>();
 	
@@ -57,7 +57,7 @@ public class Movie {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.EAGER)
+	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<News> newsList = new ArrayList<>();
 	
@@ -65,7 +65,7 @@ public class Movie {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.EAGER)
+	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<Comment> comments = new ArrayList<>();
 	
@@ -73,7 +73,7 @@ public class Movie {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.EAGER)
+	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<Prize> prizes = new ArrayList<>();
 	
@@ -81,7 +81,7 @@ public class Movie {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.EAGER)
+	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<MovieRole> movieRoles = new ArrayList<>();
 	
@@ -91,8 +91,8 @@ public class Movie {
    
 	//类型
     @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = { @JoinColumn(name = "type_id")},
-    			inverseJoinColumns = {@JoinColumn(name = "movie_id")})
+    @JoinTable(joinColumns = { @JoinColumn(name = "movie_id")},
+    			inverseJoinColumns = {@JoinColumn(name = "type_id")})
     private List<Type> types = new ArrayList<>();
     
 	public void addPrize(Prize prize) {

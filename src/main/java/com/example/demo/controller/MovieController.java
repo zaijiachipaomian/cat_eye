@@ -46,36 +46,26 @@ public class MovieController {
 	public Map<String,Object> getMovie(@PathVariable Long id) {
 		Map<String,Object> map = new HashMap<>();
 		Movie movie = movieService.findMovieById(id);
-		System.out.println(movie);
 		//类型
-		Long[] typeIds = typeRepository.findTypeIdByMovieId(movie.getId());
-		List<Type> types = typeRepository.findTypeByTypeId(typeIds);
-		movie.setTypes(types);
-		System.out.println(movie.getTypes());
 		//图集
-		System.out.println(movie.getPhotos());
 		map.put("photos",movie.getPhotos());
 		//资讯
-		System.out.println(movie.getNewsList());
 		map.put("news",movie.getNewsList());
 		//演职人员
-		System.out.println(movie.getMovieRoles());
 		map.put("roles",movie.getMovieRoles());
 		//热门短评
 		List<Comment> comments = movie.getComments();
-		System.out.println(comments);
 		map.put("comments",comments);
 		//电影评分
 		Double avg = comments.stream().collect(Collectors.averagingDouble(Comment::getScore));
-		System.out.println(avg);
 		map.put("score",avg);
 		//电影人
-		List<Person> persons = new ArrayList<>();
-		for(MovieRole movieRole : movie.getMovieRoles()) {
-			Person person = personRepository.findById(movieRole.getPersonId()).get();
-			persons.add(person);
-		}
-		movie.setPersons(persons);
+		//List<Person> persons = new ArrayList<>();
+//		for(MovieRole movieRole : movie.getMovieRoles()) {
+//			Person person = personRepository.findById(movieRole.getPersonId()).get();
+//			persons.add(person);
+//		}
+		//movie.setPersons(persons);
 		map.put("movie",movie);
 		return map;
 	}
