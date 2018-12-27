@@ -1,10 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>登陆</title>
+<title>XCCCY</title>
+<meta http-equiv="content-Type" content="text/html" charset="utf-8">
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+
+<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+
 </head>
 <body>
-用户登录
+	<div class="content">
+		<div class="ucSimpleHeader">
+			<div class="trigger">
+				<a href="##">登录</a>
+				<span>&nbsp;|&nbsp;</span>
+				<a href="/user/reg">注册</a>
+			</div>
+		</div>
+		<div class="ucSimpleHeader">
+			<a href="##" class="exo1Logo"></a>
+		</div>
+		<form action="/user/login" method="post" id="mainForm1" class="mainForm mainForm1">
+			<div class="number">
+				<a href="##" class="linkAGreen">密码登录</a>
+				<span></span>
+				<a href="##" class="linkAGray number1">验证码登录</a>
+			</div>
+			<div class="normalInput">
+				<input type="text" name="phone" class="phone" id="phone1"maxlength="11" placeholder="手机号">	
+			</div>
+
+			<div class="normalInput">
+				<input type="text" name="password" class="password" maxlength="16" autocomplete="off" placeholder="密码">
+				<input type="password" class="password1" maxlength="16" autocomplete="off" placeholder="密码">
+				<a id="pwdBtn" href="##" class="pwdBtnShow" isshow="false">
+					<i class="i_icon"></i>
+				</a>
+			</div>
+
+			<a href="##" class="fullBtnGreen" onclick="login('1')">登录</a>
+		</form>
+		<form action="/user/login" method="post" id="mainForm2" class="mainForm mainForm2">
+			<div class="number">
+				<a href="##" class="linkAGreen2 number2">密码登录</a>
+				<span></span>
+				<a href="#" class="linkAGray2">验证码登录</a>
+			</div>
+			<div class="normalInput">
+				<input type="text" name="phone" class="phone" id="phone" maxlength="22" placeholder="手机号" autocomplete="off">	
+			</div>	
+
+			<div class="normalInput" id="messages">
+				<input type="text" id="yzm1" name="yzm"  class="kapkey" maxlength="6" placeholder="验证码">
+				<span class="formLine"></span>
+				<a href="#" id="getKey1" class="linkAGreen" style="pointer-events: none;" onclick="sendemail1()">短信验证码</a>
+			</div>
+			<a href="##" class="fullBtnGreen">登录</a>
+		</form>
+	</div>
 </body>
+<script>
+	function login(value){
+		var f=document.getElementById("mainForm"+value);
+		f.submit();
+	}
+</script>
 </html>
