@@ -17,6 +17,16 @@ public class AdminHomeController {
     public static final String ADMIN = "admin";
     public static final int HTTP_OK = 200;
 
+    @ResponseBody
+    @GetMapping("/logout")
+    public Object logout(HttpServletRequest request){
+        System.out.println("管理员退出登陆");
+        request.getSession().removeAttribute(ADMIN);
+        Response response = new Response();
+        response.data ="ok";
+        response.code = 200;
+        return response;
+    }
     @GetMapping("")
     public String homePage(HttpServletRequest request) {
         System.out.println("out 请求管理员页面.....");
@@ -61,7 +71,7 @@ public class AdminHomeController {
 
 
         response.code = HTTP_OK;
-        response.data = "ok";
+        response.data = login.getUsername();
         return response;
     }
 

@@ -12,10 +12,11 @@
     <meta name="description" content="">
 
     <!--[if lt IE 9]>
-    <meta http-equiv="refresh" content="0;ie.html" />
+    <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
 
-    <link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="/static/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="/static/css/animate.css" rel="stylesheet">
     <link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
@@ -51,12 +52,12 @@
                 <li class="line dk"></li>
 
 
-
                 <li class="line dk"></li>
 
 
                 <li>
-                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">管理</span><span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">管理</span><span
+                            class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" href="/static/table_data_tables.html?v=4.00">基本表格</a>
                         </li>
@@ -81,16 +82,18 @@
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars"></i> </a>
+                <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i
+                        class="fa fa-bars"></i> </a>
                     <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
                         <div class="form-group">
-                            <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
+                            <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search"
+                                   id="top-search">
                         </div>
                     </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li><a id="login" data-target="#exampleModal" data-toggle="modal">登陆</a>
-                        <li><span id="name"></span><a id="logout">退出</a></li>
+                    <li style="display: inline-block;"><span id="name"></span><a id="logout">退出</a></li>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -173,7 +176,8 @@
 
         <div class="row J_mainContent" id="content-main">
 
-            <iframe id="J_iframe" width="100%" height="100%" src="/static/table_data_tables.html?v=4.00" frameborder="0" data-id="index_v1.html" seamless></iframe>
+            <iframe id="J_iframe" width="100%" height="100%" src="/static/table_data_tables.html?v=4.00" frameborder="0"
+                    data-id="index_v1.html" seamless></iframe>
 
             <!-- <iframe id="J_iframe" width="100%" height="100%" src="index_v1.html?v=4.0" frameborder="0" data-id="index_v1.html" seamless></iframe> -->
         </div>
@@ -200,7 +204,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="exampleModalLabel">管理员登陆</h4>
             </div>
             <div class="modal-body">
@@ -209,7 +214,7 @@
                     <div class="form-group">
                         <label for="user-phone" class="control-label col-sm-2">手机号码:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="user-phone" maxlength="20">
+                            <input type="text" class="form-control" value="131234567890" id="user-phone" maxlength="20">
                         </div>
                     </div>
                     <br/>
@@ -218,7 +223,7 @@
                     <div class="form-group">
                         <label for="user-pwd" class="control-label col-sm-2">密码:</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="user-pwd" maxlength="20">
+                            <input type="password" class="form-control" value="123456" id="user-pwd" maxlength="20">
                         </div>
                     </div>
                     <br/>
@@ -234,26 +239,50 @@
 </div>
 
 <script>
-    $(document).ready(function(){
-        $("#admin-login").click(function(){
+    $(document).ready(function () {
+        let logout = $("#logout");
+        logout.addClass("hidden");
+        $("#admin-login").click(function () {
             let phone = $("#user-phone").val();
             let pwd = $("#user-pwd").val();
+            let data = {"phone": phone, "pwd": pwd};
+            console.log("data" + data);
 
-            let data = {"phone":phone,"pwd":pwd};
-            console.log("data"+data);
-
-            $.post("/admin/login",data, function(data,res){
-                console.log(data .data + res+data.code);
-                if (data.code != 200){
+            $.post("/admin/login", data, function (data, res) {
+                console.log(data.data + res + data.code);
+                if (data.code != 200) {
                     alert(data.data);
                 } else {
-                    $("")
+                    // 隐藏登陆按钮
+                    $("#login").addClass("hidden");
+                    // 消除模态框
+                    $("#exampleModal").modal('hide');
+                    $("#name").text(data.data+"dx");
+                    logout.removeClass("hidden");
                 }
 
             });
 
 
 
+
+        });
+
+
+        logout.click(function () {
+            console.log("退出登陆");
+            $.get("/admin/logout",{}, function (data, res) {
+                console.log("用户退出登陆");
+                if (data.code == 200){
+                    $("#login").removeClass("hidden");
+                    // 消除模态框
+                   // $("#exampleModal").modal('hide');
+                    $("#name").text("");
+                    logout.addClass("hidden");
+                } else {
+
+                }
+            })
         });
     });
 </script>
