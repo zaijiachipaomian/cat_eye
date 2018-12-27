@@ -14,10 +14,11 @@ public interface TypeRepository extends JpaRepository<Type, Long>{
 	 * @param id
 	 * @return
 	 */
-	@Query(nativeQuery = true , value ="select type_id from movie_types where movie_id = ?1")
-	Long[] findTypeIdByMovieId(Long id);
-	
-	@Query(value =" select t from Type t where t.id in ?1 ")
-	List<Type> findTypeByTypeId(Long[] ids);
+	//弃用
+//	@Query(nativeQuery = true , value ="select type_id from movie_types where movie_id = ?1")
+//	Long[] findTypeIdByMovieId(Long id);
+//	
+//	@Query(value =" select t from Type t where t.id in ?1 ")
+//	List<Type> findTypeByTypeId(Long[] ids);
 
 }
