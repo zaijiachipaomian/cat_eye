@@ -3,17 +3,24 @@ package com.example.demo.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.MovieRole;
@@ -22,6 +29,7 @@ import com.example.demo.entity.Person;
 import com.example.demo.entity.Photo;
 import com.example.demo.entity.Type;
 import com.example.demo.repository.MovieRepository;
+import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.service.MovieService;
 import com.example.demo.service.PersonService;
@@ -40,6 +48,8 @@ public class MovieControllerAdmin {
 	@Autowired
 	TypeRepository typeRepository;
 	
+	@Autowired
+	PersonRepository personRepository;
 	/**
 	 * 电影的插入与更新，当有ID时为更新，没有ID时为插入，POST方式
 	 * @param movie 要插入和更新的电影
@@ -56,17 +66,25 @@ public class MovieControllerAdmin {
 	 * 			introduction	text		我们在这个屯立长大
 	 * 			filesName(图片) 	file		文件		
 	 * 			typeIds(电影类型的ID)text	1,2,3,4,5
+	 * 			personRoles		text	  [{ "personId" : 1 , "role" : "导演" },{ "personId" : 2 ,  "role" : "演员" }]
 	 */
 	@PostMapping("/add")
 	public String insertOrUpdateMovie(Movie movie ,
 			@RequestParam("fileName")  MultipartFile file,
 			@RequestParam("filesName") List<MultipartFile> files,
 			@RequestParam("typeIds") List<Long> typeIds,
-			@RequestParam("personRoles") List<Object> movieRoles ){
-		System.out.println(movieRoles);
+			@RequestParam("personRoles") String movieRoles ){
+		if(typeIds != null) {
+			List<Type> types = typeRepository.findAllById(typeIds);
+			movie.setTypes(types);
+		}
+		List<MovieRole> movieRoleList = JSON.parseArray(movieRoles, MovieRole.class);
+		System.out.println(movieRoleList);
+		for(MovieRole movieRole : movieRoleList) {
+			movie.addMovieRole(movieRole);
+			movie.addPerson(personRepository.findById(movieRole.getPersonId()).get());
+		}
 		
-		List<Type> types = typeRepository.findAllById(typeIds);
-		movie.setTypes(types);
 		
 		//批量文件上传成功，返回文件的路径加名字的List,否则返回null
 		List<String> urlList = FileUpload.multifileUpload(files);
@@ -109,8 +127,6 @@ public class MovieControllerAdmin {
 			map.put("comments", movie.getComments());
 			map.put("newsList", movie.getNewsList());
 			map.put("photos", movie.getPhotos());
-			map.put("types", movie.getTypes());
-			map.put("persons", movie.getPersons());
 			map.put("movieRoles", movie.getMovieRoles());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,6 +146,15 @@ public class MovieControllerAdmin {
 		
 		return map;
 	}
+	
+	@GetMapping("/")
+	@ResponseBody
+	public Page<Movie> getMovieList(String movieName , @PageableDefault(page=0,size=10)Pageable pageable){
+		//Page<Movie> moviePage = movieRepository.findAll(pageable);
+		Page<Movie> moviePage = movieRepository.findByTypesId(1L, pageable);
+		return moviePage;
+	}
+	
 	
 	
 	
