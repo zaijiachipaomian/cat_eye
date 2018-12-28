@@ -75,9 +75,22 @@ public class AdminHomeController {
         return response;
     }
 
-     class Admin {
+     public static class Admin {
         String phone;
         String pwd;
+		public String getPhone() {
+			return phone;
+		}
+		public void setPhone(String phone) {
+			this.phone = phone;
+		}
+		public String getPwd() {
+			return pwd;
+		}
+		public void setPwd(String pwd) {
+			this.pwd = pwd;
+		}
+        
     }
 
      public static class Response {

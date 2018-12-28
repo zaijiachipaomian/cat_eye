@@ -39,9 +39,11 @@ import com.example.demo.entity.News;
 import com.example.demo.entity.Person;
 import com.example.demo.entity.Photo;
 import com.example.demo.entity.Type;
+import com.example.demo.entity.User;
 import com.example.demo.repository.MovieRepository;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.TypeRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MovieService;
 import com.example.demo.service.PersonService;
 import com.example.demo.util.FileUpload;
@@ -61,6 +63,9 @@ public class MovieControllerAdmin {
 	
 	@Autowired
 	PersonRepository personRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 	/**
 	 * 电影的插入与更新，当有ID时为更新，没有ID时为插入，POST方式
 	 * @param movie 要插入和更新的电影
@@ -154,8 +159,8 @@ public class MovieControllerAdmin {
 //		
 //		Long[] ids2 = movieRepository.findMovidIdByTypeId(1L);
 //		map.put("data2",movieRepository.findMovieByMovieId(ids2));
-		
-		return map;
+		User user = userRepository.findById(1L).get();
+		return user;
 	}
 	
 	

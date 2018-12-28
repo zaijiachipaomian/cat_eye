@@ -109,7 +109,7 @@ public class MovieController {
 	@GetMapping("/")
 	@ResponseBody
 	public Page<Movie> getMovieList(MovieQuery movieQuery , @PageableDefault(page=0,size=10)Pageable pageable){
-		
+		System.out.println(movieQuery.toString());
 		return movieRepository.findAll(new Specification<Movie>() {
 			@Override
 			public Predicate toPredicate(Root<Movie> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -131,9 +131,9 @@ public class MovieController {
 					predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), year + "-01-01"));
 					predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), (year + 1 + "")));
 				}
-				query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(root.get("releaseDate")));
+				//query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(root.get("releaseDate")));
 				//Join join2 = root.join("comments");
-				//query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(join2.get("score")));
+				query.where(predicates.toArray(new Predicate[predicates.size()]));
 			
 			
 				

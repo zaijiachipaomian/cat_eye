@@ -13,6 +13,7 @@ public interface CommentService {
 	public boolean addComment(Comment comment,User user,Movie movie);
 	public void delComment(Long id);
 	public Comment findCommentById(Long id);
+	public Page<Comment> findAllComment(Pageable pageable);
 	public Page<Comment> findCommentByUserId(Long id,Pageable pageable);
 	public Page<Comment> findCommentByMovieId(Long id,Pageable pageable);
 	public Page<Comment> findByMovieOrderByDate(Long id,Pageable pageable);
