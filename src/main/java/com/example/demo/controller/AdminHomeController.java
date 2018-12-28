@@ -70,7 +70,7 @@ public class AdminHomeController {
         String pwd;
     }
 
-     public class Response {
+     public static class Response {
         int code; // 状态码
         Object data; // 返回信息
 

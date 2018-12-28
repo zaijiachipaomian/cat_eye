@@ -23,23 +23,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
-
-class Response{
-	int code;
-	Object data;
-	public int getCode() {
-		return code;
-	}
-	public void setCode(int code) {
-		this.code = code;
-	}
-	public Object getData() {
-		return data;
-	}
-	public void setData(Object data) {
-		this.data = data;
-	}
-}
+import com.example.demo.controller.AdminHomeController.Response;
 
 @Controller
 @RequestMapping("/user")
@@ -58,7 +42,7 @@ public class UserController {
 	//个人主页
 	@ResponseBody
 	@GetMapping("/{id}")
-	public Map<String,Object> getMe(HttpServletRequest request,@PathVariable Long id) {
+	public Object getMe(HttpServletRequest request,@PathVariable Long id) {
 		HttpSession session=request.getSession();
 		Map<String,Object> map=new HashMap<String,Object>();
 		Response re=new Response();
@@ -66,24 +50,19 @@ public class UserController {
 		if(user!=null) {
 			//判断该用户是否为当前登录用户
 			if(user.getId()==id) {
-				re.setCode(200);
-				re.setData("正确");
-				map.put("response", re);
 				map.put("user", user);
 				return map;
 			}
 			else{
 				re.setCode(400);
 				re.setData("用户错误");
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		else {
 			re.setCode(400);
 			re.setData("用户未登录");
-			map.put("response", re);
-			return map;
+			return re;
 		}
 	}
 	
@@ -104,8 +83,7 @@ public class UserController {
 	//用户登陆
 	@ResponseBody
 	@PostMapping("/login")
-	public Map<String,Object> login(HttpServletRequest request,String phone,String password,String yzm) {
-		Map<String,Object> map=new HashMap<String,Object>();
+	public Object login(HttpServletRequest request,String phone,String password,String yzm) {
 		System.out.println("正确的验证码："+valid_code);
 		System.out.println("用户输入的验证码："+yzm);
 		System.out.println("phone="+phone);
@@ -123,8 +101,7 @@ public class UserController {
 					if(phone==null||phone.equals("")) {
 						re.setCode(400);
 						re.setData("手机号为空");
-						map.put("response", re);
-						return map;
+						return re;
 					}
 					else {
 						user=userService.getUserByPhone(phone);
@@ -134,15 +111,13 @@ public class UserController {
 				if(user==null) {
 					re.setCode(400);
 					re.setData("用户未注册,请先注册再登陆");
-					map.put("response", re);
-					return map;
+					return re;
 				}
 			}
 			else {
 				re.setCode(400);
 				re.setData("未获取验证码");
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		if(user!=null) {
@@ -150,22 +125,19 @@ public class UserController {
 			session.setAttribute("user", user);
 			re.code=200;
 			re.data="登陆成功";
-			map.put("response", re);
-			return map;
+			return re;
 		}
 		else {
 			
 			if(yzm==null) {
 				re.setCode(400);
 				re.setData("手机号码或密码错误");
-				map.put("response", re);
 			}
 			else {
 				re.setCode(400);
 				re.setData("验证码错误");
-				map.put("response", re);
 			}		
-			return map;
+			return re;
 		}
 	}
 	
@@ -178,39 +150,34 @@ public class UserController {
 	//用户注册
 	@ResponseBody
 	@PostMapping("/reg")
-	public Map<String,Object> register(HttpServletRequest request,User user,String yzm) {
+	public Object register(HttpServletRequest request,User user,String yzm) {
 		System.out.println("正确的验证码："+valid_code);
 		System.out.println("用户输入的验证码："+yzm);
 		Response re=new Response();
-		Map<String,Object> map=new HashMap<String,Object>();
 		//判断验证码是否正确
 		if(valid_code!=null) {
 			if(valid_code.equals(yzm)) {
 				if(userService.register(user)!=null) {
 					re.setCode(200);
 					re.setData("注册成功");
-					map.put("response", re);
-					return map;
+					return re;
 				}
 				else {
 					re.setCode(400);
 					re.setData("注册失败");
-					map.put("response", re);
-					return map;
+					return re;
 				}
 			}
 			else{
 				re.code=400;
 				re.data="验证码错误";
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		else{
 			re.code=400;
 			re.data="未获取验证码";
-			map.put("response", re);
-			return map;
+			return re;
 		}
 		
 		
@@ -226,8 +193,7 @@ public class UserController {
 	//跳转到修改信息界面
 	@ResponseBody
 	@GetMapping("/modify/{id}")
-	public Map<String,Object> updateUser(HttpServletRequest request,Long id) {
-		Map<String,Object> map=new HashMap<String,Object>();
+	public Object updateUser(HttpServletRequest request,Long id) {
 		HttpSession session=request.getSession();
 		User user=(User) session.getAttribute("user");
 		Response re=new Response();
@@ -235,29 +201,25 @@ public class UserController {
 			if(user.getId()==id) {
 				re.code=200;
 				re.data="正确";
-				map.put("response", re);
-				return map;
+				return re;
 			}
 			else {
 				re.code=400;
 				re.data="错误的修改";
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		else {
 			re.code=400;
 			re.data="用户未登录";
-			map.put("response", re);
-			return map;
+			return re;
 		}
 	}
 	
 	//用户修改个人信息
 	@ResponseBody
 	@PostMapping("/modify")
-	public Map<String,Object> updateUser(HttpServletRequest request,User user) {
-		Map<String,Object> map=new HashMap<String,Object>();
+	public Object updateUser(HttpServletRequest request,User user) {
 		HttpSession session=request.getSession();
 		User u=(User) session.getAttribute("user");
 		Response re=new Response();
@@ -268,38 +230,33 @@ public class UserController {
 			if(u!=null) {
 				re.code=200;
 				re.data="修改成功";
-				map.put("response", re);
-				return map;
+				return re;
 			}
 			else {
 				re.code=400;
 				re.data="修改失败";
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		else {
 			re.code=400;
 			re.data="用户错误";
-			map.put("response", re);
-			return map;
+			return re;
 		}
 	}
 	
 	//获取验证码
 	@GetMapping("/valid_code")
     @ResponseBody
-    public Map<String,Object> ReceiverSMS(String phone) {
+    public Object ReceiverSMS(String phone) {
 		System.out.println(phone); 
-		Map<String,Object> map=new HashMap<String,Object>();
 		User user=null;
 		Response re=new Response();
 		user=userService.getUserByPhone(phone);
 		if(user==null) {
 			re.code=400;
 			re.data="用户未注册！";
-			map.put("response", re);
-			return map;
+			return re;
 		}
 		 
         int appid = 1400155268; 
@@ -329,13 +286,11 @@ public class UserController {
         } catch (Exception e) {
         	re.code=400;
 			re.data="获取验证码出错";
-			map.put("response", re);
-			return map;
+			return re;
         }
         //用于回调
         re.code=200;
 		re.data="获取验证码成功";
-		map.put("response", re);
-		return map;
+		return re;
     }
 }
