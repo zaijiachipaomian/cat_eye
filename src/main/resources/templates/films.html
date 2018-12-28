@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>电影信息</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script type="/static/xcccy/libs.js.下载" async="true"></script>
+    <script type="/static/xcccy/jquery.js.下载"></script>
+    <script type="/static/xcccy/ad.release.js.下载" async="true"></script>
+    <script type="/static/xcccy/douban.js.下载"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+
+    <style>
+        .radius-default{
+            border-radius: 28px
+        }
+
+        .navbar-default{
+            height: 56x;;
+        }
+        .margin-right-default{
+            margin-right: -24px;
+        }
+        .w-h-28{
+            height: 34px;
+            width: 34px;
+            text-align: center;
+        }
+
+        .flex-container{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+         /*   justify-content: space-between ;*/
+            width: 95%;
+            
+        }
+        .movie-item{
+            height: 180px;
+            width: 140px;
+            background: greenyellow;
+            margin: 30px 0 0 16px;
+        }
+
+        .movie-item1{
+            height: 140px;
+            width: 200px;
+            background: greenyellow;
+            margin: 30px 0 0 16px;
+        }
+
+        .page-pagination{
+            text-align: center;
+        }
+        .pannel{
+            height: 32px;
+            width: 100%;
+            margin-left: 16px;
+            left: 32px;
+            display: flex;
+            flex-direction: row;
+            margin: 0 auto;
+            justify-content: space-between;
+            /* margin-right: -32px !important; */
+        }
+
+        .right-pannel{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+        }
+        .pannel-rank{
+            height: 32px;;
+            width: 100%;
+            margin-top: 8px;
+            border-bottom-color: gray;
+            border-bottom-style: solid;
+            border-bottom-width: 0.4px;
+        }
+        .movie_img{
+            width: 140px;
+            height: 180px;
+        }
+
+        .movie_img1{
+            width: 200px;
+            height: 140px;
+        }
+
+        .movie_img2{
+            width: 140px;
+            height: 100px;
+        }
+
+        .radius-default {
+            border-radius: 28px;
+        }
+        #logoImg{
+          width: 80px;
+          height: 70px;
+          line-height: 50px;
+        }
+        #logoDiv{
+          margin-top: -25px;
+
+        }
+        li{
+            list-style-type: none;
+        }  
+        a{
+            text-decoration: none;
+        }  
+        a:focus, a:hover {
+            color: #23527c;
+            text-decoration: none;
+        }
+        .footer{
+            text-align-last: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: green;
+        }
+        #mainpic{
+            width: 200px;
+            height:300px;
+        }
+        .pl{
+            display: block;
+            height: 10px;
+        }
+
+        .avator{
+            width: 50px;
+            height: 50px;
+        }
+
+        /* 星星点灯照亮我的家门 */
+        .star_bg {
+            width: 120px; height: 20px;
+            background: url(hat.png) repeat-x;
+            position: relative;
+            overflow: hidden;
+        }
+        .star {
+            height: 100%; width: 24px;
+            line-height: 6em;
+            position: absolute;
+            z-index: 3;
+        }
+        .star:hover {    
+            background: url(hat.png) repeat-x 0 -20px!important;
+            left: 0; z-index: 2;
+        }
+        .star_1 { left: 0; }
+        .star_2 { left: 24px; }
+        .star_3 { left: 48px; }
+        .star_4 { left: 72px; }
+        .star_5 { left: 96px; }
+        .star_1:hover { width: 24px; }
+        .star_2:hover { width: 48px; }
+        .star_3:hover { width: 72px; }
+        .star_4:hover { width: 96px; }
+        .star_5:hover { width: 120px; }
+
+        label { 
+            display: block; _display:inline;
+            height: 100%; width: 100%;
+            cursor: pointer;
+        }
+
+        /* 幕后的英雄，单选按钮 */
+        .score { position: absolute; clip: rect(0 0 0 0); }
+        .score:checked + .star {    
+            background: url(hat.png) repeat-x 0 -20px;
+            left: 0; z-index: 1;
+        }
+        .score_1:checked ~ .star_1 { width: 24px; }
+        .score_2:checked ~ .star_2 { width: 48px; }
+        .score_3:checked ~ .star_3 { width: 72px; }
+        .score_4:checked ~ .star_4 { width: 96px; }
+        .score_5:checked ~ .star_5 { width: 120px; }
+
+        .star_bg:hover .star {  background-image: none; }
+
+        /* for IE6-IE8 JS 交互 */
+        .star_checked {    
+            background: url(hat.png) repeat-x 0 -20px;
+            left: 0; z-index: 1;
+        }
+       
+        </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".inav li").click(function () {
+                //    移除所有的 active
+                $(".inav li").removeClass("active");
+                // 设置当前点击对象的class 值为active
+                $(this).addClass("active")
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <!-- 固定导航条navbar-fixed-top -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                    <span class="sr-only">切换导航</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div id="logoDiv">
+                    <a class="navbar-brand" href="#">
+                        <img id="logoImg" src="C:\Users\Administrator\Desktop\logo.png">
+                    </a>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+                <ul class="nav navbar-nav inav">
+                    <li><a href="#" class="">首页</a></li>
+                    <li><a href="#" class="">电影</a></li>
+                    <li><a href="#" class="">榜单</a></li>
+                    <li><a href="#" class="">热点</a></li>
+
+                </ul>
+
+                <!-- 搜索表单-->
+                <form action="##" class="navbar-form navbar-right">
+                    <div class="form-group radius-default">
+                        <input type="text" class="form-control radius-default  margin-right-default" placeholder="找电影 影人 " />
+                        <button type="submit" class="btn  radius-default w-h-28" aria-hidden="true"></span>
+                        </button>
+
+                    </div>
+                </form>
+
+
+                <ul class="nav navbar-nav navbar-right ">
+                    <li>
+                        <a href="">登录</a>
+                    </li>
+                    <li><a href="" class="disable">|</a></li>
+                    <li><a href="">注册</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-sm-12" style="background-color: #8bc72d">
+        <div class="col-sm-9" style="margin-top: 60px">
+            <div class="col-sm-3" style="margin-left: 125px;">
+                <div id="dale_movie_subject_top_icon" ad-status="loaded"></div>
+                <div>
+                    <span property="v:itemreviewed" style="font-size: 30px" class="movie-name">无双</span>
+                    <span class="year">(2018)</span>
+                </div>
+
+                <div id="mainpic" class="">
+                    <a class="nbgnbg" href="">
+                        <img style="width: 200px;height: 280px;" src="C:\Users\Administrator\Desktop\poster.png" alt="無雙"
+                            rel="v:image">
+                    </a>
+                </div>
+            </div>
+            <div id="info" class="col-sm-6" style="margin-top: 60px;margin-left:39px">
+                <span class="pl">导演：庄文强</span><br>
+                <span class="pl">编剧：庄文强</span><br>
+                <span class="pl">主演：周润发/郭富城/张静初</span><br>
+                <span class="pl">类型：剧情/动作/犯罪</span><br>
+                <span class="pl">国家/地区：中国大陆/中国香港</span><br>
+                <span class="pl">语言： 普通话 / 粤语 / 英语 / 泰语 / 波兰语</span><br>
+                <span class="pl">上映日期: 2018-09-30(中国大陆)/2018-10-04(香港)</span><br>
+                <span class="pl">片长：130分钟</span><br>
+                <span class="pl">状态：已上映</span><br>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12" style="margin-top: 20px;padding-left: 100px;">
+        <div style="float: left;width: 62%">
+            <div class="introduction">
+                <div class="mod-title" style="color: green">
+                    <h4>剧情简介</h4>
+                </div>
+                <div class="mod-content">
+                    <div class="comment-list-container" data-hot="10" style="margin-top: 0px">
+                        <br>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;《无双》讲述了以代号“画家”（周润发
+                            饰）为首的犯罪团伙，掌握了制造伪钞技术，难辨真伪，并在全球进行交易获取利益，引起警方高度重视。然而“画家”和其他成员的身份一直成谜，警方的破案进度遭受到了前所未有的挑战。在关键时刻，擅长绘画的李问（郭富城
+                            饰）打开了破案的突破口，而“画家”的真实身份却让众人意想不到……</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="person">
+                <div class="mod-title" style="color: green;margin-top: 30px">
+                    <h4>演职员</h4>
+                </div>
+                <div class="mod-content">
+                    <div class="comment-list-container" data-hot="10" style="margin-top: 0px">
+                        <div class="movie-list flex-container">
+                            <div class="movie-item">
+                                <div class="cover-wp" data-isnew="false" data-id="25849049">
+                                    <img class="movie_img" src="C:\Users\Administrator\Desktop\周润发.png">
+                                    <br>
+                                    <p align="center">周润发（饰&nbsp;&nbsp;画家）</p>
+                                </div>
+                            </div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                            <div class="movie-item"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="photo">
+                <div class="mod-title" style="color: green;margin-top: 30px">
+                    <h4>电影片集</h4>
+                </div>
+                <div class="mod-content">
+                    <div class="comment-list-container" data-hot="10" style="margin-top: 0px">
+                        <div class="movie-list flex-container movie-pixes">
+                            <div class="movie-item1">
+                                <div class="cover-wp" data-isnew="false" data-id="25849049">
+                                    <img class="movie_img1" src="C:\Users\Administrator\Desktop\无双.png">
+                                </div>
+                            </div>
+                            <div class="movie-item1"></div>
+                            <div class="movie-item1"></div>
+                            <div class="movie-item1"></div>
+                            <div class="movie-item1"></div>
+                            <div class="movie-item1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="photo">
+                <div class="mod-title" style="color: green;margin-top: 30px">
+                    <h4>写影评</h4>
+                </div>
+                <div style="float: left;margin-left: 20px">评价：</div>
+                <div id="starBg" class="star_bg" style="float:left;">
+                    <input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+                    <a href="#starScore1" class="star star_1" title="烂片"><label for="starScore1">烂片</label></a>
+                    <input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+                    <a href="#starScore2" class="star star_2" title="不好看"><label for="starScore2">不好看</label></a>
+                    <input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+                    <a href="#starScore3" class="star star_3" title="一般"><label for="starScore3">一般</label></a>
+                    <input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+                    <a href="#starScore4" class="star star_4" title="好看"><label for="starScore4">好看</label></a>
+                    <input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+                    <a href="#5" class="star star_5" title="佳作"><label for="starScore5">佳作</label></a>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="content-container" style="width: 200px;margin-left: 20px">
+                    <textarea placeholder="快来说说你的看法吧" name="content" id="" cols="85" rows="10"></textarea>
+                    <span class="word-count-info"></span>
+                </div>
+                <input type="hidden" name="score" />
+                <input class="btn" type="submit" value="提交" data-act="comment-submit-click" style="margin-left: 20px" />
+                </form>
+                <div class="close">×</div>
+
+                <div class="mod-title" style="color: green;margin-top: 40px">
+                    <h4>精彩影评</h4>
+                </div>
+                <div class="mod-content">
+                    <div class="comment-list-container" data-hot="10">
+                        <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="C:\Users\Administrator\Desktop\logo.png">
+                                <br><span>用户名</span>
+                                <span>2018.10.11</span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="C:\Users\Administrator\Desktop\logo.png">
+                                <br><span>用户名</span>
+                                <span>2018.10.11</span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="C:\Users\Administrator\Desktop\logo.png">
+                                <br><span>用户名</span>
+                                <span>2018.10.11</span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="C:\Users\Administrator\Desktop\logo.png">
+                                <br><span>用户名</span>
+                                <span>2018.10.11</span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="C:\Users\Administrator\Desktop\logo.png">
+                                <br><span>用户名</span>
+                                <span>2018.10.11</span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="page-pagination">
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul><br>
+                </div>
+            </div>
+        </div>
+        <div class="news" style="width: 30%;float: left;margin-left: 50px;margin-right: 10px">
+            <div class="mod-title" style="color: green">
+                <h4>电影资讯</h4>
+            </div>
+            <div class="news-container">
+                <div style="width:100%;height: 140px;">
+                    <div class="news-img" style="width: 45%;float: left;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <img class="movie_img2" src="C:\Users\Administrator\Desktop\无双资讯.png">
+                        </a>
+                    </div>
+                    <div class="news-name" style="float: left;width: 50%;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <span>《无双》是否拍续集？导演庄文强否认：该死的都死光了</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="width:100%;height: 140px;">
+                    <div class="news-img" style="width: 45%;float: left;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <img class="movie_img2" src="C:\Users\Administrator\Desktop\无双资讯.png">
+                        </a>
+                    </div>
+                    <div class="news-name" style="float: left;width: 50%;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <span>《无双》是否拍续集？导演庄文强否认：该死的都死光了</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="width:100%;height: 140px;">
+                    <div class="news-img" style="width: 45%;float: left;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <img class="movie_img2" src="C:\Users\Administrator\Desktop\无双资讯.png">
+                        </a>
+                    </div>
+                    <div class="news-name" style="float: left;width: 50%;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <span>《无双》是否拍续集？导演庄文强否认：该死的都死光了</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="width:100%;height: 140px;">
+                    <div class="news-img" style="width: 45%;float: left;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <img class="movie_img2" src="C:\Users\Administrator\Desktop\无双资讯.png">
+                        </a>
+                    </div>
+                    <div class="news-name" style="float: left;width: 50%;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <span>《无双》是否拍续集？导演庄文强否认：该死的都死光了</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="width:100%;height: 140px;">
+                    <div class="news-img" style="width: 45%;float: left;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <img class="movie_img2" src="C:\Users\Administrator\Desktop\无双资讯.png">
+                        </a>
+                    </div>
+                    <div class="news-name" style="float: left;width: 50%;margin-top: 15px">
+                        <a href="" target="_blank">
+                            <span>《无双》是否拍续集？导演庄文强否认：该死的都死光了</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="footer col-sm-10">
+        <p>
+            <span class="mr12">XCCCY科技有限公司</span>Copyright 2018-2025 XCCCY.com Inc. All rights reserved.
+        </p>
+    </div>
+
+</body>
+
+<script>
+    $(document).ready(function () {
+        // 
+        // 渲染评论
+        function unpack_comments(comments) {
+            console.log("解包评论");
+            let comment_list_container = $(".comment-list-container");
+
+            for (let i = 0; i < comments.length; i++) {
+                let cm = comments[i];
+                comment_list_container.append(`
+               <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="${cm.usesr.avator}">
+                                <br><span>${cm.user.username}</span>
+                                <span>${cm.date}</span>
+                                <span>${cm.score}</span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                ${cm.content}
+                            </div>
+                        </div>
+               `);
+            }
+        }
+
+        // 渲染 电影
+        function unpack_movie(movie) {
+            console.log("解包 电影");
+            let name = movie.name;
+            let poster = movie.poster;
+            let area = movie.area;
+            let releaseDate = movie.releaseDate;
+            let movieLength = movie.length;
+            let introduction = movie.introduction;
+            let avgScore = movie.avgScore;
+            let id = movie.id;
+            let types = movie.types;
+            let ty = "";
+            for (var i = 0; i < types.length; i++) {
+                ty += "|" + types[i];
+            }
+
+            let info = $("#info");
+            /*
+            <span class="pl">导演：庄文强</span><br>
+                <span class="pl">编剧：庄文强</span><br>
+                <span class="pl">主演：周润发/郭富城/张静初</span><br>
+                <span class="pl">类型：剧情/动作/犯罪</span><br>
+                <span class="pl">国家/地区：中国大陆/中国香港</span><br>
+                <span class="pl">语言： 普通话 / 粤语 / 英语 / 泰语 / 波兰语</span><br>
+                <span class="pl">上映日期: 2018-09-30(中国大陆)/2018-10-04(香港)</span><br>
+                <span class="pl">片长：130分钟</span><br>
+                <span class="pl">状态：已上映</span><br>
+            */
+            $(".movie-name").text(name); // 电影的名称
+            $("#mainpic img").attr("src", poster); // 电影的海报
+            info.append(`<span class="pl">片长：${movieLength}</span><br>`); // 电影时长
+            info.append(`<span class="pl">状态：${releaseDate}</span><br>`); // 电影的状态
+            info.append(`<span class="pl">类型：${ty}</span><br>`); // 电影的类型
+        }
+
+        // 新闻
+        function unpack_news(news) {
+            console.log("解包新闻");
+            let news_box = $(".news-container");
+
+            if (news == undefined) {
+                console.log("图集为空");
+                return;
+            }
+
+            console.log("解包图集");
+
+            for (var i = 0; i < news.length; i++) {
+                let n = news[i];
+                news_box.append(`
+                    <div style="width:100%;height: 140px;">
+                        <div class="news-img" style="width: 45%;float: left;margin-top: 15px">
+                            <a href="" target="_blank">
+                                <img class="movie_img2" src="${n.pic}">
+                            </a>
+                        </div>
+                        <div class="news-name" style="float: left;width: 50%;margin-top: 15px">
+                            <a href="${n.url}" target="_blank">
+                                <span>${n.name}</span>
+                            </a>
+                        </div>
+                    </div>`);
+            }
+        }
+
+        // 图集 插入图集
+        function unpack_photos(photos) {
+
+            console.log("解包图集");
+            let movie_pixes = $(".movie-pixes");
+            if (photos == undefined) {
+                return;
+            }
+
+            for (var i = 0; i < photos.length; i++) {
+                let ph = photos[i];
+                movie_pixes.append(`
+                    <div class="movie-item1">
+                                <div class="cover-wp" data-isnew="false" data-id="25849049">
+                                    <img class="movie_img1" src="${ph.url}">
+                                </div>
+                            </div>
+                    `);
+            }
+
+        }
+
+        function run_now() {
+            let url = window.location.url;
+            console.log("urlsis " + url);
+            let urls = url.split(":8081");
+
+            if (urls.length != 2) {
+                return;
+            }
+
+            $.get(urls[1] + "/api", {}, function (data, res) {
+
+                let news = data.news;
+                let comments = data.comments;
+                let photos = data.photos;
+                let movie = data.movie;
+
+                unpack_movie(movie);
+                unpack_comments(comments);
+                unpack_photos(photos);
+                unpack_news(news);
+            });
+        }
+
+        // 马上执行的方法
+        run_now();
+
+    });
+
+
+</script>
+
+</html>
