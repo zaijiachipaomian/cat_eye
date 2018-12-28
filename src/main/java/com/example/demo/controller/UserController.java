@@ -23,23 +23,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
-
-class Response{
-	int code;
-	Object data;
-	public int getCode() {
-		return code;
-	}
-	public void setCode(int code) {
-		this.code = code;
-	}
-	public Object getData() {
-		return data;
-	}
-	public void setData(Object data) {
-		this.data = data;
-	}
-}
+import com.example.demo.controller.AdminHomeController.Response;
 
 @Controller
 @RequestMapping("/user")
