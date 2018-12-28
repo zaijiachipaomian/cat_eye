@@ -44,14 +44,14 @@ public class UserController {
 	@GetMapping("/{id}")
 	public Object getMe(HttpServletRequest request,@PathVariable Long id) {
 		HttpSession session=request.getSession();
-		Map<String,Object> map=new HashMap<String,Object>();
 		Response re=new Response();
 		User user=(User) session.getAttribute("user");
 		if(user!=null) {
 			//判断该用户是否为当前登录用户
 			if(user.getId()==id) {
-				map.put("user", user);
-				return map;
+				re.setCode(200);
+				re.setData(user);
+				return re;
 			}
 			else{
 				re.setCode(400);
