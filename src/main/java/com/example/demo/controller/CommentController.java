@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.MovieService;
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.example.demo.controller.AdminHomeController.Admin;
 import com.example.demo.controller.AdminHomeController.Response;
 @Controller
@@ -69,7 +66,6 @@ public class CommentController {
 	@ResponseBody
 	@PostMapping("/delete/{id}")
 	public Object deleteComment(HttpServletRequest request,@PathVariable Long id) {
-		Map<String,Object> map=new HashMap<String,Object>();
 		HttpSession session=request.getSession();
 		User user=null;
 		Comment comment=null;
@@ -119,10 +115,20 @@ public class CommentController {
 		Page<Comment> comment=null;	
 		if(user!=null) {
 			if(user.getId()==user_id) {
+				//TODO comment==null时
 				comment=commentService.findCommentByUserId(user_id, pageable);
-				re.setCode(200);
-				re.setData("comment");
-				return re;
+				if(comment!=null) {
+					re.setCode(200);
+					re.setData(comment.getContent());
+					return re;
+				}
+				
+				else {
+					re.setCode(200);
+					re.setData("该用户无评论");
+					return re;
+				}
+				
 			}
 			else {
 				re.setCode(400);
