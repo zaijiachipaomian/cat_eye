@@ -106,7 +106,6 @@ public class CommentController {
 	@ResponseBody
 	@GetMapping("/user/{user_id}")
 	public Object getUserComment(HttpServletRequest request,@PathVariable Long user_id,@PageableDefault(page=0,size=5)Pageable pageable){
-		Map<String,Object> map=new HashMap<String, Object>();
 		Response re=new Response();
 		HttpSession session=request.getSession();
 		User user=(User) session.getAttribute("user");
@@ -114,11 +113,9 @@ public class CommentController {
 		if(user!=null) {
 			if(user.getId()==user_id) {
 				comment=commentService.findCommentByUserId(user_id, pageable);
-				map.put("comment", comment.getContent());
 				re.setCode(200);
-				re.setData("ok");
-				map.put("response", re);
-				return map;
+				re.setData("comment");
+				return re;
 			}
 			else {
 				re.setCode(400);
