@@ -33,8 +33,7 @@ public class CommentController {
 	
 	@ResponseBody
 	@PostMapping("/add/{movie_id}")
-	public Map<String,Object> addComment(HttpServletRequest request,@PathVariable Long movie_id,Comment comment) {
-		Map<String,Object> map=new HashMap<String,Object>();
+	public Object addComment(HttpServletRequest request,@PathVariable Long movie_id,Comment comment) {
 		HttpSession session=request.getSession();
 		User user=null;
 		Movie movie=null;
@@ -46,26 +45,23 @@ public class CommentController {
 			if(commentService.addComment(comment,user,movie)) {
 				re.setCode(200);
 				re.setData("ok");
-				map.put("response", re);
-				return map;
+				return re;
 			}
 			re.setCode(400);
 			re.setData("添加错误");
-			map.put("response", re);
-			return map;
+			return re;
 		}
 		else {
 			re.setCode(400);
 			re.setData("用户未登录");
-			map.put("response", re);
-			return map;
+			return re;
 		}
 	}
 	
 	//删除评论通过评论ID
 	@ResponseBody
 	@PostMapping("/delete/{id}")
-	public Map<String,Object> deleteComment(HttpServletRequest request,@PathVariable Long id) {
+	public Object deleteComment(HttpServletRequest request,@PathVariable Long id) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		HttpSession session=request.getSession();
 		User user=null;
@@ -79,21 +75,18 @@ public class CommentController {
 				commentService.delComment(id);
 				re.setCode(200);
 				re.setData("ok");
-				map.put("response", re);
-				return map;
+				return re;
 			}
 			else {
 				re.setCode(400);
 				re.setData("用户错误");
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		else {
 			re.setCode(400);
 			re.setData("未登录或评论不存在");
-			map.put("response", re);
-			return map;
+			return re;
 		}
 		
 	}
@@ -101,7 +94,7 @@ public class CommentController {
 	//获取某部电影的评论
 	@ResponseBody
 	@GetMapping("/movie/{movie_id}")
-	public Map<String,Object> getMovieComment(@PathVariable Long movie_id,@PageableDefault(page=0,size=5)Pageable pageable){
+	public Object getMovieComment(@PathVariable Long movie_id,@PageableDefault(page=0,size=5)Pageable pageable){
 		Map<String,Object> map=new HashMap<String, Object>();
 		Page<Comment> comment=null;	
 		comment=commentService.findCommentByMovieId(movie_id,pageable);
@@ -112,7 +105,7 @@ public class CommentController {
 	//获取某个用户的评论
 	@ResponseBody
 	@GetMapping("/user/{user_id}")
-	public Map<String,Object> getUserComment(HttpServletRequest request,@PathVariable Long user_id,@PageableDefault(page=0,size=5)Pageable pageable){
+	public Object getUserComment(HttpServletRequest request,@PathVariable Long user_id,@PageableDefault(page=0,size=5)Pageable pageable){
 		Map<String,Object> map=new HashMap<String, Object>();
 		Response re=new Response();
 		HttpSession session=request.getSession();
@@ -130,15 +123,13 @@ public class CommentController {
 			else {
 				re.setCode(400);
 				re.setData("用户错误");
-				map.put("response", re);
-				return map;
+				return re;
 			}
 		}
 		else {
 			re.setCode(400);
 			re.setData("用户未登录");
-			map.put("response", re);
-			return map;
+			return re;
 		}
 	}
 }
