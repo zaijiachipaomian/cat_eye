@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.example.demo.repository.MovieRepository;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.service.MovieService;
+import com.example.demo.util.StringUitl;
 
 @RequestMapping("/films")
 @RestController
@@ -69,4 +72,31 @@ public class MovieController {
 		map.put("movie",movie);
 		return map;
 	}
-}
+	
+	@GetMapping("/area/list")
+	public Set<String> getAreaSet(){
+		Set<String> areaSet = movieRepository.findDistinctAreaSet();
+		Set<String> dotSet = areaSet.stream().filter(s -> s.contains(",")).collect(Collectors.toSet());
+		for(String s : dotSet) {
+			String[] split = s.split(",");
+			for(String tempStr : split) {
+				areaSet.add(tempStr);
+			}
+			areaSet.remove(s);
+		}
+		return areaSet;
+	}
+	
+	@GetMapping("/release/list")
+	public Set<String> getReleaseSet(){
+		Set<String> releaseDateSet = movieRepository.findDistinctReleaseSet();
+		Set<String> releaseSet = new HashSet<>();
+		for(String s : releaseDateSet) {
+			s = StringUitl.removeChinese(s);
+			if(s.length()>4) {
+				releaseSet.add(s.substring(0, 4));
+			}
+		}
+		return releaseSet;
+	}
+}	
