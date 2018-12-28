@@ -1,11 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>注册</title>
+<title>XCCCY</title>
+<meta http-equiv="content-Type" content="text/html" charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/index.css">
+
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+
 </head>
 <body>
-${user.phone}
-用户注册
+	<div class="content">
+		<div class="ucSimpleHeader">
+			<a href="##" class="meizuLogo"></a>
+			<div class="trigger">
+				<a href="login.html">登录</a>
+				<span>&nbsp;|&nbsp;</span>
+				<a href="##">注册</a>
+			</div>
+		</div>
+		<div class="ucSimpleHeader">
+			<a href="##" class="exo1Logo"></a>
+		</div>
+		<form id="#mainForm1" class="mainForm mainForm1">
+			<div class="number">
+				<a href="##" class="linkAGreen">注册</a>
+			</div>
+			<div class="normalInput">
+				<input type="text" class="phone" id="phone"maxlength="11" placeholder="手机号">	
+			</div>
+			<span class="error error1"></span>
+			<div class="normalInput">
+				<input type="text" class="username" id="username" maxlength="11" placeholder="用户名">	
+			</div>
+			<span class="error error4"></span>
+			<div class="normalInput">
+				<input type="text" class="password" id="password" maxlength="16" autocomplete="off" placeholder="密码">
+				<input type="password" class="password1" maxlength="16" autocomplete="off" placeholder="密码">
+				<a id="pwdBtn" href="##" class="pwdBtnShow" isshow="false">
+					<i class="i_icon"></i>
+				</a>
+			</div>
+			<span class="error error3"></span>			
+			<div class="normalInput">
+				<input type="text" class="kapkey" maxlength="6" placeholder="验证码">
+				<span class="formLine"></span>
+				<a href="#" id="getKey" class="linkAGreen" style="pointer-events: none;" onclick="sendemail()">短信验证码</a>
+			</div>
+			<span class="error error2"></span>			
+			<a href="##" class="fullBtnGreen">注册</a>
+		</form>
+</div>
 </body>
+
 </html>
