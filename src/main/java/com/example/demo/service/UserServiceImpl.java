@@ -1,6 +1,10 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.User;
@@ -47,10 +51,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUser(Long id) {
-		// TODO Auto-generated method stub
-		User user=null;
-		user=userRepository.findById(id).get();
-		return user;
+		return userRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -65,6 +66,12 @@ public class UserServiceImpl implements UserService {
 	public User getUserByUsername(String username) {
 		// TODO Auto-generated method stub
 		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public Page<User> getAllUser(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return userRepository.findAll(pageable);
 	}
 
 }

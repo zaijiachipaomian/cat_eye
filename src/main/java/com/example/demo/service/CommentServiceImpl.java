@@ -84,7 +84,13 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Comment findCommentById(Long id) {
 		// TODO Auto-generated method stub
-		return commentRepository.findById(id).get();
+		return commentRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public Page<Comment> findAllComment(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return commentRepository.findAll(pageable);
 	}
 
 }

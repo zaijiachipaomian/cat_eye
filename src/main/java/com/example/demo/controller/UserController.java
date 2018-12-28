@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +27,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
+import com.example.demo.controller.AdminHomeController.Admin;
 import com.example.demo.controller.AdminHomeController.Response;
 
 @Controller
@@ -124,8 +128,8 @@ public class UserController {
 		if(user!=null) {
 			HttpSession session=request.getSession();
 			session.setAttribute("user", user);
-			re.code=200;
-			re.data="登陆成功";
+			re.setCode(200);
+			re.setData("登陆成功");
 			return re;
 		}
 		else {
@@ -186,14 +190,14 @@ public class UserController {
 				
 			}
 			else{
-				re.code=400;
-				re.data="验证码错误";
+				re.setCode(400);
+				re.setData("验证码错误");
 				return re;
 			}
 		}
 		else{
-			re.code=400;
-			re.data="未获取验证码";
+			re.setCode(400);
+			re.setData("未获取验证码");
 			return re;
 		}
 		
@@ -216,19 +220,19 @@ public class UserController {
 		Response re=new Response();
 		if(user!=null) {
 			if(user.getId()==id) {
-				re.code=200;
-				re.data="正确";
+				re.setCode(200);
+				re.setData("正确");
 				return re;
 			}
 			else {
-				re.code=400;
-				re.data="错误的修改";
+				re.setCode(400);
+				re.setData("错误的修改");
 				return re;
 			}
 		}
 		else {
-			re.code=400;
-			re.data="用户未登录";
+			re.setCode(400);
+			re.setData("用户未登录");
 			return re;
 		}
 	}
@@ -245,19 +249,19 @@ public class UserController {
 			u=null;
 			u=userRepository.save(user);
 			if(u!=null) {
-				re.code=200;
-				re.data="修改成功";
+				re.setCode(200);
+				re.setData("修改成功");
 				return re;
 			}
 			else {
-				re.code=400;
-				re.data="修改失败";
+				re.setCode(400);
+				re.setData("修改失败");
 				return re;
 			}
 		}
 		else {
-			re.code=400;
-			re.data="用户错误";
+			re.setCode(400);
+			re.setData("用户错误");
 			return re;
 		}
 	}
@@ -271,8 +275,8 @@ public class UserController {
 		Response re=new Response();
 		user=userService.getUserByPhone(phone);
 		if(user==null) {
-			re.code=400;
-			re.data="用户未注册！";
+			re.setCode(400);
+			re.setData("用户未注册");
 			return re;
 		}
 		 
@@ -301,13 +305,132 @@ public class UserController {
             System.out.println(result);
             valid_code=uuid;
         } catch (Exception e) {
-        	re.code=400;
-			re.data="获取验证码出错";
+        	re.setCode(400);
+			re.setData("获取验证码出错");
 			return re;
         }
         //用于回调
-        re.code=200;
-		re.data="获取验证码成功";
+        re.setCode(200);
+		re.setData("获取验证码成功");
 		return re;
     }
+	
+	//管理员修改用户状态
+	@GetMapping("/admin/modify/{id}")
+    @ResponseBody
+    public Object updateUserStatu(HttpServletRequest request,@PathVariable Long id,String statu) {
+		HttpSession session=request.getSession();
+		Admin admin=(Admin) session.getAttribute("admin");
+		Response re=new Response();
+		if(admin!=null) {
+			User user=userService.getUser(id);
+			if(user!=null) {
+				user.setStatu(statu);
+				userService.updateUser(user);
+				re.setCode(200);
+				re.setData("修改成功");
+				return re;
+			}
+			else {
+				re.setCode(400);
+				re.setData("用户不存在");
+				return re;
+			}
+			
+		}
+		else {
+			re.setCode(400);
+			re.setData("管理员未登录");
+			return re;
+		}
+	}
+	
+	//管理员删除用户通过ID
+	@GetMapping("/admin/delete/{id}")
+	@ResponseBody
+	public Object deleteById(HttpServletRequest request,@PathVariable Long id) {
+		HttpSession session=request.getSession();
+		Admin admin=(Admin) session.getAttribute("admin");
+		Response re=new Response();
+		if(admin!=null) {
+			User user=userService.getUser(id);
+			if(user!=null) {
+				userService.delUser(id);
+				re.setCode(200);
+				re.setData("成功");
+				return re;
+			}
+			
+			else {
+				re.setCode(400);
+				re.setData("用户不存在");
+				return re;
+			}
+		}
+		
+		else {
+			re.setCode(400);
+			re.setData("管理员未登录");
+			return re;
+		}
+	}
+	
+	
+	//管理员查看所有用户 分页默认每页10个用户
+	@GetMapping("/admin/get")
+	@ResponseBody
+	public Object getAllUser(HttpServletRequest request,@PageableDefault(page=0,size=10)Pageable pageable) {
+		HttpSession session=request.getSession();
+		Admin admin=(Admin) session.getAttribute("admin");
+		Page<User> ls=null;
+		Response re=new Response();
+		if(admin!=null) {
+			ls=userService.getAllUser(pageable);
+			if(ls!=null) {
+				re.setCode(200);
+				re.setData(ls.getContent());
+				return re;
+			}
+			else {
+				re.setCode(400);
+				re.setData("获取用户列表失败");
+				return re;
+			}
+		}
+		else {
+			re.setCode(400);
+			re.setData("管理员未登录");
+			return re;
+		}
+	}
+	
+	//管理员增加管理员通过用户ID
+	@GetMapping("/admin/add/{id}")
+	@ResponseBody
+	public Object addAdmin(HttpServletRequest request,@PathVariable Long id) {
+		HttpSession session=request.getSession();
+		Admin admin=(Admin) session.getAttribute("admin");
+		Response re=new Response();
+		if(admin!=null) {
+			User user=userService.getUser(id);
+			if(user!=null) {
+				user.setStatu("管理员");
+				userService.updateUser(user);
+				re.setCode(200);
+				re.setData("修改成功");
+				return re;
+			}
+			else {
+				re.setCode(400);
+				re.setData("用户不存在");
+				return re;
+			}
+			
+		}
+		else {
+			re.setCode(400);
+			re.setData("管理员未登录");
+			return re;
+		}
+	}
 }

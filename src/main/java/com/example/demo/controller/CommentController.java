@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.User;
+import com.example.demo.repository.CommentRepository;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.MovieService;
+import com.mysql.fabric.xmlrpc.base.Array;
+import com.example.demo.controller.AdminHomeController.Admin;
 import com.example.demo.controller.AdminHomeController.Response;
 @Controller
 @RequestMapping("/comment")
@@ -30,6 +35,8 @@ public class CommentController {
 	CommentService commentService;
 	@Autowired
 	MovieService movieService;
+	@Autowired
+	CommentRepository commentRepository;
 	
 	@ResponseBody
 	@PostMapping("/add/{movie_id}")
@@ -57,8 +64,8 @@ public class CommentController {
 			return re;
 		}
 	}
-	
-	//删除评论通过评论ID
+
+	//用户删除评论通过评论ID
 	@ResponseBody
 	@PostMapping("/delete/{id}")
 	public Object deleteComment(HttpServletRequest request,@PathVariable Long id) {
@@ -126,6 +133,55 @@ public class CommentController {
 		else {
 			re.setCode(400);
 			re.setData("用户未登录");
+			return re;
+		}
+	}
+	
+	//管理员删除评论通过评论ID
+	@ResponseBody
+	@GetMapping("/admin/delete/{id}")
+	public Object delComment(HttpServletRequest request,@PathVariable Long id) {
+		HttpSession session=request.getSession();
+		Admin admin=(Admin) session.getAttribute("admin");
+		Response re=new Response();
+		if(admin!=null) {
+			commentService.delComment(id);
+			re.setCode(200);
+			re.setData("删除成功");
+			return re;
+		}
+		else {
+			re.setCode(400);
+			re.setData("管理员未登录");
+			return re;
+		}
+	}
+	
+	//管理员查看所有评论，分页默认每页10条
+	@ResponseBody
+	@GetMapping("/admin/get")
+	public Object getAllComment(HttpServletRequest request,@PageableDefault(page=0,size=10)Pageable pageable) {
+		HttpSession session=request.getSession();
+		Admin admin=(Admin) session.getAttribute("admin");
+		Response re=new Response();
+		Page<Comment> ls=null;
+		if(admin!=null) {
+			ls=commentService.findAllComment(pageable);
+			if(ls!=null) {
+				re.setCode(200);
+				re.setData(ls.getContent());
+				return re;
+			}
+			else{
+				re.setCode(400);
+				re.setData("获取评论出错");
+				return re;
+			}
+			
+		}
+		else {
+			re.setCode(400);
+			re.setData("管理员未登录");
 			return re;
 		}
 	}
