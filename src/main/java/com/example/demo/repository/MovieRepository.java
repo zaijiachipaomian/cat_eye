@@ -29,7 +29,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long>,JpaSpecifica
 	@Query(nativeQuery = true , value =" select distinct area from movie ")
 	public Set<String> findDistinctAreaSet();
 	
-	@Query(nativeQuery = true , value =" select distinct release_date from movie ")
+//	@Query(nativeQuery = true , value =" select distinct release_date from movie ")
+	@Query(value =" select function('date_format' , m.releaseDate ,'%Y') as year from Movie m group by function ('date_format' ,m.releaseDate ,'%Y') order by year desc ")
 	public Set<String> findDistinctReleaseSet();
 	
 	/**
