@@ -84,7 +84,12 @@ public class UserController {
 			return "login";
 		}
 	}
-	
+	/**
+	 * 请求方式Post
+	 * 需要三个参数，参数名为phone,password,yzm
+	 * password为空则代表用户使用验证码登录
+	 * 反之
+	 */
 	//用户登陆
 	@ResponseBody
 	@PostMapping("/login")
@@ -152,6 +157,11 @@ public class UserController {
 		return "register";
 	}
 	
+	
+	/**
+	 * 请求方式Post
+	 * 需要一个参数，参数名为yzm，表示用户输入的验证码
+	 */
 	//用户注册
 	@ResponseBody
 	@PostMapping("/reg")
@@ -204,6 +214,7 @@ public class UserController {
 		
 	}
 	
+	//退出登陆
 	@GetMapping("/loginOut")
 	public String loginOut(HttpServletRequest request) {
 		HttpSession session=request.getSession();
@@ -266,6 +277,11 @@ public class UserController {
 		}
 	}
 	
+	
+	/**
+	 * 请求方式Get
+	 * 需要一个参数，参数名为phone，表示收验证码的手机号码
+	 */
 	//获取验证码
 	@GetMapping("/valid_code")
     @ResponseBody
@@ -315,6 +331,10 @@ public class UserController {
 		return re;
     }
 	
+	/**
+	 * 请求方式Get
+	 * 需要一个参数，参数名为statu，表示修改用户后的用户状态
+	 */
 	//管理员修改用户状态
 	@GetMapping("/admin/modify/{id}")
     @ResponseBody
@@ -403,6 +423,7 @@ public class UserController {
 			return re;
 		}
 	}
+	
 	
 	//管理员增加管理员通过用户ID
 	@GetMapping("/admin/add/{id}")
