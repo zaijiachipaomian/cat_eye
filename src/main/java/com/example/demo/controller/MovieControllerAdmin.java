@@ -158,36 +158,7 @@ public class MovieControllerAdmin {
 		return map;
 	}
 	
-	@GetMapping("/")
-	@ResponseBody
-	public Page<Movie> getMovieList(MovieQuery movieQuery , @PageableDefault(page=0,size=10)Pageable pageable){
-		Integer year = Integer.parseInt(movieQuery.getReleaseDate());
-		return movieRepository.findAll(new Specification<Movie>() {
-			@Override
-			public Predicate toPredicate(Root<Movie> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				List<Predicate> predicates = new ArrayList<>();
-				if(!"".equals(movieQuery.getTypeId()) && (movieQuery.getTypeId() != null)) {
-					Join join = root.join("types");
-					predicates.add(criteriaBuilder.equal(join.get("id"),movieQuery.getTypeId()));
-				}
-				if(!"".equals(movieQuery.getName()) && (movieQuery.getName() != null)) {
-					predicates.add(criteriaBuilder.like(root.<String>get("name"), "%"+movieQuery.getName()+"%"));
-				}
-				if(!"".equals(movieQuery.getArea()) && (movieQuery.getArea() != null)) {
-					predicates.add(criteriaBuilder.like(root.<String>get("area"), "%"+movieQuery.getArea()+"%"));
-				}
-				if(!"".equals(movieQuery.getReleaseDate()) && (movieQuery.getReleaseDate() != null)) {
-					predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), year + "-01-01"));
-					predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), (year + 1 + "")));
-				}
-				query.where(predicates.toArray(new Predicate[predicates.size()]));
-                return null;
-				// TODO Auto-generated method stub
-//				Join join = root.join("types");
-//				return criteriaBuilder.equal(join.get("id"),typeId);
-			}
-		},pageable);
-	}
+	
 	
 	
 	
