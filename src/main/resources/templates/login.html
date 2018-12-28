@@ -53,14 +53,14 @@
                    autocomplete="off">
         </div>
 
-        <div class="normalInput" id="messages">
-            <input type="text" id="yzm1" name="yzm" class="kapkey" maxlength="6" placeholder="验证码">
-            <span class="formLine"></span>
-            <a href="#" id="getKey1" class="linkAGreen" style="pointer-events: none;" onclick="sendemail1()">短信验证码</a>
-        </div>
-        <a href="##" class="fullBtnGreen">登录</a>
-    </form>
-</div>
+			<div class="normalInput" id="messages">
+				<input type="text" id="yzm1" name="yzm"  class="kapkey" maxlength="6" placeholder="验证码">
+				<span class="formLine"></span>
+				<a href="#" id="getKey1" class="linkAGreen" style="pointer-events: none;" onclick="sendemail1()">短信验证码</a>
+			</div>
+			<a href="##" onclick="login('2')" class="fullBtnGreen">登录</a>
+		</form>
+	</div>
 </body>
 <script>
     function login(value) {

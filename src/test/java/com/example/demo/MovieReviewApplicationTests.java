@@ -206,7 +206,7 @@ public class MovieReviewApplicationTests {
 		Movie movie = new Movie("海王",
 				"https://p0.meituan.net/movie/c106904da68edd848afd4a320976d051346321.jpg",
 				"美国",
-				"2018-12-18",
+				new Date(),
 				"134分钟",
 				"海王爸爸好厉害",
 				"正在热映");
