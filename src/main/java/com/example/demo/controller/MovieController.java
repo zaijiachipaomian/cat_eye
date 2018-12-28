@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +59,7 @@ public class MovieController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/{id}")
+	@GetMapping("/{id}/api")
 	public Map<String,Object> getMovie(@PathVariable Long id) {
 		Map<String,Object> map = new HashMap<>();
 		Movie movie = movieService.findMovieById(id);
@@ -129,6 +132,20 @@ public class MovieController {
 					Integer year = Integer.parseInt(movieQuery.getReleaseDate());
 					predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), year + "-01-01"));
 					predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), (year + 1 + "")));
+				}
+				if(!"".equals(movieQuery.getShowType()) && (movieQuery.getShowType() != null)) {
+					//Integer showType = Integer.parseInt(movieQuery.getShowType());
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					Calendar c = Calendar.getInstance();
+					Date date = new Date();
+					//正在热映（过去两个月）
+					if(movieQuery.getShowType().equals("1")) {
+						c.setTime(date);
+				        c.add(Calendar.MONTH, - 2);
+				        Date d = c.getTime();
+				        predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), format.format(d)));
+						predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), format.format(date)));
+					}
 				}
 				//query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(root.get("releaseDate")));
 				//Join join2 = root.join("comments");

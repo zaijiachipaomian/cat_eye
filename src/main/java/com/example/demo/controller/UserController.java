@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import java.util.concurrent.TimeUnit;
@@ -185,6 +183,7 @@ public class UserController {
 					return re;
 				}
 				else {
+					//设置用户注册的时间
 					user.setRegDate(new Date());
 					if(userService.register(user)!=null) {
 						re.setCode(200);
@@ -346,10 +345,17 @@ public class UserController {
 			User user=userService.getUser(id);
 			if(user!=null) {
 				user.setStatu(statu);
-				userService.updateUser(user);
-				re.setCode(200);
-				re.setData("修改成功");
-				return re;
+				if(userService.updateUser(user)!=null) {
+					re.setCode(200);
+					re.setData("修改成功");
+					return re;
+				}
+				else {
+					re.setCode(400);
+					re.setData("修改失败");
+					return re;
+				}
+				
 			}
 			else {
 				re.setCode(400);
@@ -375,10 +381,18 @@ public class UserController {
 		if(admin!=null) {
 			User user=userService.getUser(id);
 			if(user!=null) {
-				userService.delUser(id);
-				re.setCode(200);
-				re.setData("成功");
-				return re;
+				try{
+					userService.delUser(id);
+					re.setCode(200);
+					re.setData("删除成功");
+					return re;
+				}catch (Exception e) {
+					e.printStackTrace();
+					re.setCode(400);
+					re.setData("删除失败");
+					return re;
+				}
+				
 			}
 			
 			else {
@@ -436,10 +450,17 @@ public class UserController {
 			User user=userService.getUser(id);
 			if(user!=null) {
 				user.setStatu("管理员");
-				userService.updateUser(user);
-				re.setCode(200);
-				re.setData("修改成功");
-				return re;
+				if(userService.updateUser(user)!=null) {
+					re.setCode(200);
+					re.setData("修改成功");
+					return re;
+				}
+				else {
+					re.setCode(400);
+					re.setData("修改失败");
+					return re;
+				}
+				
 			}
 			else {
 				re.setCode(400);

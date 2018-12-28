@@ -78,6 +78,7 @@ public class User {
 		return password;
 	}
 
+	@JsonBackReference
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -85,7 +86,7 @@ public class User {
 	public String getEmail() {
 		return email;
 	}
-
+	@JsonBackReference
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -93,7 +94,7 @@ public class User {
 	public String getPhone() {
 		return phone;
 	}
-
+	@JsonBackReference
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}

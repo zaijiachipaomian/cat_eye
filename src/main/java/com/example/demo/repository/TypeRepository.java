@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.demo.entity.Type;
 
 public interface TypeRepository extends JpaRepository<Type, Long>{
+	public Type findByName(String typeName);
+	
 	
 	/**
 	 * 多对多查询，从电影到类型，需要按顺序调用这两个方法

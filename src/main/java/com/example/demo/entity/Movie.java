@@ -148,7 +148,7 @@ public class Movie {
 	public List<Person> getPersons() {
 		return persons;
 	}
-	@JsonBackReference
+	//@JsonBackReference
 	public void setPersons(List<Person> persons) {
 		this.persons = persons;
 	}
@@ -177,7 +177,7 @@ public class Movie {
 	public List<Type> getTypes() {
 		return types;
 	}
-	@JsonBackReference
+	//@JsonBackReference
 	public void setTypes(List<Type> types) {
 		this.types = types;
 	}
