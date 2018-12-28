@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -157,16 +158,32 @@ public class UserController {
 		//判断验证码是否正确
 		if(valid_code!=null) {
 			if(valid_code.equals(yzm)) {
-				if(userService.register(user)!=null) {
-					re.setCode(200);
-					re.setData("注册成功");
+				//判断手机号码是否已注册
+				if(userService.getUserByPhone(user.getPhone())!=null) {
+					re.setCode(400);
+					re.setData("手机号已注册");
+					return re;
+				}
+				//判断用户名是否已已存在
+				else if(userService.getUserByUsername(user.getUsername())!=null) {
+					re.setCode(400);
+					re.setData("用户名已存在");
 					return re;
 				}
 				else {
-					re.setCode(400);
-					re.setData("注册失败");
-					return re;
+					user.setRegDate(new Date());
+					if(userService.register(user)!=null) {
+						re.setCode(200);
+						re.setData("注册成功");
+						return re;
+					}
+					else {
+						re.setCode(400);
+						re.setData("注册失败");
+						return re;
+					}
 				}
+				
 			}
 			else{
 				re.code=400;
