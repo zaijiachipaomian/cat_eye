@@ -82,31 +82,36 @@ public class MovieControllerAdmin {
 	 * 			introduction	text		我们在这个屯立长大
 	 * 			filesName(图片) 	file		文件		
 	 * 			typeIds(电影类型的ID)text	1,2,3,4,5
-	 * 			personRoles		text	  [{ "personId" : 1 , "role" : "导演" },{ "personId" : 2 ,  "role" : "演员" }]
+	 * 			movieRoles		text	  [{ "personId" : 1 , "role" : "导演" },{ "personId" : 2 ,  "role" : "演员" }]
 	 */
 	@PostMapping("/add")
 	public String insertOrUpdateMovie(Movie movie ,
-			@RequestParam("fileName")  MultipartFile file,
-			@RequestParam("filesName") List<MultipartFile> files,
-			@RequestParam("typeIds") List<Long> typeIds,
-			@RequestParam("personRoles") String movieRoles ){
+			@RequestParam(name = "fileName", required = false)  MultipartFile file,
+			@RequestParam(name = "filesName", required = false) List<MultipartFile> files,
+			@RequestParam(name = "typeIds", required = false) List<Long> typeIds,
+			@RequestParam(name = "personRoles", required = false) String movieRoles ){
+		System.out.println(movieRoles);
 		if(typeIds != null) {
 			List<Type> types = typeRepository.findAllById(typeIds);
 			movie.setTypes(types);
 		}
-		List<MovieRole> movieRoleList = JSON.parseArray(movieRoles, MovieRole.class);
-		System.out.println(movieRoleList);
-		for(MovieRole movieRole : movieRoleList) {
-			movie.addMovieRole(movieRole);
-			movie.addPerson(personRepository.findById(movieRole.getPersonId()).get());
+		if(movieRoles != null) {
+			List<MovieRole> movieRoleList = JSON.parseArray(movieRoles, MovieRole.class);
+			System.out.println(movieRoleList);
+			for(MovieRole movieRole : movieRoleList) {
+				movie.addMovieRole(movieRole);
+				movie.addPerson(personRepository.findById(movieRole.getPersonId()).get());
+			}
 		}
-		
-		
 		//批量文件上传成功，返回文件的路径加名字的List,否则返回null
-		List<String> urlList = FileUpload.multifileUpload(files);
-		String result = FileUpload.fileUpload(file);
-		if(urlList == null || result.equals("false"))
-			return "false";
+		List<String> urlList = null;
+		String result = null;
+		if(files != null)
+			urlList = FileUpload.multifileUpload(files);
+		if(file != null)
+			result = FileUpload.fileUpload(file);
+//		if(urlList == null || result.equals("false"))
+//			return "false";
 		boolean insertResult = movieService.addMovie(movie, urlList ,result);
 		if(insertResult)
 			return "true";
