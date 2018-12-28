@@ -22,10 +22,12 @@ public class MovieServiceImpl implements MovieService {
 		boolean isFlag=false;
 		Movie m=null;
 		//List<Photo> photoList = new ArrayList<>();
-		for(String photoUrl : photoUrlList) {
-			movie.addPhoto(new Photo(photoUrl));
-		}
-		movie.setPoster(posterUrl);
+		if(photoUrlList != null)
+			for(String photoUrl : photoUrlList) {
+				movie.addPhoto(new Photo(photoUrl));
+			}
+		if(posterUrl != null)
+			movie.setPoster(posterUrl);
 		System.out.println(movie);
 		System.out.println(movie.getPhotos());
 		m=movieRepository.save(movie);
