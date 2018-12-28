@@ -54,17 +54,17 @@ public class MovieServiceImpl implements MovieService {
 		return false;
 	}
 
-	@Override
-	public Map<String, Object> findMovieByStatus(String status) {
-		// TODO Auto-generated method stub
-		Map<String,Object> map=new HashMap<String,Object>();
-		List<Movie> ls=new ArrayList<Movie>();
-		ls=movieRepository.findByStatus(status);
-		if(ls.size()>0) {
-			map.put("movie", ls);
-		}
-		return map;
-	}
+//	@Override
+//	public Map<String, Object> findMovieByStatus(String status) {
+//		// TODO Auto-generated method stub
+//		Map<String,Object> map=new HashMap<String,Object>();
+//		List<Movie> ls=new ArrayList<Movie>();
+//		ls=movieRepository.findByStatus(status);
+//		if(ls.size()>0) {
+//			map.put("movie", ls);
+//		}
+//		return map;
+//	}
 
 	@Override
 	public Map<String, Object> findByTypesAndAreaAndReleaseDate(String types, String area, String release_date) {

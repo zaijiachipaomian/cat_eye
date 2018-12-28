@@ -49,7 +49,8 @@ public class Movie {
 	//简介
 	private String introduction;
 	//状态
-	private String status;
+	
+	private Float avgScore;
 	@OneToMany(mappedBy = "movie" ,cascade = {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
@@ -90,12 +91,12 @@ public class Movie {
 	@Fetch(FetchMode.SELECT)
 	private List<MovieRole> movieRoles = new ArrayList<>();
 	
-    @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.LAZY)
     @Fetch(FetchMode.SELECT)
     private List<Person> persons = new ArrayList<>();
    
 	//类型
-    @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinTable(joinColumns = { @JoinColumn(name = "movie_id")},
     			inverseJoinColumns = {@JoinColumn(name = "type_id")})
     private List<Type> types = new ArrayList<>();
@@ -206,12 +207,14 @@ public class Movie {
 		this.name = name;
 	}
 
-	public String getStatus() {
-		return status;
+	
+
+	public Float getAvgScore() {
+		return avgScore;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setAvgScore(Float avgScore) {
+		this.avgScore = avgScore;
 	}
 
 	public String getPoster() {
@@ -265,7 +268,7 @@ public class Movie {
 	}
 
 	public Movie(String name, String poster, String area,
-			Date releaseDate, String length, String introduction, String status) {
+			Date releaseDate, String length, String introduction, Float avgScore) {
 		super();
 		this.name = name;
 		this.poster = poster;
@@ -273,7 +276,7 @@ public class Movie {
 		this.releaseDate = releaseDate;
 		this.length = length;
 		this.introduction = introduction;
-		this.status = status;
+		this.avgScore = avgScore;
 	}
 
 	public Movie() {
@@ -284,7 +287,7 @@ public class Movie {
 	@Override
 	public String toString() {
 		return "Movie [Id=" + Id + ", name=" + name + ", poster=" + poster + ", area=" + area + ", releaseDate="
-				+ releaseDate + ", length=" + length + ", introduction=" + introduction + ", status=" + status + "]";
+				+ releaseDate + ", length=" + length + ", introduction=" + introduction + ", avgScore=" + avgScore + "]";
 	}
 
 	

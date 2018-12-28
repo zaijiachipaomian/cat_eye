@@ -41,7 +41,7 @@ public class User {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.EAGER)
+	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<Comment> comments = new ArrayList<>();
 	

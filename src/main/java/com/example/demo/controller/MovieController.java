@@ -133,7 +133,7 @@ public class MovieController {
 				}
 				query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(root.get("releaseDate")));
 				//Join join2 = root.join("comments");
-				//query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(join2.get("score")));
+				//query.where(predicates.toArray(new Predicate[predicates.size()])).;
 			
 			
 				

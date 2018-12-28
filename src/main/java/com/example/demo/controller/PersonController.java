@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Person;
+import com.example.demo.repository.PersonRepository;
 import com.example.demo.service.PersonService;
 import com.example.demo.util.FileUpload;
 
@@ -23,6 +27,9 @@ public class PersonController {
 	
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	PersonRepository personRepository;
 	
 	/**
 	 * @author 池章立
@@ -73,6 +80,13 @@ public class PersonController {
 		Person person = personService.getPerson(id);
 		map.put("person", person);
 		return map;
+	}
+	
+	@GetMapping("/get/")
+	public Object getPersonList( @PageableDefault(page=0,size=10)Pageable pageable){
+		//Map<String , Object> map = new HashMap<>();
+		Page<Person> personPage = personRepository.findAll(pageable);
+		return personPage;
 	}
 	
 }

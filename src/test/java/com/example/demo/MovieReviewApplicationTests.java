@@ -59,6 +59,7 @@ public class MovieReviewApplicationTests {
 	@Autowired
 	UserRepository userRepository;
 	
+	
 	@Test
 	public void contextLoads9() {
 		Movie movie = movieRepository.findById(248215L).get();
@@ -209,7 +210,7 @@ public class MovieReviewApplicationTests {
 				new Date(),
 				"134分钟",
 				"海王爸爸好厉害",
-				"正在热映");
+				(float) 123);
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/9403fa3dba59733ae508c288c3314dd0439945.jpg"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/5d08cde7241c47c29098fb4f6e412454431755.jpg@126w_126h_1e_1c"));
 		movie.addPhoto(new Photo("https://p1.meituan.net/movie/1a7c3163e69bbea88d4a376e1989a750448007.jpg@126w_126h_1e_1c"));
