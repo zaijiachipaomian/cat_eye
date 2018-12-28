@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.TodayBoxOffice;
+import com.example.demo.entity.User;
 import com.example.demo.service.BoxOfficeService;
 
 @Controller
@@ -45,8 +51,18 @@ public class IndexController {
 	}
 	
 	@GetMapping("/")
-	public String index() {
-
+	public String index(HttpServletRequest request,HttpServletResponse response) {
+		HttpSession session =request.getSession();
+		User user=(User) session.getAttribute("user");
+		if(user!=null) {
+			Cookie c=new Cookie("user_id",user.getId().toString());
+			Cookie c1=new Cookie("username", user.getUsername());
+			//会话级cookie，关闭浏览器失效
+			c.setMaxAge(-1);
+			response.addCookie(c);
+			response.addCookie(c1);
+		}
 		return "index";
 	}
+
 }

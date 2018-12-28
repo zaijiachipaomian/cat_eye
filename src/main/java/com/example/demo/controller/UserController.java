@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -44,14 +45,14 @@ public class UserController {
 	@GetMapping("/{id}")
 	public Object getMe(HttpServletRequest request,@PathVariable Long id) {
 		HttpSession session=request.getSession();
-		Map<String,Object> map=new HashMap<String,Object>();
 		Response re=new Response();
 		User user=(User) session.getAttribute("user");
 		if(user!=null) {
 			//判断该用户是否为当前登录用户
 			if(user.getId()==id) {
-				map.put("user", user);
-				return map;
+				re.setCode(200);
+				re.setData(user);
+				return re;
 			}
 			else{
 				re.setCode(400);
@@ -157,16 +158,32 @@ public class UserController {
 		//判断验证码是否正确
 		if(valid_code!=null) {
 			if(valid_code.equals(yzm)) {
-				if(userService.register(user)!=null) {
-					re.setCode(200);
-					re.setData("注册成功");
+				//判断手机号码是否已注册
+				if(userService.getUserByPhone(user.getPhone())!=null) {
+					re.setCode(400);
+					re.setData("手机号已注册");
+					return re;
+				}
+				//判断用户名是否已已存在
+				else if(userService.getUserByUsername(user.getUsername())!=null) {
+					re.setCode(400);
+					re.setData("用户名已存在");
 					return re;
 				}
 				else {
-					re.setCode(400);
-					re.setData("注册失败");
-					return re;
+					user.setRegDate(new Date());
+					if(userService.register(user)!=null) {
+						re.setCode(200);
+						re.setData("注册成功");
+						return re;
+					}
+					else {
+						re.setCode(400);
+						re.setData("注册失败");
+						return re;
+					}
 				}
+				
 			}
 			else{
 				re.code=400;
