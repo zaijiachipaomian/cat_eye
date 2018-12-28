@@ -41,5 +41,10 @@ $(document).ready(function () {
 
     }
 
+    // 获取热门电影
+    function fetch_films_hot(){
+
+    }
+    // 
     fetch_index();
 });
