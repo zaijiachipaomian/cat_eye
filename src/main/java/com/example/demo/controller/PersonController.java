@@ -46,7 +46,7 @@ public class PersonController {
 		birthday		TEXT				2018-12-25
 		introduction	TEXT				海王是一部新电影
 	 */
-	@PostMapping("/addOrUpdate")
+	@PostMapping("/admin/addOrUpdate")
 	public String insertOrUpdatePerson(Person person , @RequestParam("fileName") MultipartFile file){
 		//文件上传成功，返回文件的路径加名字,否则返回false
 		String result = FileUpload.fileUpload(file);
@@ -61,7 +61,7 @@ public class PersonController {
 	 * @param id person表的数据id
 	 * @return true表示删除成功，false表示删除失败
 	 */
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public String deletePerson(@PathVariable Long id){
 		try {
 			personService.deletePerson(id);
@@ -82,7 +82,7 @@ public class PersonController {
 		return map;
 	}
 	
-	@GetMapping("/get/")
+	@GetMapping("/admin/get/")
 	public Object getPersonList( @PageableDefault(page=0,size=10)Pageable pageable){
 		//Map<String , Object> map = new HashMap<>();
 		Page<Person> personPage = personRepository.findAll(pageable);
