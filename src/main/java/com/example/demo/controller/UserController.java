@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 import java.util.concurrent.TimeUnit;
@@ -281,53 +282,106 @@ public class UserController {
 	 * 请求方式Get
 	 * 需要一个参数，参数名为phone，表示收验证码的手机号码
 	 */
-	//获取验证码
-	@GetMapping("/valid_code")
+	//注册时获取验证码
+	@GetMapping("/valid_code_reg")
     @ResponseBody
-    public Object ReceiverSMS(String phone) {
+    public Object ReceiverSMS1(String phone) {
+		System.out.println(phone); 
+		User user=null;
+		Response re=new Response();
+		user=userService.getUserByPhone(phone);
+		if(user!=null) {
+			re.setCode(400);
+			re.setData("该号码已注册");
+			return re;
+		}
+		else {
+			int appid = 1400155268; 
+	        String appkey = "9e7873c0a1b3bc1fb8976cfcafb1599e";
+	        // 需要发送短信的手机号码
+	        String[] phoneNumbers = {phone};
+	        // 短信模板ID，需要在短信应用中申请
+	        int templateId = 219697; 
+	        // 签名
+	        String smsSign = "池章立个人技术经验分享"; 
+	        Integer random=(int)((Math.random()*9+1)*100000);
+	        String uuid =random.toString();
+	        System.out.println(uuid);
+
+	        //User user = userRepository.findByPhoneNumber(phone);
+	        //System.out.println(user);
+	        
+	        stringRedisTemplate.opsForValue().set(phone, uuid,1,TimeUnit.MINUTES);
+	        //发送短信
+	        try {
+	            String[] params = {uuid,"1"};
+	            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
+	            //send 的参数 1. 0 : 代表普通参数， 2. countrycode 国家代码， 3. 短信的手机号  4. 短信发送的内容， 5和6  扩展内容
+	            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
+	                templateId, params, smsSign, "", "");  
+	            System.out.println(result);
+	            valid_code=uuid;
+	        } catch (Exception e) {
+	        	re.setCode(400);
+				re.setData("获取验证码出错");
+				return re;
+	        }
+	        //用于回调
+	        re.setCode(200);
+			re.setData("获取验证码成功");
+			return re;
+		}
+    }
+	
+	//找回密码时获取验证码
+	@GetMapping("/valid_code_back")
+    @ResponseBody
+    public Object ReceiverSMS2(String phone) {
 		System.out.println(phone); 
 		User user=null;
 		Response re=new Response();
 		user=userService.getUserByPhone(phone);
 		if(user==null) {
 			re.setCode(400);
-			re.setData("用户未注册");
+			re.setData("未注册");
 			return re;
 		}
-		 
-        int appid = 1400155268; 
-        String appkey = "9e7873c0a1b3bc1fb8976cfcafb1599e";
-        // 需要发送短信的手机号码
-        String[] phoneNumbers = {phone};
-        // 短信模板ID，需要在短信应用中申请
-        int templateId = 219697; 
-        // 签名
-        String smsSign = "池章立个人技术经验分享"; 
-        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 9).toLowerCase();
-        System.out.println(uuid);
+		else {
+			int appid = 1400155268; 
+	        String appkey = "9e7873c0a1b3bc1fb8976cfcafb1599e";
+	        // 需要发送短信的手机号码
+	        String[] phoneNumbers = {phone};
+	        // 短信模板ID，需要在短信应用中申请
+	        int templateId = 219697; 
+	        // 签名
+	        String smsSign = "池章立个人技术经验分享"; 
+	        Integer random=(int)((Math.random()*9+1)*100000);
+	        String uuid =random.toString();
+	        System.out.println(uuid);
 
-        //User user = userRepository.findByPhoneNumber(phone);
-        //System.out.println(user);
-        
-        stringRedisTemplate.opsForValue().set(phone, uuid,1,TimeUnit.MINUTES);
-        //发送短信
-        try {
-            String[] params = {uuid,"1"};
-            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
-            //send 的参数 1. 0 : 代表普通参数， 2. countrycode 国家代码， 3. 短信的手机号  4. 短信发送的内容， 5和6  扩展内容
-            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
-                templateId, params, smsSign, "", "");  
-            System.out.println(result);
-            valid_code=uuid;
-        } catch (Exception e) {
-        	re.setCode(400);
-			re.setData("获取验证码出错");
+	        //User user = userRepository.findByPhoneNumber(phone);
+	        //System.out.println(user);
+	        
+	        stringRedisTemplate.opsForValue().set(phone, uuid,1,TimeUnit.MINUTES);
+	        //发送短信
+	        try {
+	            String[] params = {uuid,"1"};
+	            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
+	            //send 的参数 1. 0 : 代表普通参数， 2. countrycode 国家代码， 3. 短信的手机号  4. 短信发送的内容， 5和6  扩展内容
+	            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
+	                templateId, params, smsSign, "", "");  
+	            System.out.println(result);
+	            valid_code=uuid;
+	        } catch (Exception e) {
+	        	re.setCode(400);
+				re.setData("获取验证码出错");
+				return re;
+	        }
+	        //用于回调
+	        re.setCode(200);
+			re.setData("获取验证码成功");
 			return re;
-        }
-        //用于回调
-        re.setCode(200);
-		re.setData("获取验证码成功");
-		return re;
+		}
     }
 	
 	/**
@@ -474,5 +528,11 @@ public class UserController {
 			re.setData("管理员未登录");
 			return re;
 		}
+	}
+	@GetMapping("/test")
+	@ResponseBody
+	public String test() {
+		Integer random=(int)((Math.random()*9+1)*100000);
+		return random.toString();
 	}
 }
