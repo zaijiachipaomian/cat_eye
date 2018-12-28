@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Person;
+import com.example.demo.repository.PersonRepository;
 import com.example.demo.service.PersonService;
 import com.example.demo.util.FileUpload;
 
@@ -23,6 +27,9 @@ public class PersonController {
 	
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	PersonRepository personRepository;
 	
 	/**
 	 * @author 池章立
@@ -39,7 +46,7 @@ public class PersonController {
 		birthday		TEXT				2018-12-25
 		introduction	TEXT				海王是一部新电影
 	 */
-	@PostMapping("/addOrUpdate")
+	@PostMapping("/admin/addOrUpdate")
 	public String insertOrUpdatePerson(Person person , @RequestParam("fileName") MultipartFile file){
 		//文件上传成功，返回文件的路径加名字,否则返回false
 		String result = FileUpload.fileUpload(file);
@@ -54,7 +61,7 @@ public class PersonController {
 	 * @param id person表的数据id
 	 * @return true表示删除成功，false表示删除失败
 	 */
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public String deletePerson(@PathVariable Long id){
 		try {
 			personService.deletePerson(id);
@@ -73,6 +80,13 @@ public class PersonController {
 		Person person = personService.getPerson(id);
 		map.put("person", person);
 		return map;
+	}
+	
+	@GetMapping("/admin/get/")
+	public Object getPersonList( @PageableDefault(page=0,size=10)Pageable pageable){
+		//Map<String , Object> map = new HashMap<>();
+		Page<Person> personPage = personRepository.findAll(pageable);
+		return personPage;
 	}
 	
 }
