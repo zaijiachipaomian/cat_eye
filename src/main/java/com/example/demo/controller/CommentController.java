@@ -25,7 +25,6 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.MovieService;
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.example.demo.controller.AdminHomeController.Admin;
 import com.example.demo.controller.AdminHomeController.Response;
 @Controller

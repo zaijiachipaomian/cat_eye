@@ -36,7 +36,6 @@ import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.service.MovieService;
 import com.example.demo.util.StringUitl;
-
 @RequestMapping("/films")
 @RestController
 public class MovieController {
