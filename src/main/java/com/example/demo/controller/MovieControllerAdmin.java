@@ -1,13 +1,23 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +33,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Movie;
+import com.example.demo.entity.MovieQuery;
 import com.example.demo.entity.MovieRole;
 import com.example.demo.entity.News;
 import com.example.demo.entity.Person;
@@ -149,10 +160,33 @@ public class MovieControllerAdmin {
 	
 	@GetMapping("/")
 	@ResponseBody
-	public Page<Movie> getMovieList(String movieName , @PageableDefault(page=0,size=10)Pageable pageable){
-		//Page<Movie> moviePage = movieRepository.findAll(pageable);
-		Page<Movie> moviePage = movieRepository.findByTypesId(1L, pageable);
-		return moviePage;
+	public Page<Movie> getMovieList(MovieQuery movieQuery , @PageableDefault(page=0,size=10)Pageable pageable){
+		Integer year = Integer.parseInt(movieQuery.getReleaseDate());
+		return movieRepository.findAll(new Specification<Movie>() {
+			@Override
+			public Predicate toPredicate(Root<Movie> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> predicates = new ArrayList<>();
+				if(!"".equals(movieQuery.getTypeId()) && (movieQuery.getTypeId() != null)) {
+					Join join = root.join("types");
+					predicates.add(criteriaBuilder.equal(join.get("id"),movieQuery.getTypeId()));
+				}
+				if(!"".equals(movieQuery.getName()) && (movieQuery.getName() != null)) {
+					predicates.add(criteriaBuilder.like(root.<String>get("name"), "%"+movieQuery.getName()+"%"));
+				}
+				if(!"".equals(movieQuery.getArea()) && (movieQuery.getArea() != null)) {
+					predicates.add(criteriaBuilder.like(root.<String>get("area"), "%"+movieQuery.getArea()+"%"));
+				}
+				if(!"".equals(movieQuery.getReleaseDate()) && (movieQuery.getReleaseDate() != null)) {
+					predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), year + "-01-01"));
+					predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), (year + 1 + "")));
+				}
+				query.where(predicates.toArray(new Predicate[predicates.size()]));
+                return null;
+				// TODO Auto-generated method stub
+//				Join join = root.join("types");
+//				return criteriaBuilder.equal(join.get("id"),typeId);
+			}
+		},pageable);
 	}
 	
 	

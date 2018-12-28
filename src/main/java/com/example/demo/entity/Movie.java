@@ -1,9 +1,11 @@
 package com.example.demo.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -37,7 +40,9 @@ public class Movie {
 	//国家区域
 	private String area;
 	//上映日期
-	private String releaseDate;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date releaseDate;
 	//片长
 	private String length;
 	//票房
@@ -225,11 +230,12 @@ public class Movie {
 		this.area = area;
 	}
 
-	public String getReleaseDate() {
+
+	public Date getReleaseDate() {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(String releaseDate) {
+	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 
@@ -259,7 +265,7 @@ public class Movie {
 	}
 
 	public Movie(String name, String poster, String area,
-			String releaseDate, String length, String introduction, String status) {
+			Date releaseDate, String length, String introduction, String status) {
 		super();
 		this.name = name;
 		this.poster = poster;

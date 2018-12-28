@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.example.demo.entity.Photo;
 
 public class FileUpload {
+	
 	
     public static String fileUpload(MultipartFile file){
         if(file.isEmpty()){
