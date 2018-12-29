@@ -54,5 +54,7 @@ public class IndexController {
 	public String index(HttpServletRequest request,HttpServletResponse response) {
 		return "index";
 	}
+	
+	
 
 }
