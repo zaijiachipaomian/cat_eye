@@ -13,7 +13,7 @@ public class TplController {
     }
 
 
-    @GetMapping("/persons/{id}")
+    @GetMapping("/person/{id}")
     public String persons(){
         return "persons";
     }
