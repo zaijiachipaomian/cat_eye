@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +26,6 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
-import com.example.demo.controller.AdminHomeController.Admin;
 import com.example.demo.controller.AdminHomeController.Response;
 
 @Controller
@@ -44,7 +41,7 @@ public class UserController {
     private StringRedisTemplate stringRedisTemplate;
 	
 	private static String valid_code=null;
-	
+
 	//个人主页
 	@ResponseBody
 	@GetMapping("/{id}")
@@ -122,7 +119,7 @@ public class UserController {
 	
 	/**
 	 * 请求方式Post
-	 * 需要一个参数，参数名为yzm，表示用户输入的验证码
+	 *
 	 */
 	//用户注册
 	@ResponseBody
@@ -133,9 +130,12 @@ public class UserController {
 		//判断验证码是否正确
 		if(valid_code!=null) {
 			if(valid_code.equals(yzm)) {
+				//将验证码设置为空
+				valid_code=null;
 				//判断手机号码是否已注册
 				if(userService.getUserByPhone(user.getPhone())!=null) {
 					return new Response(400,"手机号已注册");
+					
 				}
 				//判断用户名是否已已存在
 				else if(userService.getUserByUsername(user.getUsername())!=null) {
@@ -186,7 +186,7 @@ public class UserController {
 	//跳转到修改信息界面
 	@ResponseBody
 	@GetMapping("/modify/{id}")
-	public Object updateUser(HttpServletRequest request,Long id) {
+	public Object updateUser(HttpServletRequest request,@PathVariable Long id) {
 		HttpSession session=request.getSession();
 		User user=(User) session.getAttribute("user");
 		if(user!=null) {
@@ -201,7 +201,10 @@ public class UserController {
 			return new Response(400,"用户未登录");
 		}
 	}
-	
+	/**
+	 *通过传入User对象修改用户信息 
+	 *适用于个人中心中个人信息表单的修改信息
+	 */
 	//用户修改个人信息
 	@ResponseBody
 	@PostMapping("/modify")
@@ -224,10 +227,87 @@ public class UserController {
 		}
 	}
 	
+	/**
+	 *方式Get
+	 *跳转到找回密码的界面
+	 */
+	//跳转到找回密码界面
+	@GetMapping("/backPassword")
+	public String backPassword() {
+		//TODO 跳转到找回密码界面
+		return "找回密码界面";
+	}
+	
+	
+	/**
+	 *方式Post
+	 *需要两个参数phone（手机号）和yzm（用户输入的验证码）
+	 *判断验证码是否正确
+	 *若验证码正确则将phone设置到session中
+	 */
+	//用户找回密码时判断用户验证码是否正确
+	@PostMapping("/backPassword")
+    @ResponseBody
+    public Object backPassword(HttpServletRequest request,String phone,String yzm) {
+		System.out.println("valid_code="+valid_code);
+		System.out.println("yzm="+yzm);
+		if(valid_code!=null) {
+			if(valid_code.equals(yzm)) {
+				//将验证码设置为null
+				valid_code=null;
+				//将电话号码设置到session
+				request.getSession().setAttribute("phoneForBack",phone);
+				//验证码输入正确时,返回输入正确验证码的手机号
+				return new Response(200,phone);
+			}
+			else {
+				return new Response(400,"验证码有误");
+			}
+		}
+		else {
+			return new Response(400,"未获取验证码");
+		}
+	}
+	
+	/**
+	 *方式Post
+	 *需要一个参数newPassword(找回密码时设置的新密码)
+	 */
+	//用户通过找回密码修改个人密码
+	@ResponseBody
+	@PostMapping("/modify/password")
+	public Object updatePasswordByPhone(HttpServletRequest request,String newPassword) {
+		//获取输入正确验证码的手机号
+		String phone=(String) request.getSession().getAttribute("phoneForBack");
+		//判断手机号是否已获得验证码
+		if(phone!=null) {
+			User user=userService.getUserByPhone(phone);
+			//判断该手机号的用户是否存在
+			if(user!=null) {
+				user.setPassword(newPassword);
+				if(userRepository.save(user)!=null) {
+					//将获取验证码的手机号码从session中去除
+					request.getSession().removeAttribute("phoneForBack");
+					return new Response(200,"修改成功");
+				}
+				else {
+					return new Response(400,"修改失败");
+				}
+			}
+			else {
+				return new Response(400,"该手机号未注册");
+			}
+		}
+		else {
+			return new Response(400,"手机号码错误");
+		}
+		
+	}
 	
 	/**
 	 * 请求方式Get
 	 * 需要一个参数，参数名为phone，表示收验证码的手机号码
+	 * 获取验证码成功时返回   code：200,data:电话号码
 	 */
 	//注册时获取验证码
 	@GetMapping("/valid_code_reg")
@@ -254,9 +334,9 @@ public class UserController {
 
 	        //User user = userRepository.findByPhoneNumber(phone);
 	        //System.out.println(user);
-	        
 	        stringRedisTemplate.opsForValue().set(phone, uuid,1,TimeUnit.MINUTES);
 	        //发送短信
+	        
 	        try {
 	            String[] params = {uuid,"1"};
 	            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
@@ -269,7 +349,7 @@ public class UserController {
 				return new Response(400,"获取验证码出错");
 	        }
 	        //用于回调
-			return new Response(200,"获取验证码成功");
+			return new Response(200,phone);
 		}
     }
 	
@@ -313,7 +393,7 @@ public class UserController {
 				return new Response(400,"获取验证码出错");
 	        }
 	        //用于回调
-			return new Response(200,"获取验证码成功");
+	        return new Response(200,phone);
 		}
     }
 	
