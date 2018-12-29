@@ -23,6 +23,7 @@ import com.example.demo.controller.AdminHomeController.Admin;
 import com.example.demo.controller.AdminHomeController.Response;
 import com.example.demo.entity.Person;
 import com.example.demo.repository.PersonRepository;
+import com.example.demo.service.MovieService;
 import com.example.demo.service.PersonService;
 import com.example.demo.util.FileUpload;
 
@@ -32,6 +33,9 @@ public class PersonController {
 	
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	MovieService movieService;
 	
 	@Autowired
 	PersonRepository personRepository;
@@ -98,11 +102,17 @@ public class PersonController {
 	}
 	
 	@GetMapping("/get/{id}")
-	public Map<String, Object> getPerson(@PathVariable Long id){
+	public Object getPerson(@PathVariable Long id){
 		Map<String , Object> map = new HashMap<>();
-		Person person = personService.getPerson(id);
-		map.put("person", person);
-		return map;
+		try {
+			Person person = personService.getPerson(id);
+			map.put("person", person);
+			map.put("movie", person.getMovies());
+			return new Response(200,map);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new Response(400,"获取电影人失败");
+		}
 	}
 	
 	@GetMapping("/admin/get")

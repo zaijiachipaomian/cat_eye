@@ -2,8 +2,14 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import com.example.demo.entity.Movie;
+import com.example.demo.entity.MovieQuery;
 
 public interface MovieService {
 	boolean addMovie(Movie movie, List<String> photoUrl , String posterUrl);
@@ -13,4 +19,8 @@ public interface MovieService {
 	//public Map<String,Object> findMovieByStatus(String status);
 	public Map<String,Object> findByTypesAndAreaAndReleaseDate(String type,String area,String releaseDate);
 	public Map<String,Object> findByTypesAndAreaAndReleaseDateOrderByReleaseDate(String type,String area,String releaseDate);
+	public Set<String> findDistinctAreaSet();
+	public Set<String> findDistinctReleaseSet();
+	public Page<Movie> getMovieList(MovieQuery movieQuery , Pageable pageable);
+
 }

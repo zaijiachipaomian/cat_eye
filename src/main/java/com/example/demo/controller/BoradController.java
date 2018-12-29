@@ -18,4 +18,6 @@ public class BoradController {
 		map.put("name", "haiwang");
 		return map;
 	}
+	
+	//
 }
