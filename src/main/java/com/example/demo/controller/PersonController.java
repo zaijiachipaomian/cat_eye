@@ -95,7 +95,7 @@ public class PersonController {
 	/**
 	 * 根据id删除person，请求方式delete	
 	 * @param id person表的数据id
-	 * @return true表示删除成功，false表示删除失败
+	 * @return code=200表示删除成功，code=400表示删除失败
 	 */
 	@DeleteMapping("/admin/delete/{id}")
 	public Object deletePerson(HttpServletRequest request,@PathVariable Long id){
@@ -151,7 +151,7 @@ public class PersonController {
 			Page<Person> personPage = personRepository.findAll(pageable);
 			if(personPage!=null) {
 				re.setCode(200);
-				re.setData(personPage.getContent());
+				re.setData(personPage);
 				return re;
 			}
 			else {

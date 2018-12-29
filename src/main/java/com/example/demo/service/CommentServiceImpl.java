@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
 		Page<Comment> comment=null;
 		Movie movie=null;
 		List<Comment> ls=new ArrayList<Comment>();
-		movie=movieRepository.findById(id).get();
+		movie=movieRepository.findById(id).orElse(null);
 		if(movie!=null) {
 			comment= commentRepository.findByMovie(movie,pageable);
 			

@@ -46,14 +46,24 @@ public class CommentController {
 		user=(User) session.getAttribute("user");
 		movie=movieService.findMovieById(movie_id);
 		if(user!=null) {
-			if(commentService.addComment(comment,user,movie)) {
-				re.setCode(200);
-				re.setData("ok");
+			if(movie!=null) {
+				if(commentService.addComment(comment,user,movie)) {
+					re.setCode(200);
+					re.setData("ok");
+					return re;
+				}
+				else {
+					re.setCode(400);
+					re.setData("添加错误");
+					return re;
+				}
+			}
+			else {
+				re.setCode(400);
+				re.setData("电影不存在");
 				return re;
 			}
-			re.setCode(400);
-			re.setData("添加错误");
-			return re;
+			
 		}
 		else {
 			re.setCode(400);
@@ -100,9 +110,18 @@ public class CommentController {
 	public Object getMovieComment(@PathVariable Long movie_id,@PageableDefault(page=0,size=5)Pageable pageable){
 		Map<String,Object> map=new HashMap<String, Object>();
 		Page<Comment> comment=null;	
+		Response re=new Response();
 		comment=commentService.findCommentByMovieId(movie_id,pageable);
-		map.put("comment",comment.getContent());
-		return map;
+		if(comment!=null) {
+			map.put("comment",comment.getContent());
+			return map;
+		}
+		else {
+			re.setCode(400);
+			re.setData("电影不存在");
+			return re;
+		}
+		
 	}
 	
 	//获取某个用户的评论
@@ -119,7 +138,7 @@ public class CommentController {
 				comment=commentService.findCommentByUserId(user_id, pageable);
 				if(comment!=null) {
 					re.setCode(200);
-					re.setData(comment.getContent());
+					re.setData(comment);
 					return re;
 				}
 				
@@ -175,7 +194,7 @@ public class CommentController {
 			ls=commentService.findAllComment(pageable);
 			if(ls!=null) {
 				re.setCode(200);
-				re.setData(ls.getContent());
+				re.setData(ls);
 				return re;
 			}
 			else{
