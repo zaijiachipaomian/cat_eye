@@ -52,16 +52,6 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String index(HttpServletRequest request,HttpServletResponse response) {
-		HttpSession session =request.getSession();
-		User user=(User) session.getAttribute("user");
-		if(user!=null) {
-			Cookie c=new Cookie("user_id",user.getId().toString());
-			Cookie c1=new Cookie("username", user.getUsername());
-			//会话级cookie，关闭浏览器失效
-			c.setMaxAge(-1);
-			response.addCookie(c);
-			response.addCookie(c1);
-		}
 		return "index";
 	}
 

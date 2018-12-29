@@ -103,6 +103,8 @@ public class UserController {
 		if(user!=null) {
 			HttpSession session=request.getSession();
 			session.setAttribute("user", user);
+			
+			//设置两个cookie，user_id代表用户id,username代表用户名
 			Cookie c=new Cookie("user_id",user.getId().toString());
 			Cookie c1=new Cookie("username", user.getUsername());
 			//会话级cookie，关闭浏览器失效
@@ -192,6 +194,8 @@ public class UserController {
 	public String loginOut(HttpServletRequest request,HttpServletResponse response) {
 		HttpSession session=request.getSession();
 		session.removeAttribute("user");
+		
+		//删除登陆时的cookie
 		Cookie killMyCookie = new Cookie("user_id", null);
         killMyCookie.setMaxAge(0);
         killMyCookie.setPath("/");
