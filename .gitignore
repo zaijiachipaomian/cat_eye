@@ -27,3 +27,4 @@
 
 # 排除图片
 /images
+/src/main/resources/static/images

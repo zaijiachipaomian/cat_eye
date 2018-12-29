@@ -32,16 +32,18 @@ public class FileUpload {
         System.out.println(fileName + "-->" + size);
         
         //String path = "F:/test" ;
-        
+        //"D:/workspace/MovieReview
         String path = System.getProperty("user.dir");
-        File dest = new File(path + "/images/" + fileName);
+        //\src\main\resources\static
+        File dest = new File(path + "/src/main/resources/static/images/" + fileName);
         //System.out.println(dest.getAbsolutePath());
         if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
             dest.getParentFile().mkdir();
         }
         try {
             file.transferTo(dest); //保存文件
-            return dest.getAbsolutePath();
+            //return dest.getAbsolutePath();
+            return "/static/images/" + fileName;
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -72,13 +74,14 @@ public class FileUpload {
             if(file.isEmpty()){
                 return null;
             }else{        
-            	 File dest = new File(path + "/images/" + fileName);
+            	 File dest = new File(path + "/src/main/resources/static/images/" + fileName);
                 if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
                     dest.getParentFile().mkdir();
                 }
                 try {
                     file.transferTo(dest);
-                    urlList.add(dest.getAbsolutePath());
+//                    urlList.add(dest.getAbsolutePath());
+                    urlList.add("/static/images/" + fileName);
                 }catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
