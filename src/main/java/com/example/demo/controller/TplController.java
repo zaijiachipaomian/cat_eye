@@ -17,4 +17,8 @@ public class TplController {
     public String persons(){
         return "persons";
     }
+    @GetMapping("/films")
+    public String filmsTotla(){
+        return "films_totals";
+    }
 }
