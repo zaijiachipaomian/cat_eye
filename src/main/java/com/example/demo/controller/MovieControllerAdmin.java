@@ -47,6 +47,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MovieService;
 import com.example.demo.service.PersonService;
 import com.example.demo.util.FileUpload;
+import com.example.demo.controller.AdminHomeController.Response;
 
 @RestController
 @RequestMapping("/admin/films")
@@ -71,7 +72,7 @@ public class MovieControllerAdmin {
 	 * @param movie 要插入和更新的电影
 	 * @param file  电影海报的文件
 	 * @param files 电影图片的多个文件
-	 * @return		如果插入或者更新成功，返回true,否则返回false
+	 * @return		如果插入或者更新成功，返回200,否则返回400
 	 * @form 表单字段名称		类型			值（例子）
 	 * 			id				text		1250342
 	 * 			name			text		我们这一家we are
@@ -85,7 +86,7 @@ public class MovieControllerAdmin {
 	 * 			movieRoles		text	  [{ "personId" : 1 , "role" : "导演" },{ "personId" : 2 ,  "role" : "演员" }]
 	 */
 	@PostMapping("/add")
-	public String insertOrUpdateMovie(Movie movie ,
+	public Response insertOrUpdateMovie(Movie movie ,
 			@RequestParam(name = "fileName", required = false)  MultipartFile file,
 			@RequestParam(name = "filesName", required = false) List<MultipartFile> files,
 			@RequestParam(name = "typeIds", required = false) List<Long> typeIds,
@@ -110,13 +111,11 @@ public class MovieControllerAdmin {
 			urlList = FileUpload.multifileUpload(files);
 		if(file != null)
 			result = FileUpload.fileUpload(file);
-//		if(urlList == null || result.equals("false"))
-//			return "false";
 		boolean insertResult = movieService.addMovie(movie, urlList ,result);
 		if(insertResult)
-			return "true";
+			return new Response(200,"电影插入成功");
 		else
-			return "false";
+			return new Response(400,"电影插入失败");
 	}
 	/**
 	 * 通过ID删除电影
@@ -124,14 +123,14 @@ public class MovieControllerAdmin {
 	 * @return
 	 */
 	@DeleteMapping("/delete/{id}")
-	public String deleteMovie(@PathVariable Long id) {
+	public Object deleteMovie(@PathVariable Long id) {
 		try {
 			movieService.delMovie(id);
+			return new Response(200, "删除电影成功");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "false";
+			return new Response(400, "删除电影失败");
 		}
-		return "true";
 	}
 	
 	/**
@@ -149,29 +148,10 @@ public class MovieControllerAdmin {
 			map.put("newsList", movie.getNewsList());
 			map.put("photos", movie.getPhotos());
 			map.put("movieRoles", movie.getMovieRoles());
+			return new Response(200,map);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "false";
+			return new Response(400,"获取电影失败");
 		}
-		return map;
 	}
-	
-	@GetMapping("/test/{id}")
-	public Object getMovie2(@PathVariable Long id) {
-		Map<String,Object> map = new HashMap<>();
-//		Long[] ids = typeRepository.findTypeIdByMovieId(id);
-//		map.put("data",typeRepository.findTypeByTypeId(ids));
-//		
-//		Long[] ids2 = movieRepository.findMovidIdByTypeId(1L);
-//		map.put("data2",movieRepository.findMovieByMovieId(ids2));
-		User user = userRepository.findById(1L).get();
-		return user;
-	}
-	
-	
-	
-	
-	
-	
-	
 }
