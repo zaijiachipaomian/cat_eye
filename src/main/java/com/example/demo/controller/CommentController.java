@@ -41,34 +41,25 @@ public class CommentController {
 		HttpSession session=request.getSession();
 		User user=null;
 		Movie movie=null;
-		Response re=new Response();
 		//获取当前登录用户
 		user=(User) session.getAttribute("user");
 		movie=movieService.findMovieById(movie_id);
 		if(user!=null) {
 			if(movie!=null) {
 				if(commentService.addComment(comment,user,movie)) {
-					re.setCode(200);
-					re.setData("ok");
-					return re;
+					return new Response(200,"增加成功");
 				}
 				else {
-					re.setCode(400);
-					re.setData("添加错误");
-					return re;
+					return new Response(400,"增加错误");
 				}
 			}
 			else {
-				re.setCode(400);
-				re.setData("电影不存在");
-				return re;
+				return new Response(400,"电影不存在");
 			}
 			
 		}
 		else {
-			re.setCode(400);
-			re.setData("用户未登录");
-			return re;
+			return new Response(400,"用户未登录");
 		}
 	}
 
@@ -79,27 +70,26 @@ public class CommentController {
 		HttpSession session=request.getSession();
 		User user=null;
 		Comment comment=null;
-		Response re=new Response();
 		user=(User) session.getAttribute("user");
 		comment=commentService.findCommentById(id);
 		if(user!=null&&comment!=null) {
 			//判断该评论是否属于该用户，若属于则评论可删除
 			if(comment.getUser().getId()==user.getId()) {
-				commentService.delComment(id);
-				re.setCode(200);
-				re.setData("ok");
-				return re;
+				try{
+					commentService.delComment(id);
+					return new Response(200,"删除成功");
+				}catch (Exception e) {
+					e.printStackTrace();
+					return new Response(400,"删除成功");
+				}
+				
 			}
 			else {
-				re.setCode(400);
-				re.setData("用户错误");
-				return re;
+				return new Response(400,"用户错误");
 			}
 		}
 		else {
-			re.setCode(400);
-			re.setData("未登录或评论不存在");
-			return re;
+			return new Response(400,"未登录或评论不存在");
 		}
 		
 	}
@@ -110,16 +100,13 @@ public class CommentController {
 	public Object getMovieComment(@PathVariable Long movie_id,@PageableDefault(page=0,size=5)Pageable pageable){
 		Map<String,Object> map=new HashMap<String, Object>();
 		Page<Comment> comment=null;	
-		Response re=new Response();
 		comment=commentService.findCommentByMovieId(movie_id,pageable);
 		if(comment!=null) {
 			map.put("comment",comment);
 			return map;
 		}
 		else {
-			re.setCode(400);
-			re.setData("电影不存在");
-			return re;
+			return new Response(400,"电影不存在");
 		}
 		
 	}
@@ -128,7 +115,6 @@ public class CommentController {
 	@ResponseBody
 	@GetMapping("/user/{user_id}")
 	public Object getUserComment(HttpServletRequest request,@PathVariable Long user_id,@PageableDefault(page=0,size=5)Pageable pageable){
-		Response re=new Response();
 		HttpSession session=request.getSession();
 		User user=(User) session.getAttribute("user");
 		Page<Comment> comment=null;	
@@ -137,77 +123,47 @@ public class CommentController {
 				//TODO comment==null时
 				comment=commentService.findCommentByUserId(user_id, pageable);
 				if(comment!=null) {
-					re.setCode(200);
-					re.setData(comment);
-					return re;
+					return new Response(200,comment);
 				}
 				
 				else {
-					re.setCode(200);
-					re.setData("该用户无评论");
-					return re;
+					return new Response(200,"该用户无评论");
 				}
 				
 			}
 			else {
-				re.setCode(400);
-				re.setData("用户错误");
-				return re;
+				return new Response(400,"用户错误");
 			}
 		}
 		else {
-			re.setCode(400);
-			re.setData("用户未登录");
-			return re;
+			return new Response(400,"用户未登录");
 		}
 	}
 	
 	//管理员删除评论通过评论ID
 	@ResponseBody
 	@GetMapping("/admin/delete/{id}")
-	public Object delComment(HttpServletRequest request,@PathVariable Long id) {
-		HttpSession session=request.getSession();
-		Admin admin=(Admin) session.getAttribute("admin");
-		Response re=new Response();
-		if(admin!=null) {
+	public Object delComment(@PathVariable Long id) {
+		try{
 			commentService.delComment(id);
-			re.setCode(200);
-			re.setData("删除成功");
-			return re;
-		}
-		else {
-			re.setCode(400);
-			re.setData("管理员未登录");
-			return re;
+			return new Response(200,"删除成功");
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new Response(400,"删除失败");
 		}
 	}
 	
 	//管理员查看所有评论，分页默认每页10条
 	@ResponseBody
 	@GetMapping("/admin/get")
-	public Object getAllComment(HttpServletRequest request,@PageableDefault(page=0,size=10)Pageable pageable) {
-		HttpSession session=request.getSession();
-		Admin admin=(Admin) session.getAttribute("admin");
-		Response re=new Response();
+	public Object getAllComment(@PageableDefault(page=0,size=10)Pageable pageable) {	
 		Page<Comment> ls=null;
-		if(admin!=null) {
-			ls=commentService.findAllComment(pageable);
-			if(ls!=null) {
-				re.setCode(200);
-				re.setData(ls);
-				return re;
-			}
-			else{
-				re.setCode(400);
-				re.setData("获取评论出错");
-				return re;
-			}
-			
+		ls=commentService.findAllComment(pageable);
+		if(ls!=null) {
+			return new Response(200,ls);
 		}
-		else {
-			re.setCode(400);
-			re.setData("管理员未登录");
-			return re;
+		else{
+			return new Response(400,"获取评论出错");
 		}
 	}
 }

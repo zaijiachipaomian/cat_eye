@@ -52,44 +52,24 @@ public class PersonController {
 		introduction	TEXT				海王是一部新电影
 	 */
 	@PostMapping("/admin/addOrUpdate")
-	public Object insertOrUpdatePerson(HttpServletRequest request,Person person , @RequestParam("fileName") MultipartFile file){
+	public Object insertOrUpdatePerson(Person person , @RequestParam("fileName") MultipartFile file){
 		//文件上传成功，返回文件的路径加名字,否则返回false
 		String result = FileUpload.fileUpload(file);
-		HttpSession session=request.getSession();
-		Admin admin=(Admin) session.getAttribute("admin");
-		Response re=new Response();
 		if(!result.equals("false")) {
-			if(admin!=null) {
-				if(person!=null) {
-					if(personService.savePerson(person, result)!=null) {
-						re.setCode(200);
-						re.setData("成功");
-						return re;
-					}
-					else {
-						re.setCode(400);
-						re.setData("修改失败");
-						return re;
-					}
+			if(person!=null) {
+				if(personService.savePerson(person, result)!=null) {
+					return new Response(200,"成功");
 				}
 				else {
-					re.setCode(400);
-					re.setData("用户为空");
-					return re;
+					return new Response(400,"修改失败");
 				}
-				
 			}
-			else{
-				re.setCode(400);
-				re.setData("管理员未登录");
-				return re;
+			else {
+				return new Response(400,"用户为空");
 			}
-			
 		}
 		else {
-			re.setCode(400);
-			re.setData("文件上传错误");
-			return re;
+			return new Response(400,"文件上传错误");
 		}
 	}
 	/**
@@ -98,39 +78,22 @@ public class PersonController {
 	 * @return code=200表示删除成功，code=400表示删除失败
 	 */
 	@DeleteMapping("/admin/delete/{id}")
-	public Object deletePerson(HttpServletRequest request,@PathVariable Long id){
-		HttpSession session=request.getSession();
-		Admin admin=(Admin) session.getAttribute("admin");
-		Response re=new Response();
-		if(admin!=null) {
-			Person person=personRepository.findById(id).orElse(null);
-			if(person!=null) {
-				try {
-					personService.deletePerson(id);
-					re.setCode(200);
-					re.setData("删除成功");
-					return re;
-				}
-				catch (Exception e) {
-					System.out.println("删除失败");
-					e.printStackTrace();
-					re.setCode(400);
-					re.setData("删除失败");
-					return re;
-				}
+	public Object deletePerson(@PathVariable Long id){
+		Person person=personRepository.findById(id).orElse(null);
+		if(person!=null) {
+			try {
+				personService.deletePerson(id);
+				return new Response(200,"删除成功");
 			}
-			
-			else {
-				re.setCode(400);
-				re.setData("用户不存在");
-				return re;
+			catch (Exception e) {
+				System.out.println("删除失败");
+				e.printStackTrace();
+				return new Response(400,"删除失败");
 			}
 		}
 		
 		else {
-			re.setCode(400);
-			re.setData("管理员未登录");
-			return re;
+			return new Response(400,"用户不存在");
 		}
 	}
 	
@@ -143,28 +106,13 @@ public class PersonController {
 	}
 	
 	@GetMapping("/admin/get")
-	public Object getPersonList(HttpServletRequest request,@PageableDefault(page=0,size=10)Pageable pageable){
-		HttpSession session=request.getSession();
-		Admin admin=(Admin) session.getAttribute("admin");
-		Response re=new Response();
-		if(admin!=null) {
-			Page<Person> personPage = personRepository.findAll(pageable);
-			if(personPage!=null) {
-				re.setCode(200);
-				re.setData(personPage);
-				return re;
-			}
-			else {
-				re.setCode(400);
-				re.setData("获取电影人错误");
-				return re;
-			}
+	public Object getPersonList(@PageableDefault(page=0,size=10)Pageable pageable){
+		Page<Person> personPage = personRepository.findAll(pageable);
+		if(personPage!=null) {
+			return new Response(200,personPage);
 		}
-		
 		else {
-			re.setCode(400);
-			re.setData("管理员未登录");
-			return re;
+			return new Response(400,"获取电影人错误");
 		}
 	}
 	
