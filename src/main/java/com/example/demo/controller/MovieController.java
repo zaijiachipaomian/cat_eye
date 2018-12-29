@@ -90,6 +90,8 @@ public class MovieController {
 	@GetMapping("/area/list")
 	public Set<String> getAreaSet(){
 		Set<String> areaSet = movieRepository.findDistinctAreaSet();
+		if(areaSet.contains(null))
+			areaSet.remove(null);
 		Set<String> dotSet = areaSet.stream().filter(s -> s.contains(",")).collect(Collectors.toSet());
 		for(String s : dotSet) {
 			String[] split = s.split(",");
@@ -104,10 +106,33 @@ public class MovieController {
 	@GetMapping("/release/list")
 	public Set<String> getReleaseSet(){
 		Set<String> releaseDateSet = movieRepository.findDistinctReleaseSet();
-		releaseDateSet.remove(null);
+		if(releaseDateSet.contains(null))
+			releaseDateSet.remove(null);
 		return releaseDateSet;
 	}
 	
+	
+	/**
+	 * 	前台的筛选参数
+	 * 	showType(1: 【电影正在热映】过去两个月内上映的电影 ；
+	 *  		 2:【电影即将上映】还没有上映的电影
+	 *  	     3:【经典影片】 已经上映超过两个月的电影）   
+	 *  sortId
+	 *  		（1：【按热门排序】 假功能，不存在的；
+	 *  		  2: 【按时间排序】   按上映时间倒序排序
+	 *  		  3:【按评价排序】   按电影评分倒序排序
+	 *  typeId
+	 *  		（按电影类型的ID来进行筛选）
+	 *  area
+	 *  		（按电影的地域进行筛选）
+	 *  releaseDate
+	 *  		（按电影的上映日期进行筛选）
+	 *  比如我要查看：正在热映(showType=1)  且  类型为剧情（TYPEID=1） 且  地域为大陆（area=大陆） 且  上映日期为2018年（releaseDate=2018）
+	 *   就这么写： ip:port/flims?showType=1&sortId=3&typeId=1&area=大陆&releaseDate=2018
+	 * @param movieQuery
+	 * @param pageable
+	 * @return
+	 */
 	@GetMapping("/")
 	@ResponseBody
 	public Page<Movie> getMovieList(MovieQuery movieQuery , @PageableDefault(page=0,size=10)Pageable pageable){
@@ -116,6 +141,7 @@ public class MovieController {
 			@Override
 			public Predicate toPredicate(Root<Movie> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> predicates = new ArrayList<>();
+				//标签筛选
 				if(!"".equals(movieQuery.getTypeId()) && (movieQuery.getTypeId() != null)) {
 					Join join = root.join("types");
 					predicates.add(
@@ -133,27 +159,51 @@ public class MovieController {
 					predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), year + "-01-01"));
 					predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), (year + 1 + "")));
 				}
+				//导航栏筛选
 				if(!"".equals(movieQuery.getShowType()) && (movieQuery.getShowType() != null)) {
 					//Integer showType = Integer.parseInt(movieQuery.getShowType());
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					Calendar c = Calendar.getInstance();
 					Date date = new Date();
+					c.setTime(date);
 					//正在热映（过去两个月）
 					if(movieQuery.getShowType().equals("1")) {
-						c.setTime(date);
 				        c.add(Calendar.MONTH, - 2);
 				        Date d = c.getTime();
+				        
+				        System.out.println(format.format(d));
+				        System.out.println(format.format(date));
+				        System.out.println("正在热映");
 				        predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), format.format(d)));
 						predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), format.format(date)));
 					}
+					//即将上映
+					if(movieQuery.getShowType().equals("2")) {
+						c.add(Calendar.DATE, + 1);
+						Date d = c.getTime();
+						predicates.add(criteriaBuilder.greaterThan(root.get("releaseDate").as(String.class), format.format(d)));
+					}
+					//经典电影（上映过了两个月）
+					if(movieQuery.getShowType().equals("3")) {
+				        c.add(Calendar.MONTH, - 2);
+				        Date d = c.getTime();
+						predicates.add(criteriaBuilder.lessThan(root.get("releaseDate").as(String.class), format.format(d)));
+					}
+					
 				}
-				//query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.asc(root.get("releaseDate")));
-				//Join join2 = root.join("comments");
-				query.where(predicates.toArray(new Predicate[predicates.size()]));
-			
-			
-				
-				
+				//排序,都是倒序
+				//按热门排序（猫眼假功能）
+				if(!"".equals(movieQuery.getSortId()) && (movieQuery.getSortId() != null)) {
+					if(movieQuery.getSortId().equals("2")) {
+						query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.desc(root.get("releaseDate")));
+					}
+					else if(movieQuery.getSortId().equals("3")){
+						query.where(predicates.toArray(new Predicate[predicates.size()])).orderBy(criteriaBuilder.desc(root.get("avgScore")));
+					}
+				}
+				else {
+					query.where(predicates.toArray(new Predicate[predicates.size()]));
+				}
                 return null;
 				// TODO Auto-generated method stub
 //				Join join = root.join("types");
