@@ -113,7 +113,7 @@ public class CommentController {
 		Response re=new Response();
 		comment=commentService.findCommentByMovieId(movie_id,pageable);
 		if(comment!=null) {
-			map.put("comment",comment.getContent());
+			map.put("comment",comment);
 			return map;
 		}
 		else {

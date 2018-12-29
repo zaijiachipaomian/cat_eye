@@ -118,5 +118,16 @@ public class AdminHomeController {
              System.out.println("hello world toString ...... "+JSON.toJSONString(this));
              return JSON.toJSONString(this);
          }
+         
+		public Response() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public Response(int code, Object data) {
+			super();
+			this.code = code;
+			this.data = data;
+		}
      }
 }
