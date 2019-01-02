@@ -3,11 +3,13 @@ package com.example.demo.controller;
 import java.util.Date;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +35,10 @@ import com.example.demo.controller.AdminHomeController.Response;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	/**
+     * 正则表达式：验证手机号
+     */
+    public static final String REGEX_MOBILE = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 	@Autowired
 	UserService userService;
 	
@@ -40,7 +48,6 @@ public class UserController {
 	@Autowired
     private StringRedisTemplate stringRedisTemplate;
 	
-	private static String valid_code=null;
 
 	//个人主页
 	@ResponseBody
@@ -125,13 +132,12 @@ public class UserController {
 	@ResponseBody
 	@PostMapping("/reg")
 	public Object register(HttpServletRequest request,User user,String yzm) {
+		String valid_code=stringRedisTemplate.opsForValue().get(user.getPhone());
 		System.out.println("正确的验证码："+valid_code);
 		System.out.println("用户输入的验证码："+yzm);
 		//判断验证码是否正确
 		if(valid_code!=null) {
 			if(valid_code.equals(yzm)) {
-				//将验证码设置为空
-				valid_code=null;
 				//判断手机号码是否已注册
 				if(userService.getUserByPhone(user.getPhone())!=null) {
 					return new Response(400,"手机号已注册");
@@ -161,8 +167,6 @@ public class UserController {
 		else{
 			return new Response(400,"未获取验证码");
 		}
-		
-		
 	}
 	
 	//退出登陆 删除cookie并remove user的Session
@@ -235,7 +239,7 @@ public class UserController {
 	@GetMapping("/backPassword")
 	public String backPassword() {
 		//TODO 跳转到找回密码界面
-		return "找回密码界面";
+		return "backPassword";
 	}
 	
 	
@@ -249,12 +253,11 @@ public class UserController {
 	@PostMapping("/backPassword")
     @ResponseBody
     public Object backPassword(HttpServletRequest request,String phone,String yzm) {
+		String valid_code=stringRedisTemplate.opsForValue().get(phone);
 		System.out.println("valid_code="+valid_code);
 		System.out.println("yzm="+yzm);
 		if(valid_code!=null) {
 			if(valid_code.equals(yzm)) {
-				//将验证码设置为null
-				valid_code=null;
 				//将电话号码设置到session
 				request.getSession().setAttribute("phoneForBack",phone);
 				//验证码输入正确时,返回输入正确验证码的手机号
@@ -312,7 +315,7 @@ public class UserController {
 	//注册时获取验证码
 	@GetMapping("/valid_code_reg")
     @ResponseBody
-    public Object ReceiverSMS1(String phone) {
+    public Object ReceiverSMS1(HttpServletRequest request,String phone) {
 		System.out.println(phone); 
 		User user=null;
 		user=userService.getUserByPhone(phone);
@@ -344,7 +347,7 @@ public class UserController {
 	            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
 	                templateId, params, smsSign, "", "");  
 	            System.out.println(result);
-	            valid_code=uuid;
+	            
 	        } catch (Exception e) {
 				return new Response(400,"获取验证码出错");
 	        }
@@ -356,7 +359,7 @@ public class UserController {
 	//找回密码时获取验证码
 	@GetMapping("/valid_code_back")
     @ResponseBody
-    public Object ReceiverSMS2(String phone) {
+    public Object ReceiverSMS2(HttpServletRequest request,String phone) {
 		System.out.println(phone); 
 		User user=null;
 		user=userService.getUserByPhone(phone);
@@ -388,7 +391,7 @@ public class UserController {
 	            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
 	                templateId, params, smsSign, "", "");  
 	            System.out.println(result);
-	            valid_code=uuid;
+	            request.getSession().setAttribute("valid_code", uuid);
 	        } catch (Exception e) {
 				return new Response(400,"获取验证码出错");
 	        }

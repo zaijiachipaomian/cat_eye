@@ -11,6 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -24,13 +28,13 @@ public class User {
 	private Long Id;
 	
 	private String avator;
-	
+
 	private String username;
 	
 	private String password;
-	
+
 	private String email;
-	
+
 	private String phone;
 	
 	private Date regDate;
