@@ -1,8 +1,12 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,4 +77,19 @@ public class NewsController {
 			return new Response(400 , "删除电影新闻失败");
 		}
 	}
+	
+	@ResponseBody
+	@GetMapping("/get/list")
+	public Object getNewsList(@PageableDefault(page=0,size=10) Pageable pageable) {
+		try {
+			Page<News> newsList = newsRepository.findAll(pageable);
+			return new Response(200 , newsList);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return new Response(400 , "删除电影新闻失败");
+		}
+	}
+	
 }
+	
