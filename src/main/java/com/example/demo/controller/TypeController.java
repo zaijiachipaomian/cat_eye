@@ -34,22 +34,19 @@ public class TypeController {
 	 * 需要一个参数，参数名为typeName，表示增加的电影类型名
 	 */
 	//管理员增加电影类型
-	@GetMapping("/admin/add")
-	public Object addType(String typeName) {
-		System.out.println("typeName="+typeName);
-		//判断该类型名是否存在
-		if(typeRepository.findByName(typeName)==null) {
-			Type type=new Type(typeName);
+	@GetMapping("/admin/addOrUpdate")
+	public Object addType(Type type) {
+		if(type!=null) {
 			if(typeRepository.save(type)!=null) {
-				return new Response(200,"添加成功");
+				return new Response(200,"成功");
 			}
-			else{
-				return new Response(400,"添加失败");
+			else {
+				return new Response(400,"失败");
 			}
 		}
 		else {
-			return new Response(400,"该类型已存在");
-		}		
+			return new Response(400,"类型ID错误");
+		}
 	}
 	
 	/**
@@ -57,22 +54,22 @@ public class TypeController {
 	 * 需要一个参数，参数名为nawTypeName，表示新的电影类型名
 	 */
 	//管理员修改电影类型
-	@GetMapping("/admin/update/{id}")
-	public Object updateType(@PathVariable Long id,String newTypeName) {
-		Type type=typeRepository.findById(id).orElse(null);
-		if(type!=null) {
-			type.setName(newTypeName);
-			if(typeRepository.save(type)!=null) {
-				return new Response(200,"修改成功");
-			}
-			else {
-				return new Response(400,"修改失败");
-			}
-		}
-		else {
-			return new Response(400,"类型ID错误");
-		}
-	}
+//	@GetMapping("/admin/update/{id}")
+//	public Object updateType(@PathVariable Long id,String newTypeName) {
+//		Type type=typeRepository.findById(id).orElse(null);
+//		if(type!=null) {
+//			type.setName(newTypeName);
+//			if(typeRepository.save(type)!=null) {
+//				return new Response(200,"修改成功");
+//			}
+//			else {
+//				return new Response(400,"修改失败");
+//			}
+//		}
+//		else {
+//			return new Response(400,"类型ID错误");
+//		}
+//	}
 	
 	//管理员删除电影类型
 	@GetMapping("/admin/delete/{id}")
