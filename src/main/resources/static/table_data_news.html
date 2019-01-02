@@ -89,7 +89,6 @@
                             <thead>
                                 <tr>
                                     <th>新闻id</th>
-                                    <th>电影id</th>
                                     <th>新闻名</th>
                                     <th>新闻url</th>
                                     <th>图片url</th>
@@ -133,21 +132,12 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <!--电影id-->
-                        <div class="form-group">
-                            <label for="movie-name" class="control-label col-sm-2">电影id：</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="">
-                            </div>
-                        </div>
-                        <!-- 电影id -->
-                        <input type="hidden" id="movie-id">
-                        <br />
+                    	<input type="text" hidden="true" id="new-id">
                         <!---新闻名-->
                         <div class="form-group">
                             <label for="movie-area" class="control-label col-sm-2">新闻名：</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="">
+                                <input type="text" class="form-control" id="new-name">
                             </div>
                         </div>
                         <br />
@@ -155,21 +145,21 @@
                         <div class="form-group">
                             <label for="movie-length" class="control-label col-sm-2">图片url：</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="">
+                                <input type="text" class="form-control" id="new-pic">
                             </div>
                         </div>
                         <!--新闻url-->
                         <div class="form-group">
                             <label for="movie-introduction" class="control-label col-sm-2">新闻url：</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="">
+                                <input type="text" class="form-control" id="new-url">
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" id="add_or_modify" class="btn btn-primary">确认添加</button>
+                    <button type="button" id="add_or_modify" class="btn btn-primary">确认</button>
                 </div>
             </div>
         </div>
@@ -185,6 +175,106 @@
 
     <!-- 自定义js -->
     <script src="/static/js/content.js?v=1.0.0"></script>
+    <script>
+    function fetch_data_from_row(id) {
+    	$("#new-id").val(id);
+        $("#movie-id").val($("#movie-id-"+id).text().trim());
+        $("#new-name").val($("#new-name-" + id).text().trim());
+        $("#new-pic").val($("#new-pic-" + id).text().trim());
+        $("#new-url").val($("#new-url-" + id).text().trim());
+        
+    }
+    
+  //删除类型
+    function deleteNew(id){
+    	var truthBeTold = window.confirm("是否确认删除");
+    	if (truthBeTold) {
+    		$.get("/type/admin/delete/"+id, function (data, res) {
+                if(data.code!=200){
+                	alert(data.data);
+                }
+                else{
+                	fetch_data("/type/list", 0);
+                }
+            });
+    	} 
+    	else
+    	 	return 0;
+   	}
+    function fetch_data(url, offset) {
+        $.get(url, {}, function (data, status) {
+            let content = data.data.content;
+            // 移除子节点
+            $("#data_data").children().remove();
+            for (let i = 0; i < content.length; i++) {
+                let cn = content[i];
+                $("#data_data").append(`
+           			<tr class="gradeX" style="height:56px!important;" >
+                        <td id="new-${cn.id}">${cn.id}</td>
+                        <td id="new-name-${cn.id}">${cn.name}</td>
+                        <td id="new-pic-${cn.id}">${cn.pic}</td>
+                        <td id="new-url-${cn.id}">${cn.url}</td>
+                        <td class="flex-operation">
+
+                         <a class="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${cn.id}">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"  ></span>编辑
+                         </a>
+                         <a class="button" onclick="deleteNew('${cn.id}')">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
+                         </a>
+
+                        </td>
+                    </tr>`);
+            }
+
+        });
+    }
+    var recipient="";
+    $(document).ready(function(){
+        fetch_data("/admin/news/get/list", 0);
+		$("#add_or_modify").click(function(){
+			let type_name = $("#type_name").val();
+			if (recipient != "添加资讯"){
+				$.get("/admin/news/add?id="+recipient+"&name="+type_name, function (data, res) {
+	            	recipient="";
+	            	if(data.code!=200){
+	                	alert(data.data);
+	                }
+	                else{
+	                	$("#exampleModal").modal('hide');
+	                	fetch_data("/admin/news/get/list", 0);
+	                }
+	            });
+			}
+			else{
+				$.get("/admin/news/add", function (data, res) {
+	            	recipient="";
+	            	if(data.code!=200){
+	                	alert(data.data);
+	                }
+	                else{
+	                	$("#exampleModal").modal('hide');
+	                	fetch_data("/admin/news/get/list", 0);
+	                }
+	            });
+			}
+			
+		});
+
+    });
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        console.log(button);
+        recipient = button.data('whatever');
+        
+        if (recipient == "添加类型") {
+            // 清空
+            $("#type_name").val("");
+            return;
+        }
+        fetch_data_from_row(recipient);
+    });
+    </script>
 </body>
 
 </html>
