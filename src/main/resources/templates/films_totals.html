@@ -207,13 +207,71 @@
         <!-- 搜索表单-->
         <form action="##" class="navbar-form navbar-right">
           <div class="form-group radius-default">
-            <input type="text" class="form-control radius-default  margin-right-default" placeholder="找电影 影人 " />
-            <button type="submit" class="btn  radius-default w-h-28" aria-hidden="true"></span>
-            </button>
+            <input type="text" id="input-search" class="form-control radius-default  margin-right-default" placeholder="找电影 影人 " />
+            <a href="javascript:void(0);" id="search" class="btn  radius-default w-h-28" aria-hidden="true"></span>
+            </a>
 
           </div>
         </form>
+        <!---用户主动搜索--->
+        <script>
+          $(document).ready(function () {
+            let input_search = $("#input-search");
+            $("#search").click(function () {
 
+              if (input_search.val().length == 0) {
+                return;
+              }
+
+              let url = "/search?name=" + input_search.val();
+
+              let movie_list_container = $(".movie-list-container");
+              movie_list_container.children().remove();
+              // 清空数据
+              input_search.val("");
+              $.get(url, {}, function (data, res) {
+
+                if (data.code != 200) {
+                  return;
+                }
+                console.log("length "+ data.data.movies.length +" lenght "+data.data.movies);
+
+                if (data.data.movies.length != 0) {
+                  for (let i = 0; i < data.data.movies.length; i++) {
+                    let movie = data.data.movies[i];
+
+                    movie_list_container.append(` <div class="movie-item">
+      <a class="item"  href="/films/${movie.id}">
+
+        <div class="cover-wp" data-isnew="false" data-id="${movie.id}">
+          <img class="movie_img" src="${movie.photo}" alt="${movie.name}" data-x="160" data-y="230">
+          <p align="center">${movie.name}<strong>&nbsp;&nbsp;8.6</strong> </p>
+        </div>
+
+      </a>
+    </div>`);
+                  }
+                }
+
+                if (data.data.persons.length != 0) {
+                  for (let i = 0; i < data.data.persons.length; i++) {
+                    let person = data.data.persons[i];
+                    movie_list_container.append(` <div class="movie-item">
+      <a class="item"  href="/person/${person.id}">
+
+        <div class="cover-wp" data-isnew="false" data-id="${person.id}">
+          <img class="movie_img" src="${person.photo}" alt="${person.name}" data-x="160" data-y="230">
+          <p align="center">${person.name}<strong>&nbsp;&nbsp;8.6</strong> </p>
+        </div>
+
+      </a>
+    </div>`);
+                  }
+                }
+              });
+            });
+          });
+        </script>
 
         <ul class="nav navbar-nav navbar-right ">
           <li>
