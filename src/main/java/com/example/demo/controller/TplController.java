@@ -21,4 +21,9 @@ public class TplController {
     public String filmsTotla(){
         return "films_totals";
     }
+
+    @GetMapping("/user/tpl")
+    public String userTpl(){
+        return "user";
+    }
 }
