@@ -38,7 +38,7 @@ public class UserController {
 	/**
      * 正则表达式：验证手机号
      */
-    public static final String REGEX_MOBILE = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+    public static final String REGEX_MOBILE = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
 	@Autowired
 	UserService userService;
 	
@@ -94,26 +94,34 @@ public class UserController {
 		System.out.println("phone="+phone);
 		System.out.println("password="+password);
 		User user=null;
-		//用户使用密码登录
-		user=userService.login(phone,password);
-		if(user!=null) {
-			HttpSession session=request.getSession();
-			session.setAttribute("user", user);
-			
-			//设置两个cookie，user_id代表用户id,username代表用户名
-			Cookie c=new Cookie("user_id",user.getId().toString());
-			Cookie c1=new Cookie("username", user.getUsername());
-			//会话级cookie，关闭浏览器失效
-			c.setMaxAge(-1);
-			c1.setMaxAge(-1);
-			c.setPath("/");
-			c1.setPath("/");
-			response.addCookie(c);
-			response.addCookie(c1);
-			return new Response(200,"登陆成功");
+		if(phone==null) {
+			return new Response(400,"电话号码不能为空");
 		}
-		else{
-			return new Response(400,"用户名或密码错误");
+		else if(!Pattern.matches(REGEX_MOBILE, phone)){
+			return new Response(400,"请输入正确的电话号码");
+		}
+		else {
+			//用户使用密码登录
+			user=userService.login(phone,password);
+			if(user!=null) {
+				HttpSession session=request.getSession();
+				session.setAttribute("user", user);
+				
+				//设置两个cookie，user_id代表用户id,username代表用户名
+				Cookie c=new Cookie("user_id",user.getId().toString());
+				Cookie c1=new Cookie("username", user.getUsername());
+				//会话级cookie，关闭浏览器失效
+				c.setMaxAge(-1);
+				c1.setMaxAge(-1);
+				c.setPath("/");
+				c1.setPath("/");
+				response.addCookie(c);
+				response.addCookie(c1);
+				return new Response(200,"登陆成功");
+			}
+			else{
+				return new Response(400,"电话号码或密码错误");
+			}
 		}
 	}
 	
