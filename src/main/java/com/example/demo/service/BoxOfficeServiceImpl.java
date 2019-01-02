@@ -35,6 +35,8 @@ public class BoxOfficeServiceImpl implements BoxOfficeService{
 	@Autowired
 	private PhotoRepository photoRepository;
 	
+	
+	//弃用
 	@Override
 	public List<TodayBoxOffice> getTodayBoxOffice() {
 		//猫眼票房API

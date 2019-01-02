@@ -22,5 +22,10 @@ public interface MovieService {
 	public Set<String> findDistinctAreaSet();
 	public Set<String> findDistinctReleaseSet();
 	public Page<Movie> getMovieList(MovieQuery movieQuery , Pageable pageable);
+	//主页中获得正在热映的且今日票房最高的8部电影，并按票房排序.
+	public List<Map<String,Object>> getReleasingMovieOrderByBoxOfficeLimit8() throws Exception;
+	//显示正在热映电影的总数量。
+	Long getReleasingCount();
+	
 
 }
