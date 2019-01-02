@@ -158,6 +158,8 @@
           color: green;
         }
         </style>
+  <!--js 操作cookie文件的操作-->
+  <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
   <script>
     $(document).ready(function () {
@@ -176,6 +178,47 @@
 </head>
 
 <body>
+
+
+  <script>
+    $(document).ready(function () {
+      function login_user() {
+        let username = $.cookie('username');
+
+        if (username == null) {
+          console.log("获取用户的用户名失败");
+          return;
+        }
+        let user_id = $.cookie('user_id');
+
+        if (user_id == null) {
+          console.log("获取用户的id失败")
+          return;
+        }
+
+        console.log("username " + username + " user_id " + user_id);
+        // 移除登陆注册的按钮
+        $(".login-out").remove();
+        // 增加用户的超链接
+        // 连接到一个用户的模板
+        $(".user-operation").append(`
+              <li >
+                        <a href="/user/tpl"> ${username} </a>
+                    </li>
+              `);
+
+        // 退出登陆按钮
+        $(".user-operation").append(`
+              <li >
+                        <a href="/user/loginOut"> 退出登陆 </a>
+                    </li>
+              `);
+
+      }
+      // 判断用户是否已经登陆,
+      login_user();
+    });
+  </script>
 
   <!-- 固定导航条navbar-fixed-top -->
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -234,7 +277,7 @@
                 if (data.code != 200) {
                   return;
                 }
-                console.log("length "+ data.data.movies.length +" lenght "+data.data.movies);
+                console.log("length " + data.data.movies.length + " lenght " + data.data.movies);
 
                 if (data.data.movies.length != 0) {
                   for (let i = 0; i < data.data.movies.length; i++) {
@@ -273,22 +316,13 @@
           });
         </script>
 
-        <ul class="nav navbar-nav navbar-right ">
-          <li>
+        <ul class="nav navbar-nav navbar-right user-operation">
+          <li class="login-out">
             <a href="/user/login">登录</a>
           </li>
-          <li><a href="" class="disable">|</a></li>
-          <li><a href="/user/reg">注册</a></li>
-          <!-- <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        登陆 <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">另一个分离的链接</a></li>
+          <li class="login-out"><a href="" class="disable">|</a></li>
+          <li class="login-out"><a href="/user/reg">注册</a></li>
 
-                        <li><a href="#">另一个分离的链接</a></li>
-                    </ul>
-                </li> -->
         </ul>
       </div>
     </div>
