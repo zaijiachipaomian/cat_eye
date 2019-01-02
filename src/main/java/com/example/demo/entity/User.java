@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,16 +26,21 @@ public class User {
 	
 	private String avator;
 	
+	@Column(length = 20)
 	private String username;
 	
+	@Column(length = 20)
 	private String password;
 	
+	@Column(length = 20)
 	private String email;
 	
+	@Column(length = 20)
 	private String phone;
 	
 	private Date regDate;
 	
+	@Column(length = 20)
 	private String statu;
 	
 	@OneToMany(mappedBy = "user" ,cascade = {

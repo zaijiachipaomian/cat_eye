@@ -27,5 +27,7 @@ public interface MovieService {
 	//显示正在热映电影的总数量。
 	Long getReleasingCount();
 	
+	public Object searchByName(String name);
+	
 
 }

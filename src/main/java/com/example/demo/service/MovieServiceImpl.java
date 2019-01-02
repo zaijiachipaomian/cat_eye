@@ -278,5 +278,11 @@ public class MovieServiceImpl implements MovieService {
 			}
 		});
 	}
+
+	@Override
+	public Object searchByName(String name) {
+		// TODO Auto-generated method stub
+		return movieRepository.searchByName(name);
+	}
 	
 }

@@ -35,4 +35,10 @@ public class PersonServiceImpl implements PersonService {
 		Person person = personRepository.findById(id).get();
 		return person;
 	}
+
+	@Override
+	public Object searchByName(String name) {
+		// TODO Auto-generated method stub
+		return personRepository.searchByName(name);
+	}
 }

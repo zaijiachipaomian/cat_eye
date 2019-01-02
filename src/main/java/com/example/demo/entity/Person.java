@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.Columns;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,10 +25,14 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String avator;
+	@Column(length = 30)
 	private String name;
+	@Column(length = 2)
 	private String gender;
+	@Column(length = 20)
 	private String nation;
 	//@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(length = 20)
 	private String birthday;
 	@Column(length = 1200)
 	private String introduction;
@@ -67,6 +72,12 @@ public class Person {
 		this.nation = nation;
 	}
 	
+	public String getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
 	public String getIntroduction() {
 		return introduction;
 	}
