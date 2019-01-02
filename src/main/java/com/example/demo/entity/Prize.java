@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,7 @@ public class Prize {
 	private Long id;
 	private String name;
 	private String logoUrl;
+	@Column(length = 50)
 	private String detail;
 	@ManyToOne
 	private Movie movie;

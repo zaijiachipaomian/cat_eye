@@ -5,12 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -25,16 +30,21 @@ public class User {
 	
 	private String avator;
 	
+	@Column(length = 20)
 	private String username;
 	
+	@Column(length = 20)
 	private String password;
 	
+	@Column(length = 20)
 	private String email;
 	
+	@Column(length = 20)
 	private String phone;
 	
 	private Date regDate;
 	
+	@Column(length = 20)
 	private String statu;
 	
 	@OneToMany(mappedBy = "user" ,cascade = {

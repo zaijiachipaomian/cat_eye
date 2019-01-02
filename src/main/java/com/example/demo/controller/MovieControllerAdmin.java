@@ -1,51 +1,28 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.example.demo.entity.Comment;
 import com.example.demo.entity.Movie;
-import com.example.demo.entity.MovieQuery;
 import com.example.demo.entity.MovieRole;
-import com.example.demo.entity.News;
-import com.example.demo.entity.Person;
-import com.example.demo.entity.Photo;
 import com.example.demo.entity.Type;
-import com.example.demo.entity.User;
 import com.example.demo.repository.MovieRepository;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MovieService;
-import com.example.demo.service.PersonService;
 import com.example.demo.util.FileUpload;
 import com.example.demo.controller.AdminHomeController.Response;
 
@@ -92,6 +69,9 @@ public class MovieControllerAdmin {
 			@RequestParam(name = "typeIds", required = false) List<Long> typeIds,
 			@RequestParam(name = "personRoles", required = false) String movieRoles ){
 		System.out.println(movieRoles);
+		movie.getMovieRoles().clear();
+		movie.getPersons().clear();
+		movie.getPhotos().clear();
 		if(typeIds != null) {
 			List<Type> types = typeRepository.findAllById(typeIds);
 			movie.setTypes(types);

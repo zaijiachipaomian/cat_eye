@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -32,6 +33,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long>,JpaSpecifica
 //	@Query(nativeQuery = true , value =" select distinct release_date from movie ")
 	@Query(value =" select function('date_format' , m.releaseDate ,'%Y') as year from Movie m group by function ('date_format' ,m.releaseDate ,'%Y') order by year desc ")
 	public Set<String> findDistinctReleaseSet();
+	
+	@Query(nativeQuery = true , value = " select id , name , poster as photo from movie where name like %?1% order by release_date desc limit 3 ")
+	public List<Map<String,Object>> searchByName(String name);
 	
 	/**
 	 * 多对多查询，从类型到电影，需要按顺序调用这两个方法
