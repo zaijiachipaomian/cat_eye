@@ -9,4 +9,6 @@ public interface PersonService {
 	public void deletePerson(Long id);
 	
 	public Person getPerson(Long id);
+	
+	public Object searchByName(String name);
 }

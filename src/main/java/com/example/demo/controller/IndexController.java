@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.MovieQuery;
+import com.example.demo.repository.MovieRepository;
+import com.example.demo.repository.PersonRepository;
 import com.example.demo.service.BoardSerivce;
 import com.example.demo.service.BoxOfficeService;
 import com.example.demo.service.MovieService;
+import com.example.demo.service.PersonService;
 import com.example.demo.util.MaoYanBoxOfficeApi;
 import com.example.demo.controller.AdminHomeController.Response;
 @Controller
@@ -31,6 +34,9 @@ public class IndexController {
 	
 	@Autowired
 	BoardSerivce boardSerivce;
+	
+	@Autowired
+	PersonService personService;
 	
 	@ResponseBody
 	@GetMapping("/index_data/todayBoxOffice")
@@ -108,12 +114,35 @@ public class IndexController {
 		}
 	}
 
+
 	
 	@GetMapping("/")
 	public String index(HttpServletRequest request,HttpServletResponse response) {
 		return "index";
 	}
 	
+	/**
+	 * 检索电影和电影人
+	 */
+	@ResponseBody
+	@GetMapping("/search")
+	public Object search(String name) {
+		if(name.equals(""))
+			return new Response(400,"查询不可为空");
+		try {
+			System.out.println(name);
+			HashMap<String, Object> map = new HashMap<>();
+			Object movies = movieService.searchByName(name);
+			map.put("movies", movies);
+			Object persons = personService.searchByName(name);
+			map.put("persons", persons);
+			return new Response(200 , map);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return new Response(400 , "查询错误");
+		}
+	}
 	
 
 }

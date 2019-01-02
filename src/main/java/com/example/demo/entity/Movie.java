@@ -27,6 +27,7 @@ public class Movie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
+	@Column(length = 50)
 	private String name;
 	//海报
 	private String poster;
@@ -38,6 +39,7 @@ public class Movie {
 //	private String mainActor;
 //	类型
 	//国家区域
+	@Column(length = 20)
 	private String area;
 	//上映日期
 	
@@ -47,6 +49,7 @@ public class Movie {
 	private String length;
 	//票房
 	//简介
+	@Column(length = 1200)
 	private String introduction;
 	//状态
 	private Long commentCount;
@@ -55,8 +58,8 @@ public class Movie {
 	@OneToMany(mappedBy = "movie" ,cascade = {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
-			CascadeType.REMOVE,			
-	},fetch = FetchType.LAZY)
+			CascadeType.REMOVE,	
+	},fetch = FetchType.LAZY ,orphanRemoval = true)
 	@Fetch(FetchMode.SELECT)
 	private List<Photo> photos = new ArrayList<>();
 	
@@ -67,7 +70,7 @@ public class Movie {
 	},fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	private List<News> newsList = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "movie" ,cascade = {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
@@ -88,7 +91,7 @@ public class Movie {
 			CascadeType.PERSIST,
 			CascadeType.MERGE,
 			CascadeType.REMOVE,			
-	},fetch = FetchType.LAZY)
+	},fetch = FetchType.LAZY,orphanRemoval = true)
 	@Fetch(FetchMode.SELECT)
 	private List<MovieRole> movieRoles = new ArrayList<>();
 	

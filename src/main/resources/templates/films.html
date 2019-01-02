@@ -7,11 +7,53 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>电影信息</title>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!--js 操作cookie文件的操作-->
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
     <script type="/static/xcccy/libs.js.下载" async="true"></script>
     <script type="/static/xcccy/jquery.js.下载"></script>
     <script type="/static/xcccy/ad.release.js.下载" async="true"></script>
     <script type="/static/xcccy/douban.js.下载"></script>
 
+    <script>
+        $(document).ready(function () {
+            function login_user() {
+                let username = $.cookie('username');
+
+                if (username == null) {
+                    console.log("获取用户的用户名失败");
+                    return;
+                }
+                let user_id = $.cookie('user_id');
+
+                if (user_id == null) {
+                    console.log("获取用户的id失败")
+                    return;
+                }
+
+                console.log("username " + username + " user_id " + user_id);
+                // 移除登陆注册的按钮
+                $(".login-out").remove();
+                // 增加用户的超链接
+                // 连接到一个用户的模板
+                $(".user-operation").append(`
+              <li >
+                        <a href="/user/tpl"> ${username} </a>
+                    </li>
+              `);
+
+                // 退出登陆按钮
+                $(".user-operation").append(`
+              <li >
+                        <a href="/user/loginOut"> 退出登陆 </a>
+                    </li>
+              `);
+
+            }
+            // 判断用户是否已经登陆,
+            login_user();
+        });
+    </script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -231,7 +273,7 @@
                 </button>
                 <div id="logoDiv">
                     <a class="navbar-brand" href="#">
-                        <img id="logoImg" src="C:\Users\Administrator\Desktop\logo.png">
+
                     </a>
                 </div>
             </div>
@@ -255,12 +297,12 @@
                 </form>
 
 
-                <ul class="nav navbar-nav navbar-right ">
-                    <li>
-                        <a href="">登录</a>
+                <ul class="nav navbar-nav navbar-right user-operation">
+                    <li class="login-out">
+                        <a href="/user/login">登录</a>
                     </li>
-                    <li><a href="" class="disable">|</a></li>
-                    <li><a href="">注册</a></li>
+                    <li class="login-out"><a href="" class="disable">|</a></li>
+                    <li class="login-out"><a href="/user/reg">注册</a></li>
 
                 </ul>
             </div>
@@ -434,7 +476,7 @@
             for (let i = 0; i < comments.length; i++) {
                 let cm = comments[i];
                 var movieLengths = cm.date.split("T");
-                if (movieLengths.length ==2){
+                if (movieLengths.length == 2) {
                     cm.date = movieLengths[0];
                 }
 
@@ -463,7 +505,7 @@
             let releaseDate = movie.releaseDate;
             let movieLength = movie.length;
             var releaseDates = movie.releaseDate.split("T");
-            if (releaseDates.length == 2){
+            if (releaseDates.length == 2) {
                 releaseDate = releaseDates[0];
             }
             let introduction = movie.introduction;
@@ -542,7 +584,7 @@
         function run_now(window) {
             window.location.href;
             let url = window.location.href;
-            console.log("urlsis " + url+ "    " +window);
+            console.log("urlsis " + url + "    " + window);
             let urls = url.split(":8081");
 
             if (urls.length != 2) {

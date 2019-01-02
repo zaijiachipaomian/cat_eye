@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class MovieRole {
 	@ManyToOne
 	private Movie movie;
 	//角色 -> 导演 、 剪辑等等
+	@Column(length = 20)
 	private String role;
 	
 	//可能多对一
