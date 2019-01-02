@@ -120,7 +120,6 @@ public class CommentController {
 		Page<Comment> comment=null;	
 		if(user!=null) {
 			if(user.getId()==user_id) {
-				//TODO comment==null时
 				comment=commentService.findCommentByUserId(user_id, pageable);
 				if(comment!=null) {
 					return new Response(200,comment);

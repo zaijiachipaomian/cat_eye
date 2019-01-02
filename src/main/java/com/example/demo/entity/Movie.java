@@ -49,6 +49,7 @@ public class Movie {
 	//简介
 	private String introduction;
 	//状态
+	private Long commentCount;
 	
 	private Float avgScore;
 	@OneToMany(mappedBy = "movie" ,cascade = {
@@ -267,6 +268,15 @@ public class Movie {
 		this.photos = photos;
 	}
 
+	
+	public Long getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(Long commentCount) {
+		this.commentCount = commentCount;
+	}
+
 	public Movie(String name, String poster, String area,
 			Date releaseDate, String length, String introduction, Float avgScore) {
 		super();
@@ -283,21 +293,13 @@ public class Movie {
 		super();
 	}
 
-
 	@Override
 	public String toString() {
 		return "Movie [Id=" + Id + ", name=" + name + ", poster=" + poster + ", area=" + area + ", releaseDate="
-				+ releaseDate + ", length=" + length + ", introduction=" + introduction + ", avgScore=" + avgScore + "]";
-	}
-
+				+ releaseDate + ", length=" + length + ", introduction=" + introduction + ", commentCount="
+				+ commentCount + ", avgScore=" + avgScore + "]";
+	}	
 	
-	
-	
-	
-	
-	
-
-
 	
 	
 }
