@@ -349,8 +349,8 @@
 
       });
 
- //  包装url 
- function boxUrl() {
+      //  包装url 
+      function boxUrl() {
         let year_type = $(".year-tags li.active a ").attr("data-val");
         let area_type = $(".area-tags li.active a ").attr("data-val");
         let tag_type = $(".type-tags li.active a ").attr("data-val");
@@ -368,21 +368,21 @@
           sortId = "sortId=3";
         }
 
-        let url = root_url + "?" + year_type + "&" + area_type + "&" + tag_type+"&"+sortId;
+        let url = root_url + "?" + year_type + "&" + area_type + "&" + tag_type + "&" + sortId;
         console.log("year_type = " + year_type + " area_type " + area_type + " tag_type " + tag_type + " url " + url);
         return url;
       }
-      
-     
-      function sortId_() {
-      $("span input").click(function () {
-        console.log("hello  " + $(this).val() + $(this).parent().text());
-        $(this).parent().addClass("active");
-        let url = boxUrl();
 
-        fetch_films(url);
-      })
-    }
+
+      function sortId_() {
+        $("span input").click(function () {
+          console.log("hello  " + $(this).val() + $(this).parent().text());
+          $(this).parent().addClass("active");
+          let url = boxUrl();
+
+          fetch_films(url);
+        })
+      }
 
 
       function local_remove_class(tagName, className) {
@@ -401,7 +401,7 @@
 
     });
 
-   
+
 
     function fetch_movies(url) {
       console.log("url " + url);
@@ -671,7 +671,7 @@
     fetch_films(root_films_);
 
 
-   
+
 
   });
 
@@ -690,6 +690,7 @@
       let first = data.data.first;
       let last = data.data.last;
       let size = data.data.size;
+      let totalPages = data.data.totalPages;
 
       console.warn("content " + content);
       console.warn("pageable " + pageable);
@@ -697,12 +698,18 @@
       console.warn("first " + first + " number " + number + "  size " + size);
 
       unpack_movies(content);
+
+      // 解包分页
+      unpack_page(number, totalPages);
     });
 
 
 
 
   }
+
+
+
   function unpack_movies(movies) {
     let movie_list_container = $(".movie-list-container");
     movie_list_container.children().remove();
@@ -720,9 +727,57 @@
     </div>`);
     }
   }
-  // todo  分页功能
-  function unpack_page(pages) {
-    // todo
+
+  //  包装url 
+  function boxUrl_() {
+    let root_url = "/films/";
+    let year_type = $(".year-tags li.active a ").attr("data-val");
+    let area_type = $(".area-tags li.active a ").attr("data-val");
+    let tag_type = $(".type-tags li.active a ").attr("data-val");
+    // 
+    let sortId = "sortId=1";
+    let inp = $("span .active input");
+
+    let inpText = inp.parent().text();
+
+    if (inpText == "按热门排序") {
+      sortId = "sortId=1";
+    } else if (inpText == "按时间排序") {
+      sortId = "sortId=2";
+    } else {
+      sortId = "sortId=3";
+    }
+
+    let url = root_url + "?" + year_type + "&" + area_type + "&" + tag_type + "&" + sortId;
+    console.log("year_type = " + year_type + " area_type " + area_type + " tag_type " + tag_type + " url " + url);
+    return url;
+  }
+
+  //  分页功能
+  function unpack_page(index, total) {
+    console.log("解包分页");
+    let pagination = $("ul.pagination");
+    pagination.children().remove();
+
+    for (let i = 0; i < total; i++) {
+      pagination.append(`<li><a data-val=${i} href="javascript:void(0);">${i}</a></li>`);
+    }
+
+    $("ul.pagination li a ").click(function () {
+
+      // 
+      let dataVal = $(this).attr("data-val");
+      console.log("dataVal " + dataVal);
+
+      let url = boxUrl_();
+      url = url + "&page=" + dataVal;
+      console.log("url " + url);
+      fetch_films(url);
+    });
+
+    //  $(`ul.pagination li a data-val=[${index}]`).parent().addClass("active");
+
+
   }
 
 
