@@ -63,8 +63,10 @@ public class PersonController {
 		//文件上传成功，返回文件的路径加名字,否则返回false
 		System.out.println(person);
 		String result = "";
-		if(file != null)
+		if(file != null) {
 			result = FileUpload.fileUpload(file);
+			System.out.println(result);
+		}
 		if(!result.equals("false")) {
 			if(person!=null) {
 				if(personService.savePerson(person, result)!=null) {

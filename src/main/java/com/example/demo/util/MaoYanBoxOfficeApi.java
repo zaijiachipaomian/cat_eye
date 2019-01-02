@@ -23,11 +23,17 @@ public class MaoYanBoxOfficeApi {
 	}
 	
 	public static JSONArray parseMaoYanBoxOfficeResp(Response resp) {
-		String respBody = resp.body();
-		JSONObject jsonObject = new JSONObject(respBody);
-		JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("list");
-		System.out.println(jsonArray);
-		return jsonArray;
+		try {
+			String respBody = resp.body();
+			JSONObject jsonObject = new JSONObject(respBody);
+			JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("list");
+			System.out.println(jsonArray);
+			return jsonArray;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
