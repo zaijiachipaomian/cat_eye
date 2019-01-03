@@ -188,7 +188,7 @@
                 </button>
                 <h4 class="modal-title" id="exampleModalLabel">增加或者修改</h4>
             </div>
-            <div class="modal-body" style="height: 1050px !important;">
+            <div class="modal-body" style="height: 400px !important;">
                 <form method="post" id="movie_form" enctype="multipart/form-data">
 
                     <!-- 电影的id -->
@@ -239,24 +239,33 @@
                     <div class="form-group">
                         <label for="movie-introduction" class="control-label col-sm-2">介绍:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="movie-introduction" name="introduction">
+                        	<textarea class="form-control" name="introduction" style="height:100px;" id="movie-introduction"></textarea>
                         </div>
                     </div>
                     <!--电影图片-->
                     <div class="form-group">
                         <label for="movie-photos" class="control-label col-sm-2">图片:</label>
                         <div class="col-sm-10">
-                            <input type="file" class="form-control" id="movie-photos" name="filesName">
+                            <input type="file" multiple="multiple" class="form-control" id="movie-photos" name="filesName">
                         </div>
                     </div>
                     <br/>
-                    <!--电影类型的IDS-->
+                    <!--电影类型的IDS type-select -->
+                    
                     <div class="form-group">
+                          <label for="movie-typeIds" class="control-label col-sm-2">电影类型:</label>
+                          <div class="col-sm-10">
+	                          <select multiple="multiple" class="form-control" name="typeIds" id="movie-typeIds">
+
+							  </select>
+                          </div>
+                    </div>
+<!--                     <div class="form-group">
                         <label for="movie-typeIds" class="control-label col-sm-2">类型:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="movie-typeIds" name="typeIds">
                         </div>
-                    </div>
+                    </div> -->
                     <!--电影的角色-->
                     <div class="form-group">
 
@@ -264,7 +273,7 @@
 
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="movie-movieRoles" name="movieRoles">
+                            <input type="text" value='[{ "personId" : 1 , "role" : "群众演员" },{ "personId" : 1 ,  "role" : "演员" }]' class="form-control" id="movie-movieRoles" name="personRoles">
                         </div>
                     </div>
                     <br/>
@@ -352,7 +361,9 @@
             $("#movie-length").val("");
             return;
         }
-
+		
+        
+        
         //$("#movie-name").val($("#movie" + recipient).val());
         fetch_data_from_row(recipient);
 
@@ -363,7 +374,7 @@
     //点击提交的时候对表单数据进行提交
     $(document).ready(function () {
         $("#add_or_modify").click(function () {
-            var form = new FormData(document.getElementById("movie-form"));
+            var form = new FormData(document.getElementById("movie_form"));
             $.ajax({
                 url: "/admin/films/add",
                 type: "post",
@@ -381,6 +392,16 @@
             });
         });
 
+        
+        $.get("/type/list", {}, function (data, status) {
+            let content = data;
+            alert(content);
+            var sel=$("#movie-typeIds")
+            for (let i = 0; i < content.length; i++) {
+                let cn = content[i];
+                sel.append(`<option value="${cn.id}">${cn.name}</option>`);
+            }
+        });
         //页面加载完毕时，调用这个函数加载数据
         //fetch_data("/person/admin/get",0);
     });

@@ -60,7 +60,7 @@ public class MovieControllerAdmin {
 	 * 			introduction	text		我们在这个屯立长大
 	 * 			filesName(图片) 	file		文件		
 	 * 			typeIds(电影类型的ID)text	1,2,3,4,5
-	 * 			movieRoles		text	  [{ "personId" : 1 , "role" : "导演" },{ "personId" : 2 ,  "role" : "演员" }]
+	 * 			personRoles		text	  [{ "personId" : 1 , "role" : "导演" },{ "personId" : 2 ,  "role" : "演员" }]
 	 */
 	@PostMapping("/add")
 	public Response insertOrUpdateMovie(Movie movie ,
@@ -73,7 +73,9 @@ public class MovieControllerAdmin {
 		movie.getPersons().clear();
 		movie.getPhotos().clear();
 		if(typeIds != null) {
+			System.out.println(typeIds);
 			List<Type> types = typeRepository.findAllById(typeIds);
+			System.out.println(types);
 			movie.setTypes(types);
 		}
 		if(movieRoles != null) {

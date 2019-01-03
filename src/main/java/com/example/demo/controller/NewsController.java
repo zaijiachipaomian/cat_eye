@@ -52,7 +52,8 @@ public class NewsController {
 		System.out.println(news.toString());
 		try {
 			String picUrl = FileUpload.fileUpload(file);
-			news.setPic(picUrl);
+			if(!picUrl.equals("false"))
+				news.setPic(picUrl);
 			Movie movie = movieRepository.findById(movieId).get();
 			movie.addNews(news);
 			movieRepository.save(movie);
