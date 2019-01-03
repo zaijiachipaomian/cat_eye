@@ -50,11 +50,21 @@ public class PrizeController {
 	public Object insertOrUpdatePrize(Long movieId , 
 			 Prize prize,
 			 @RequestParam(name = "fileName", required = false)  MultipartFile file) {
+		Prize oldPrize=null;
 		System.out.println(movieId);
 		System.out.println(prize.toString());
 		try {
+			if(prizeRepository.existsById(prize.getId())) {
+				oldPrize=prizeRepository.findById(prize.getId()).orElse(null);
+			}
 			String logoUrl = FileUpload.fileUpload(file);
-			prize.setLogoUrl(logoUrl);
+			if(!logoUrl.equals("false"))
+				prize.setLogoUrl(logoUrl);
+			else {
+				if(oldPrize!=null) {
+					prize.setLogoUrl(oldPrize.getLogoUrl());
+				}
+			}
 			Movie movie = movieRepository.findById(movieId).get();
 			movie.addPrize(prize);
 			movieRepository.save(movie);
