@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,11 @@ public class TypeController {
 	public List<Type> getTypeList(){
 		return typeRepository.findAll();
 	}
-	
+	//获取所有电影类型 分页
+	@GetMapping("/list/pageable")
+	public Object getTypeListPage(@PageableDefault(page=0,size=10) Pageable pageable){
+		return new Response(200,typeRepository.findAll(pageable));
+	}
 	/**
 	 * 请求方式Get
 	 * 需要一个参数，参数名为typeName，表示增加的电影类型名
