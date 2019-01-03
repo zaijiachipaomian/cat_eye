@@ -247,6 +247,14 @@
     var recipient="";
     $(document).ready(function(){
         fetch_data("/admin/news/get/list", 0);
+        $.get("/films/?size=200", {}, function (data, status) {
+            let content = data.data.content;
+            var sel=$("#movie-select")
+            for (let i = 0; i < content.length; i++) {
+                let cn = content[i];
+                sel.append(`<option value="${cn.id}">${cn.name}</option>`);
+            }
+        });
 		$("#add_or_modify").click(function(){
 			var statu=$("#movie-select").val();
         	if(statu!=-1){
@@ -278,14 +286,7 @@
         var button = $(event.relatedTarget) // Button that triggered the modal
         console.log(button);
         recipient = button.data('whatever');
-        $.get("/films/?size=200", {}, function (data, status) {
-            let content = data.data.content;
-            var sel=$("#movie-select")
-            for (let i = 0; i < content.length; i++) {
-                let cn = content[i];
-                sel.append(`<option value="${cn.id}">${cn.name}</option>`);
-            }
-        });
+        
         if (recipient == "添加资讯") {
         	$("#new-id").val("");
             $("#movie-id").val("");
