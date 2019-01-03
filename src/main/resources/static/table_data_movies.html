@@ -107,9 +107,13 @@
                                     <th>电影id</th>
                                     <th>名称</th>
                                     <th>地区</th>
+                                    <th>海报</th>
+                                    <th>发布日期</th>
                                     <th>时长</th>
-                                    <th style="row-span: 2;">介绍</th>
-                                    <th>操作</th>
+                                    <th>介绍</th>
+                                    <th>图片</th>
+                                    <th>类型ID</th>
+                                    <th>电影角色</th>
                                 </tr>
                             </thead>
                             <tbody id="data_data">
@@ -171,37 +175,83 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="exampleModalLabel">增加或者修改</h4>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <div class="modal-body" style="height: 1050px !important;">
+                    <form method="post" id="movie_form" enctype="multipart/form-data">
+                    
+                        <!-- 电影的id -->
+                        <input type="hidden" id="movie-id" name="id">
+                        
+                      
+                    
+                    
+                        <br />
                         <!--电影名称-->
                         <div class="form-group">
                             <label for="movie-name" class="control-label col-sm-2">电影名称:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-name">
+                                <input type="text" class="form-control" id="movie-name" name="name">
                             </div>
                         </div>
-                        <!-- 电影的id -->
-                        <input type="hidden" id="movie-id">
-                        <br />
                         <!---电影地区-->
                         <div class="form-group">
                             <label for="movie-area" class="control-label col-sm-2">电影地区:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-area">
+                                <input type="text" class="form-control" id="movie-area" name="area">
                             </div>
                         </div>
                         <br />
-                        <!---电影地区-->
+                        <!---电影海报-->
                         <div class="form-group">
-                            <label for="movie-length" class="control-label col-sm-2">电影时长:</label>
+                            <label for="movie-poster" class="control-label col-sm-2">电影海报:</label>
+                            <div class="col-sm-5">
+                                <input type="file" class="form-control" id="movie-poster" name="fileName">
+                            </div>
+                        </div>
+                        <br />
+                        <!---电影上映日期-->
+                        <div class="form-group">
+                            <label for="movie-releaseDate" class="control-label col-sm-2">电影上映日期:</label>
+                            <div class="col-sm-5">
+                                <input type="date" class="form-control" id="movie-releaseDate" name="releaseDate">
+                            </div>
+                        </div>
+                        <!--电影时长-->
+                        <div class="form-group">
+                            <label for="movie-length" class="control-label col-sm-2">时长:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-length">
+                                <input type="text" class="form-control" id="movie-length" name="length">
                             </div>
                         </div>
                         <!--电影介绍-->
                         <div class="form-group">
-                            <label for="movie-introduction" class="control-label">介绍:</label>
-                            <textarea class="form-control" style="height:120px;" id="movie-introduction"></textarea>
+                            <label for="movie-introduction" class="control-label col-sm-2">介绍:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="movie-introduction" name="introduction">
+                            </div>
+                        </div>
+                        <!--电影图片-->
+                        <div class="form-group">
+                            <label for="movie-photos" class="control-label col-sm-2">图片:</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" id="movie-photos" name="filesName">
+                            </div>
+                        </div>
+                        <!--电影类型的IDS-->
+                        <div class="form-group">
+                            <label for="movie-typeIds" class="control-label col-sm-2">类型:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="movie-typeIds" name="typeIds">
+                            </div>
+                        </div>
+                        <!--电影的角色-->
+                        <div class="form-group">
+                        <div class="col-sm-2">
+                                                    <label for="movie-movieRoles" class="control-label">角色:</label>
+                        
+                        	</div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="movie-movieRoles" name="movieRoles">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -214,13 +264,20 @@
     </div>
     <script>
 
+    
+    
         function fetch_data_from_row(id) {
-            console.log("fetch_data_from_row" + id + $("#movie-" + id).text() + $("#movie-" + id + "-name").text() + $("#movie-" + id + "-name"));
             $("#movie-id").val(id);
             $("#movie-name").val($("#movie-" + id + "-name").text().trim());
             $("#movie-area").val($("#movie-" + id + "-area").text().trim());
-            $("#movie-introduction").val($("#movie-" + id + "-introduction").text().trim());
+            $("#movie-poster").val($("#movie-" + id + "-poster").text().trim());
+            $("#movie-releaseDate").val($("#movie-" + id + "-releaseDate").text().trim());
             $("#movie-length").val($("#movie-" + id + "-length").text().trim());
+            $("#movie-introduction").val($("#movie-" + id + "-introduction").text().trim());
+            $("#movie-photos").val($("#movie-" + id + "-photos").text().trim());
+            $("#movie-typeIds").val($("#movie-" + id + "-typeIds").text().trim());
+            $("#movie-movieRoles").val($("#movie-" + id + "-movieRoles").text().trim());
+           
         }
         $(document).ready(function () {
             console.log("data....");
@@ -281,27 +338,35 @@
             }
 
             //$("#movie-name").val($("#movie" + recipient).val());
-            $("")
-            console.log($(event).parent() + recipient);
             fetch_data_from_row(recipient);
 
 
         });
-
+		
+        
+      //点击提交的时候对表单数据进行提交
         $(document).ready(function () {
             $("#add_or_modify").click(function () {
-                console.log("xiugai huo zhe zeng jia dianying");
-                let movie_id = $("#movie-id").val();
-                let movie_name = $("#movie-name").val();
-                let movie_area = $("#movie-area").val();
-                let movie_introduction = $("#movie-introduction").val();
-                let movie_length = $("#movie-length").val();
-                let data = {"id":movie_id,"name":movie_name,"area":movie_area,"introduction":movie_introduction,"fileName":"",};
-                console.log("data"+ JSON.stringify(data));
-                $.post("/admin/films/add", data, function (data, res) {
-                    console.log("data " + data);
-                });
+            	var form = new FormData(document.getElementById("movie-form"));
+            	 $.ajax({
+                     url:"/admin/films/add",
+                     type:"post",
+                     data:form,
+                     processData:false,
+                     contentType:false,
+                     success:function(data){
+                         alert("插入或者成功！！");
+                         $("#exampleModal").modal('hide');
+                         //fetch_data("/person/admin/get", 0);
+                     },
+                     error:function(e){
+                         alert("错误！！");
+                     }
+                 });      
             });
+            
+            //页面加载完毕时，调用这个函数加载数据
+            //fetch_data("/person/admin/get",0);
         });
     </script>
 
