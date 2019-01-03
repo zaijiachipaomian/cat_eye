@@ -88,60 +88,18 @@
                         <table class="table table-striped table-bordered table-hover ">
                             <thead>
                                 <tr>
+                                	<th>评论id</th>
                                     <th>用户id</th>
-                                    <th>电影名</th>
                                     <th>评论内容</th>
+                                    <th>评论时间</th>
+                                    <th>评分</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody id="data_data">
-                                <tr class="gradeX">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 4.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td class="center">4</td>
-                                    <td class="center">X</td>
-
-                                    <td class="flex-operation">
-
-                                     <a class="button">
-                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
-                                     </a>
-                                     <div class="button">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
-                                     </div>
-
-                                    </td>
-                                </tr>
-                               
-                                <tr class="gradeX">
-                                        <td>Trident</td>
-                                        <td>Internet Explorer 4.0
-                                        </td>
-                                        <td>Win 95+</td>
-                                        <td class="center">4</td>
-                                        <td class="center">X</td>
-    
-                                        <td class="flex-operation">
-    
-                                         <a class="button">
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
-                                         </a>
-    
-                                        </td>
-                                    </tr>
-
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <th>渲染引擎</th>
-                                    <th>浏览器</th>
-                                    <th>平台</th>
-                                    <th>引擎版本</th>
-                                    <th>CSS等级</th>
-                                    <th>操作</th>
-                                </tr>
+                                
                             </tfoot>
                         </table>
 
@@ -152,9 +110,9 @@
 
                 </div>
                 <div class="page_flex">
-                    <div><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                                 data-whatever="@mdo">
-                        添加数据</button></div>
+                    <!-- <div><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                                 data-whatever="添加评论">
+                        添加评论</button></div> -->
                     <div class="page-pagination">
                         <ul class="pagination">
                             <li><a href="#">&laquo;</a></li>
@@ -181,11 +139,63 @@
     <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 
     <script>
+    function deleteComment(id){
+    	var truthBeTold = window.confirm("是否确认删除");
+    	if (truthBeTold) {
+    		$.get("/comment/admin/delete/"+id, function (data, res) {
+                if(data.code!=200){
+                	alert(data.data);
+                }
+                else{
+                	fetch_data("/comment/admin/get", 0);
+                }
+            });
+    	} 
+    	else
+    	 	return 0;
+   	}
+    function fetch_data(url, offset) {
+        $.get(url, {}, function (data, status) {
+            let content = data.data.content;
+            // 移除子节点
+            $("#data_data").children().remove();
+            for (let i = 0; i < content.length; i++) {
+                let cn = data.data.content[i];
+                $("#data_data").append(`
+           			<tr class="gradeX" style="height:56px!important;" >
+           				<td id="id-${cn.id}">${cn.id}</td>
+                        <td id="user-id-${cn.id}">${cn.user.id}</td>
+                        <td id="content-${cn.id}">${cn.content}</td>
+                        <td id="date-${cn.id}">${cn.date}</td>
+                        <td id="score-${cn.id}">${cn.score}</td>
+                        <td class="flex-operation">
+                         <a class="button" onclick="deleteComment('${cn.id}')">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
+                         </a>
 
+                        </td>
+                    </tr>`);
+            }
 
-
-
-
+        });
+    }
+    $(document).ready(function(){
+        fetch_data("/comment/admin/get", 0);
+        $("#add_or_modify").click(function(){
+        	var statu=$("#statu").val();
+			$.get("/user/admin/modify/"+recipient+"?statu="+statu, function (data, res) {
+            	recipient="";
+            	if(data.code!=200){
+                	alert(data.data);
+                }
+                else{
+                	$("#exampleModal").modal('hide');
+                	fetch_data("/user/admin/get", 0);
+                }
+            });
+			
+		});
+    });
 
     </script>
 
