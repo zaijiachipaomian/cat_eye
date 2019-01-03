@@ -2,8 +2,12 @@
 function fetch_valid_code() {
     let phone = $("#phone").val();
     let data = {"phone": phone};
-    $.get("/user/valid_code", data, function (data, res) {
-        console.log("datas" + data);
+    $.get("/user/valid_code_reg", data, function (data, res) {
+        console.log("data" + data);
+
+        if (data.code !=200){
+            alert("获取验证码失败");
+        }
     });
 }
 

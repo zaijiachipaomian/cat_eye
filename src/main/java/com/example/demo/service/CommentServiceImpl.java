@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,13 @@ public class CommentServiceImpl implements CommentService {
 		// TODO Auto-generated method stub
 		boolean isFlag=false;
 		if(user!=null&&movie!=null) {
-			user.addComment(comment);
-			movie.addComment(comment);
+			comment.setUser(user);
+			comment.setMovie(movie);
+//			user.addComment(comment);
+//			movie.addComment(comment);
+//			userRepository.save(user);
+//			movieRepository.save(movie);
+			comment.setDate(new Date());
 			commentRepository.save(comment);
 			isFlag=true;
 		}
