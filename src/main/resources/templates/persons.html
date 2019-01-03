@@ -16,8 +16,8 @@
   	<link rel="dns-prefetch" href="https://report.meituan.com/">
   	<link rel="dns-prefetch" href="https://frep.meituan.com/">
 
-  
 
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 
 
 
@@ -293,6 +293,121 @@
                 </p>
     </div>
 
+<script>
+    $(document).ready(function () {
+       let urlHref = window.location.href;
+
+       let sps = urlHref.split("/");
+       let person_id = sps[sps.length -1];
+       console.log(sps + "person_id "+ person_id);
+       let url = "/person/get/"+person_id;
+       function fetch_person(url) {
+
+           //
+           $.get(url, {} , function (data,res) {
+
+                if (data.code !=200){
+                    return ;
+                }
+
+            unpack_person(data.data);
+
+           });
+
+       }
+
+        function unpack_person(data) {
+            let person = data.person;
+            console.warn(data, data.person);
+            let person_name = $(".pserson-name");
+            let introduction = $(".introduction-detail");
+            let poster = $("#mainpic img");
+            poster.attr("src", person.avator);
+            introduction.text(person.introduction);
+            // 设置姓名
+            person_name.text(person.name);
+            console.warn(person);
+            let info_property = $("#info-property");
+            info_property.children().remove();
+            info_property.append(`<span class="pl">性别：${person.gender}</span></br>`);
+            info_property.append(`<span class="pl">国籍：${person.nation}</span></br>`);
+            let info_represent = $("#info-represent");
+            info_represent.children().remove();
+            let movies = data.movie;
+            for (var i = 0; i < movies.length; i++) {
+                let mov = movies[i];
+                info_represent.append(` <div>
+                        <center>
+                        <a href="/films/${mov.id}"><img style="width: 110px;height: 140px;" src="${mov.poster}">
+                        <br>
+                        </a>
+                        </center>
+                    </div>`);
+            }
+        }
+
+       fetch_person(url);
+    });
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function run_now() {
+            let urls = window.location.href.split(":8081");
+            if (urls.length == 2) {
+                urls = urls[1];
+            }
+            urls = urls.split("/");
+            let person_id;
+            console.warn(urls);
+            if (urls.length == 3) {
+                person_id = urls[2];
+            }
+            if (person_id == undefined) {
+                console.warn("获取用户id出现错误");
+                return;
+            }
+            urls = "/person/get/" + person_id;
+            $.get(urls, {}, function (data, res) {
+                if (data.code == 200) {
+                    unpack_person(data.data);
+                }
+            });
+        }
+        function unpack_person(data) {
+            let person = data.person;
+            console.warn(data, data.person);
+            let person_name = $(".pserson-name");
+            let introduction = $(".introduction-detail");
+            let poster = $("#mainpic img");
+            poster.attr("src", person.avator);
+            introduction.text(person.introduction);
+            // 设置姓名
+            person_name.text(person.name);
+            console.warn(person);
+            let info_property = $("#info-property");
+            info_property.children().remove();
+            info_property.append(`<span class="pl">性别：${person.gender}</span></br>`);
+            info_property.append(`<span class="pl">国籍：${person.nation}</span></br>`);
+            let info_represent = $("#info-represent");
+            info_represent.children().remove();
+            let movies = data.movie;
+            for (var i = 0; i < movies.length; i++) {
+                let mov = movies[i];
+                info_represent.append(` <div>
+                        <center>
+                        <a href="/films/${mov.id}"><img style="width: 110px;height: 140px;" src="${mov.poster}">
+                        <br>
+                        </a>
+                        </center>
+                    </div>`);
+            }
+        }
+        run_now();
+    });
+</script>
   </body>
-</html>            let perseon = data.perseon;
+</html>
 
