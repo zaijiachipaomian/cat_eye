@@ -7,24 +7,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        .page_flex{
+        .page_flex {
             display: flex;
             flex-direction: row;
-            justify-content:space-around;
+            justify-content: space-around;
             height: 36px;
             align-content: center;
 
             margin: 0 auto;
         }
-        .pagination{
+
+        .pagination {
             margin: 0 auto;
         }
-        .page-pagination{
-            display:inline-block;
+
+        .page-pagination {
+            display: inline-block;
         }
 
-        td{
-            height: 32px!important;
+        td {
+            height: 32px !important;
+        }
+        div.form-group{
+            margin-bottom: 8px !important;
         }
     </style>
     <title> - 数据表格</title>
@@ -54,241 +59,252 @@
     <script src="/static/js/content.js?v=1.0.0"></script>
 
     <style>
-        .page_flex{
+        .page_flex {
             display: flex;
             flex-direction: row;
-            justify-content:space-around;
+            justify-content: space-around;
             height: 36px;
             align-content: center;
 
             margin: 0 auto;
         }
-        .pagination{
+
+        .pagination {
             margin: 0 auto;
         }
-        .page-pagination{
-            display:inline-block;
+
+        .page-pagination {
+            display: inline-block;
         }
     </style>
 
 </head>
 
 <body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5 id="data_type">基本 <small>分类，查找</small></h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="/static/table_data_tables.html#">选项1</a>
-                                </li>
-                                <li><a href="/static/table_data_tables.html#">选项2</a>
-                                </li>
-                            </ul>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 id="data_type">基本
+                        <small>分类，查找</small>
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="/static/table_data_tables.html#">选项1</a>
+                            </li>
+                            <li><a href="/static/table_data_tables.html#">选项2</a>
+                            </li>
+                        </ul>
 
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
                     </div>
-                    <div class="ibox-content">
+                </div>
+                <div class="ibox-content">
 
-                        <table class="table table-striped table-bordered table-hover ">
-                            <thead>
-                                <tr>
-                                    <th>电影id</th>
-                                    <th>名称</th>
-                                    <th>地区</th>
-                                    <th>海报</th>
-                                    <th>发布日期</th>
-                                    <th>时长</th>
-                                    <th>介绍</th>
-                                    <th>图片</th>
-                                    <th>类型ID</th>
-                                    <th>电影角色</th>
-                                </tr>
-                            </thead>
-                            <tbody id="data_data">
-                                <tr class="gradeX">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 4.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td class="center">4</td>
-                                    <td class="center">X</td>
+                    <table class="table table-striped table-bordered table-hover ">
+                        <thead>
+                        <tr>
+                            <th>电影id</th>
+                            <th>名称</th>
+                            <th>地区</th>
+                            <th>海报</th>
+                            <th>发布日期</th>
+                            <th>时长</th>
+                            <th>介绍</th>
+                            <th>图片</th>
+                            <th>类型ID</th>
+                            <th>电影角色</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data_data">
+                        <tr class="gradeX">
+                            <td>Trident</td>
+                            <td>Internet Explorer 4.0
+                            </td>
+                            <td>Win 95+</td>
+                            <td class="center">4</td>
+                            <td class="center">X</td>
 
-                                    <td class="flex-operation">
+                            <td class="flex-operation">
 
-                                        <a class="button">
-                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
-                                        </a>
-                                        <div class="button">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
-                                        </div>
+                                <a class="button">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
+                                </a>
+                                <div class="button">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
+                                </div>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
                 </div>
-                <div class="page_flex">
-                    <div><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+
+            </div>
+            <div class="page_flex">
+                <div>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
                             data-whatever="新增电影">
-                            新增电影</button></div>
-                    <div class="page-pagination">
-                        <ul class="pagination">
-                            <li><a href="#">&laquo;</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul><br>
+                        新增电影
+                    </button>
+                </div>
+                <div class="page-pagination">
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                    <br>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">增加或者修改</h4>
+            </div>
+            <div class="modal-body" style="height: 1050px !important;">
+                <form method="post" id="movie_form" enctype="multipart/form-data">
+
+                    <!-- 电影的id -->
+                    <input type="hidden" id="movie-id" name="id">
+
+
+                    <br/>
+                    <!--电影名称-->
+                    <div class="form-group">
+                        <label for="movie-name" class="control-label col-sm-2">电影名称:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="movie-name" name="name">
+                        </div>
                     </div>
-                </div>
+                    <!---电影地区-->
+                    <div class="form-group">
+                        <label for="movie-area" class="control-label col-sm-2">电影地区:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="movie-area" name="area">
+                        </div>
+                    </div>
+                    <br/>
+                    <!---电影海报-->
+                    <div class="form-group">
+                        <label for="movie-poster" class="control-label col-sm-2">电影海报:</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="movie-poster" name="fileName">
+                        </div>
+                    </div>
+                    <br/>
+                    <!---电影上映日期-->
+                    <div class="form-group">
+                        <label for="movie-releaseDate" class="control-label col-sm-2">上映日期:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="movie-releaseDate" name="releaseDate">
+                        </div>
+                    </div>
+                    <br/>
+                    <!--电影时长-->
+                    <div class="form-group">
+                        <label for="movie-length" class="control-label col-sm-2">时长:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="movie-length" name="length">
+                        </div>
+                    </div>
+                    <br/>
+                    <!--电影介绍-->
+                    <div class="form-group">
+                        <label for="movie-introduction" class="control-label col-sm-2">介绍:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="movie-introduction" name="introduction">
+                        </div>
+                    </div>
+                    <!--电影图片-->
+                    <div class="form-group">
+                        <label for="movie-photos" class="control-label col-sm-2">图片:</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="movie-photos" name="filesName">
+                        </div>
+                    </div>
+                    <br/>
+                    <!--电影类型的IDS-->
+                    <div class="form-group">
+                        <label for="movie-typeIds" class="control-label col-sm-2">类型:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="movie-typeIds" name="typeIds">
+                        </div>
+                    </div>
+                    <!--电影的角色-->
+                    <div class="form-group">
 
+                        <label for="movie-movieRoles" class="control-label col-sm-2">角色:</label>
+
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="movie-movieRoles" name="movieRoles">
+                        </div>
+                    </div>
+                    <br/>
+                </form>
             </div>
-
-
-
-        </div>
-
-    </div>
-
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">增加或者修改</h4>
-                </div>
-                <div class="modal-body" style="height: 1050px !important;">
-                    <form method="post" id="movie_form" enctype="multipart/form-data">
-                    
-                        <!-- 电影的id -->
-                        <input type="hidden" id="movie-id" name="id">
-                        
-                      
-                    
-                    
-                        <br />
-                        <!--电影名称-->
-                        <div class="form-group">
-                            <label for="movie-name" class="control-label col-sm-2">电影名称:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-name" name="name">
-                            </div>
-                        </div>
-                        <!---电影地区-->
-                        <div class="form-group">
-                            <label for="movie-area" class="control-label col-sm-2">电影地区:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-area" name="area">
-                            </div>
-                        </div>
-                        <br />
-                        <!---电影海报-->
-                        <div class="form-group">
-                            <label for="movie-poster" class="control-label col-sm-2">电影海报:</label>
-                            <div class="col-sm-5">
-                                <input type="file" class="form-control" id="movie-poster" name="fileName">
-                            </div>
-                        </div>
-                        <br />
-                        <!---电影上映日期-->
-                        <div class="form-group">
-                            <label for="movie-releaseDate" class="control-label col-sm-2">电影上映日期:</label>
-                            <div class="col-sm-5">
-                                <input type="date" class="form-control" id="movie-releaseDate" name="releaseDate">
-                            </div>
-                        </div>
-                        <!--电影时长-->
-                        <div class="form-group">
-                            <label for="movie-length" class="control-label col-sm-2">时长:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-length" name="length">
-                            </div>
-                        </div>
-                        <!--电影介绍-->
-                        <div class="form-group">
-                            <label for="movie-introduction" class="control-label col-sm-2">介绍:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-introduction" name="introduction">
-                            </div>
-                        </div>
-                        <!--电影图片-->
-                        <div class="form-group">
-                            <label for="movie-photos" class="control-label col-sm-2">图片:</label>
-                            <div class="col-sm-10">
-                                <input type="file" class="form-control" id="movie-photos" name="filesName">
-                            </div>
-                        </div>
-                        <!--电影类型的IDS-->
-                        <div class="form-group">
-                            <label for="movie-typeIds" class="control-label col-sm-2">类型:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-typeIds" name="typeIds">
-                            </div>
-                        </div>
-                        <!--电影的角色-->
-                        <div class="form-group">
-                        <div class="col-sm-2">
-                                                    <label for="movie-movieRoles" class="control-label">角色:</label>
-                        
-                        	</div>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="movie-movieRoles" name="movieRoles">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_or_modify" class="btn btn-primary">Send message</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="add_or_modify" class="btn btn-primary">Send message</button>
             </div>
         </div>
     </div>
-    <script>
+</div>
+<script>
 
-    
-    
-        function fetch_data_from_row(id) {
-            $("#movie-id").val(id);
-            $("#movie-name").val($("#movie-" + id + "-name").text().trim());
-            $("#movie-area").val($("#movie-" + id + "-area").text().trim());
-            $("#movie-poster").val($("#movie-" + id + "-poster").text().trim());
-            $("#movie-releaseDate").val($("#movie-" + id + "-releaseDate").text().trim());
-            $("#movie-length").val($("#movie-" + id + "-length").text().trim());
-            $("#movie-introduction").val($("#movie-" + id + "-introduction").text().trim());
-            $("#movie-photos").val($("#movie-" + id + "-photos").text().trim());
-            $("#movie-typeIds").val($("#movie-" + id + "-typeIds").text().trim());
-            $("#movie-movieRoles").val($("#movie-" + id + "-movieRoles").text().trim());
-           
-        }
-        $(document).ready(function () {
-            console.log("data....");
-            function fetch_data(url, offset) {
-                $.get(url, {}, function (data, status) {
-                    let content = data.data.content;
-                    // 移除子节点
-                    $("#data_data").children().remove();
-                    for (let i = 0; i < content.length; i++) {
-                        let cn = content[i];
-                        $("#data_data").append(`
+
+    function fetch_data_from_row(id) {
+        $("#movie-id").val(id);
+        $("#movie-name").val($("#movie-" + id + "-name").text().trim());
+        $("#movie-area").val($("#movie-" + id + "-area").text().trim());
+        $("#movie-poster").val($("#movie-" + id + "-poster").text().trim());
+        $("#movie-releaseDate").val($("#movie-" + id + "-releaseDate").text().trim());
+        $("#movie-length").val($("#movie-" + id + "-length").text().trim());
+        $("#movie-introduction").val($("#movie-" + id + "-introduction").text().trim());
+        $("#movie-photos").val($("#movie-" + id + "-photos").text().trim());
+        $("#movie-typeIds").val($("#movie-" + id + "-typeIds").text().trim());
+        $("#movie-movieRoles").val($("#movie-" + id + "-movieRoles").text().trim());
+
+    }
+
+    $(document).ready(function () {
+        console.log("data....");
+
+        function fetch_data(url, offset) {
+            $.get(url, {}, function (data, status) {
+                let content = data.data.content;
+                // 移除子节点
+                $("#data_data").children().remove();
+                for (let i = 0; i < content.length; i++) {
+                    let cn = content[i];
+                    $("#data_data").append(`
                        <tr class="gradeX" style="height:56px!important;" >
                                     <td id="movie-${cn.id}">${cn.id}</td>
                                     <td id="movie-${cn.id}-name">${cn.name}
@@ -308,67 +324,67 @@
 
                                     </td>
                                 </tr>`);
-                    }
+                }
 
-                });
-            }
-
-            fetch_data("/films/", 0);
-
-        });
-
-        $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            console.log(button);
-            var recipient = button.data('whatever'); // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            // var modal = $(this)
-            // modal.find('.modal-title').text('New message to ' + recipient)
-            // modal.find('.modal-body input').val(recipient)
-
-            if (recipient == "新增电影") {
-                // 清空
-                $("#movie-id").val("");
-                $("#movie-name").val("");
-                $("#movie-area").val("");
-                $("#movie-introduction").val("");
-                $("#movie-length").val("");
-                return;
-            }
-
-            //$("#movie-name").val($("#movie" + recipient).val());
-            fetch_data_from_row(recipient);
-
-
-        });
-		
-        
-      //点击提交的时候对表单数据进行提交
-        $(document).ready(function () {
-            $("#add_or_modify").click(function () {
-            	var form = new FormData(document.getElementById("movie-form"));
-            	 $.ajax({
-                     url:"/admin/films/add",
-                     type:"post",
-                     data:form,
-                     processData:false,
-                     contentType:false,
-                     success:function(data){
-                         alert("插入或者成功！！");
-                         $("#exampleModal").modal('hide');
-                         //fetch_data("/person/admin/get", 0);
-                     },
-                     error:function(e){
-                         alert("错误！！");
-                     }
-                 });      
             });
-            
-            //页面加载完毕时，调用这个函数加载数据
-            //fetch_data("/person/admin/get",0);
+        }
+
+        fetch_data("/films/", 0);
+
+    });
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        console.log(button);
+        var recipient = button.data('whatever'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        // var modal = $(this)
+        // modal.find('.modal-title').text('New message to ' + recipient)
+        // modal.find('.modal-body input').val(recipient)
+
+        if (recipient == "新增电影") {
+            // 清空
+            $("#movie-id").val("");
+            $("#movie-name").val("");
+            $("#movie-area").val("");
+            $("#movie-introduction").val("");
+            $("#movie-length").val("");
+            return;
+        }
+
+        //$("#movie-name").val($("#movie" + recipient).val());
+        fetch_data_from_row(recipient);
+
+
+    });
+
+
+    //点击提交的时候对表单数据进行提交
+    $(document).ready(function () {
+        $("#add_or_modify").click(function () {
+            var form = new FormData(document.getElementById("movie-form"));
+            $.ajax({
+                url: "/admin/films/add",
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert("插入或者成功！！");
+                    $("#exampleModal").modal('hide');
+                    //fetch_data("/person/admin/get", 0);
+                },
+                error: function (e) {
+                    alert("错误！！");
+                }
+            });
         });
-    </script>
+
+        //页面加载完毕时，调用这个函数加载数据
+        //fetch_data("/person/admin/get",0);
+    });
+</script>
 
 
 </body>
