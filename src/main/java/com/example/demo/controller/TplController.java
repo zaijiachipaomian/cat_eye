@@ -33,4 +33,11 @@ public class TplController {
         System.out.println("comments");
         return "comment";
     }
+
+
+    @GetMapping("/board")
+    public String board(){
+        System.out.println("/board .......  ");
+        return "board";
+    }
 }

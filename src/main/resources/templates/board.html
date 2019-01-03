@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<!--中文版本-->
+<html lang="zh_cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link href="../static/css/index.css">
+    <script src="../static/js/index_home.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+
+    <style>
+        .radius-default {
+            border-radius: 28px
+        }
+
+        .navbar-default {
+            height: 56x;;
+        }
+
+        .margin-right-default {
+            margin-right: -24px;
+        }
+
+        .w-h-28 {
+            height: 34px;
+            width: 34px;
+            text-align: center;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+
+        }
+
+        .movie-item {
+            height: 230px;
+            width: 160px;
+            background: greenyellow;
+            margin: 30px 0 0 16px;
+        }
+
+        .page-pagination {
+            text-align: center;
+        }
+
+        .pannel {
+            height: 32px;
+            width: 100%;
+            margin-left: 16px;
+            left: 32px;
+            display: flex;
+            flex-direction: row;
+            margin: 0 auto;
+            justify-content: space-between;
+            /* margin-right: -32px !important; */
+        }
+
+        .right-pannel {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+        }
+
+        .pannel-rank {
+            height: 32px;;
+            width: 100%;
+            margin-top: 8px;
+            border-bottom-color: gray;
+            border-bottom-style: solid;
+            border-bottom-width: 0.4px;
+        }
+
+        .movie_img {
+            width: 160px;
+            height: 230px;
+        }
+
+        .radius-default {
+            border-radius: 28px;
+        }
+
+        #logoImg {
+            width: 80px;
+            height: 70px;
+            line-height: 50px;
+        }
+
+        #logoDiv {
+            margin-top: -25px;
+
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        .ranking-index-10, ranking-index-9, ranking-index-8, ranking-index-7, ranking-index-6, ranking-index-5, ranking-index-3, .normal-link {
+            font-size: 20px;
+            color: gray;
+            font-family: "宋体";
+            /*            font-style:italic;*/
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:focus, a:hover {
+            /*color: #23527c;*/
+            text-decoration: none;
+        }
+
+        .board-flex {
+            display: flex;
+
+            flex-direction: row;
+            justify-content: center;
+            background-color: #534b4b;
+        }
+
+        .board-type {
+            margin-left: 24px;
+            margin-right: 24px;
+            padding: 8px 8px 8px 8px;
+            line-height: 48px;
+
+            vertical-align: center;
+            font-size: 18px;
+            /* // background: #23527c; */
+
+        }
+
+        .board-type a {
+            line-height: 48px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .borad-item {
+            /*border-bottom-color: #534b4b;*/
+            border-bottom-style: dashed;
+            border-bottom-width: 1px;
+            height: 220px;
+            padding-bottom: 20px;
+            /*background: blue;*/
+
+        }
+
+        .rank {
+
+            /*background-color: #534b4b;*/
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .movie-info {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .movie-detail {
+            max-lines: 1;
+            overflow: hidden;
+            line-height: 32px;
+            height: 32px;
+            width: 100%;
+            text-overflow: ellipsis;
+        }
+
+        .rank-position {
+            font-size: 24px;
+            width: 100%;
+            height: 56px;
+            line-height: 56px;;
+            vertical-align: middle;
+            color: white;
+            background: #dddddd;
+            text-align: center;
+            align-items: center;
+            border-radius: 4px;
+            margin: 0 auto;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .active {
+            background: #f34d41;
+            border-radius: 8px;
+
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".inav li").click(function () {
+                //    移除所有的 active
+                $(".inav li").removeClass("active");
+                // 设置当前点击对象的class 值为active
+                $(this).addClass("active")
+            })
+        });
+    </script>
+</head>
+
+<body>
+
+<!--js 操作cookie文件的操作-->
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+        function login_user() {
+            let username = $.cookie('username');
+
+            if (username == null) {
+                console.log("获取用户的用户名失败");
+                return;
+            }
+            let user_id = $.cookie('user_id');
+
+            if (user_id == null) {
+                console.log("获取用户的id失败")
+                return;
+            }
+
+            console.log("username " + username + " user_id " + user_id);
+            // 移除登陆注册的按钮
+            $(".login-out").remove();
+            // 增加用户的超链接
+            // 连接到一个用户的模板
+            $(".user-operation").append(`
+              <li >
+                        <a href="/user/tpl"> ${username} </a>
+                    </li>
+              `);
+
+            // 退出登陆按钮
+            $(".user-operation").append(`
+              <li >
+                        <a href="/user/loginOut"> 退出登陆 </a>
+                    </li>
+              `);
+
+        }
+
+        // 判断用户是否已经登陆,
+        login_user();
+    });
+</script>
+<!-- 固定导航条navbar-fixed-top -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div id="logoDiv">
+                <a class="navbar-brand" href="#">
+                    <img id="logoImg" src="/static/image/logo.png">
+                </a>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <ul class="nav navbar-nav inav">
+                <li><a href="/" class="">首页</a></li>
+                <li><a href="/films" class="">电影</a></li>
+                <li><a href="/board" class="">榜单</a></li>
+                <!--<li><a href="#" class="">热点</a></li>-->
+
+            </ul>
+
+            <!-- 搜索表单-->
+            <form action="##" class="navbar-form navbar-right">
+                <div class="form-group radius-default">
+                    <input type="text" class="form-control radius-default  margin-right-default" placeholder="找电影 影人 "/>
+                    <button type="submit" class="btn  radius-default w-h-28" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+            </form>
+
+
+            <ul class="nav navbar-nav navbar-right user-operation">
+                <li class="login-out">
+                    <a href="/user/login">登录</a>
+                </li>
+                <li class="login-out"><a href="" class="disable">|</a></li>
+                <li class="login-out"><a href="/user/reg">注册</a></li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    $(document).ready(function () {
+        console.log("hello world");
+        $(".board-type a").click(function () {
+            console.log("点击事件.....");
+            $(".board-type a").removeClass("active");
+            $(this).addClass("active");
+            let dataVal = $(this).attr("data-val");
+            console.log("data -val " + dataVal);
+
+            // 分发请求
+            // 口碑榜
+            if (dataVal == "/board/7/api") {
+
+                $.get(dataVal, {}, function (data, res) {
+
+                    if (data.code != 200) {
+                        return;
+                    }
+                    unpack_movie_with_praise(data.data.content);
+
+                });
+                // top 10
+            } else if (dataVal == "/board/4/api") {
+                $.get(dataVal, {}, function (data, res) {
+
+                    if (data.code !=200){
+                        return ;
+                    }
+                    // 解包...
+                    unpack_movie_with_praise(data.data.content);
+                });
+                // 国内票房榜
+            } else if (dataVal == "/board/1/api") {
+                $.get(dataVal, {}, function (data, res) {
+                    if (data.code != 200) {
+                        return;
+                    }
+                    // 解包票房榜
+                    unpack_movie_with_box(data.data);
+                });
+            }
+        });
+
+
+        // 口碑榜
+        function unpack_movie_with_praise(content) {
+
+            let movie_board = $(".movie-board");
+            // 移除子项
+            movie_board.children().remove();
+            for (let i = 0; i < content.length; i++) {
+                let movie = content[i];
+                console.log(i);
+                movie_board.append(`
+                <div class="borad-item">
+                <div class="col-sm-1 " style="height:100%;">
+                    <div class="rank" style="height:100%;">
+                        <span class="rank-position">${i+1}</span>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="height:100%;">
+
+                    <a href="/films/${movie.id}">
+                        <img src="${movie.poster}"
+                             alt="" style="height:100%;width: 160px; padding:16px;">
+                    </a>
+
+                </div>
+                <div class="col-sm-6 movie-info" style="height:100%;">
+                    <span style="font-size: 26px;">电影名:${movie.name} </span>
+                    <span style="font-size:20px;"
+                          class="movie-detail">${movie.introduction}</span>
+                    <div style="font-size:18px;">时长 ${movie.length}</div>
+                </div>
+                <div class="col-sm-1 rank" style="height:100%;">
+                    <span class="rank-position">${movie.avgScore}</span>
+                </div>
+            </div>
+                `);
+            }
+        }
+
+        // 票房榜
+        function unpack_movie_with_box(content) {
+            let movie_board = $(".movie-board");
+            // 移除子项
+            movie_board.children().remove();
+
+            for (let i = 0; i < content.length; i++) {
+                let movie = content[i].movie;
+                console.log(i);
+                movie_board.append(`
+                <div class="borad-item">
+                <div class="col-sm-1 " style="height:100%;">
+                    <div class="rank" style="height:100%;">
+                        <span class="rank-position">${i+1}</span>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="height:100%;">
+
+                    <a href="/films/${movie.id}">
+                        <img src="${movie.poster}"
+                             alt="" style="height:100%;width: 160px; padding:16px;">
+                    </a>
+
+                </div>
+                <div class="col-sm-6 movie-info" style="height:100%;">
+                    <span style="font-size: 26px;">电影名:${movie.name} </span>
+                    <span style="font-size:20px;"
+                          class="movie-detail">${movie.introduction}</span>
+                    <div style="font-size:18px;">时长 ${movie.length}</div>
+                </div>
+                <div class="col-sm-1 rank" style="height:100%;">
+                    <span class="rank-position">${movie.avgScore}</span>
+                </div>
+            </div>
+                `);
+            }
+        }
+
+        // 拉取数据....
+        function run_now() {
+            $.get("/board/7/api",{},function (data,res) {
+                if (data.code != 200) {
+                    return;
+                }
+                unpack_movie_with_praise(data.data.content);
+            });
+        }
+        // 执行拉取数据
+        run_now();
+    });
+</script>
+<div class="container-fluid board-flex" style="margin-top:56px!important; height: 48px;">
+    <div class="board-type">
+        <a class="active" href="javascript:void(0)" data-val="/board/7/api">口碑榜至上</a>
+    </div>
+    <div class="board-type">
+        <a href="javascript:void(0)" data-val="/board/4/api">top10</a>
+    </div>
+    <div class="board-type">
+        <a href="javascript:void(0)" data-val="/board/1/api">票房榜</a>
+    </div>
+</div>
+<div class="container">
+    <div class="col-sm-1 hidden-sm" >ui</div>
+    <div class="col-sm-9" >
+        <div class="movie-board">
+            <div class="borad-item">
+                <div class="col-sm-1 " style="height:100%;">
+                    <div class="rank" style="height:100%;">
+                        <span class="rank-position">1</span>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="height:100%;">
+
+                    <a href="">
+                        <img src="https://static.oschina.net/build/oschina/components/imgs/header/logo.svg?t=1537346735000"
+                             alt="" style="height:100%;width: 160px; padding:16px;">
+                    </a>
+
+                </div>
+                <div class="col-sm-6 movie-info" style="height:100%;">
+                    <span style="font-size:26px;"
+                          class="movie-detail">1233333333333333333333333333333333333333333333</span>
+                    <div style="font-size:18px;">34567</div>
+                </div>
+                <div class="col-sm-1 rank" style="height:100%;">
+                    <span class="rank-position">1</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-2 hidden-sm" >vc</div>
+</div>
+<div class="footer"></div>
+</body>
+
+</html>

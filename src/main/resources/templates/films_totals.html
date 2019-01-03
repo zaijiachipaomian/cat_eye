@@ -234,7 +234,7 @@
         </button>
         <div id="logoDiv">
           <a class="navbar-brand" href="#">
-            <img id="logoImg" src="C:\Users\Administrator\Desktop\logo.png">
+            <img id="logoImg" src="/static/image/logo.png">
           </a>
         </div>
       </div>
@@ -450,16 +450,20 @@
         let sortId = "sortId=1";
         let inp = $("span .active input");
 
-        let inpText = inp.parent().text();
-
-        if (inpText == "按热门排序") {
+        //let inpText = inp.parent().text();
+          // 查找响应点击radio的值
+          let inpText=$('input:radio[name="sort"]:checked').val();
+        //alert(inpText);
+          // 比较点击的值, 赋值排序类型
+        if (inpText == "1") {
           sortId = "sortId=1";
-        } else if (inpText == "按时间排序") {
+        } else if (inpText == "2") {
           sortId = "sortId=2";
         } else {
           sortId = "sortId=3";
         }
 
+        // 返回 排序url
         let url = root_url + "?" + year_type + "&" + area_type + "&" + tag_type + "&" + sortId;
         console.log("year_type = " + year_type + " area_type " + area_type + " tag_type " + tag_type + " url " + url);
         return url;
@@ -691,17 +695,17 @@
           <ul>
             <li>
               <span class="sort-control-group">
-                <input type="radio" name="1" checked="">按热门排序
+                <input type="radio" value="1" name="sort" checked="">按热门排序
               </span>
             </li>
             <li>
               <span class="sort-control-group">
-                <input type="radio" name="1">按时间排序
+                <input type="radio" value="2" name="sort">按时间排序
               </span>
             </li>
             <li>
               <span class="sort-control-group">
-                <input type="radio" name="1">按评分排序
+                <input type="radio" value="3" name="sort">按评分排序
               </span>
             </li>
           </ul>

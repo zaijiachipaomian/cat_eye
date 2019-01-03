@@ -103,6 +103,47 @@
 </head>
 
 <body>
+<!--js 操作cookie文件的操作-->
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+        function login_user() {
+            let username = $.cookie('username');
+
+            if (username == null) {
+                console.log("获取用户的用户名失败");
+                return;
+            }
+            let user_id = $.cookie('user_id');
+
+            if (user_id == null) {
+                console.log("获取用户的id失败")
+                return;
+            }
+
+            console.log("username " + username + " user_id " + user_id);
+            // 移除登陆注册的按钮
+            $(".login-out").remove();
+            // 增加用户的超链接
+            // 连接到一个用户的模板
+            $(".user-operation").append(`
+              <li >
+                        <a href="/user/tpl"> ${username} </a>
+                    </li>
+              `);
+
+            // 退出登陆按钮
+            $(".user-operation").append(`
+              <li >
+                        <a href="/user/loginOut"> 退出登陆 </a>
+                    </li>
+              `);
+
+        }
+        // 判断用户是否已经登陆,
+        login_user();
+    });
+</script>
 <!-- 固定导航条navbar-fixed-top -->
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -119,10 +160,10 @@
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav inav">
-                <li class="active inav"><a href="#">首页</a></li>
-                <li><a href="#" class="">电影</a></li>
-                <li><a href="#" class="">榜单</a></li>
-                <li><a href="#" class="">热点</a></li>
+                <li class="active inav"><a href="/">首页</a></li>
+                <li><a href="/films" class="">电影</a></li>
+                <li><a href="/board" class="">榜单</a></li>
+                <!--<li><a href="#" class="">热点</a></li>-->
             </ul>
 
             <form action="##" class="navbar-form navbar-right">
@@ -134,12 +175,12 @@
                 </div>
             </form>
 
-            <ul class="nav navbar-nav navbar-right ">
-                <li>
-                    <a href="">登陆</a>
+            <ul class="nav navbar-nav navbar-right user-operation">
+                <li class="login-out">
+                    <a href="/user/login">登录</a>
                 </li>
-                <li><a href="" class="disable">|</a></li>
-                <li><a href="">注册</a></li>
+                <li class="login-out"><a href="" class="disable">|</a></li>
+                <li class="login-out"><a href="/user/reg">注册</a></li>
 
             </ul>
         </div>
@@ -194,5 +235,22 @@
 
 
 </body>
+
+
+<script>
+    $(document).ready(function () {
+       // todo
+       let user_id = $.cookie("user_id");
+       let url = "/comment/user/"+user_id;
+
+       console.log("user "+ url );
+        $.get(url,{},function (data,res) {
+           console.log(data.code+"  "+JSON.stringify(data.data));
+        });
+
+
+    });
+
+</script>
 
 </html>

@@ -114,7 +114,7 @@
                                  data-whatever="添加用户">
                         添加用户</button></div> -->
                     <div class="page-pagination">
-                        <ul class="pagination">
+                        <ul id="pagination" class="pagination">
                             <li><a href="#">&laquo;</a></li>
                             <li><a href="#">1</a></li>
                             <li><a href="#">2</a></li>
@@ -168,6 +168,7 @@
     <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 
     <script>
+    var current_page=0;
     function deleteUser(id){
     	var truthBeTold = window.confirm("是否确认删除");
     	if (truthBeTold) {
@@ -176,7 +177,7 @@
                 	alert(data.data);
                 }
                 else{
-                	fetch_data("/user/admin/get", 0);
+                	fetch_data("/user/admin/get", current_page);
                 }
             });
     	} 
@@ -186,8 +187,9 @@
     function fetch_data_from_row(id) {
         $("#statu").val($("#statu-" + id).text().trim());
     }
-    function fetch_data(url, offset) {
-        $.get(url, {}, function (data, status) {
+    function fetch_data(url, page) {
+    	current_page=page;
+        $.get(url + '?page=' + page, {}, function (data, status) {
             let content = data.data.content;
             // 移除子节点
             $("#data_data").children().remove();
@@ -215,7 +217,24 @@
                         </td>
                     </tr>`);
             }
-
+            $("#pagination").children().remove();
+            let totalPages = data.data.totalPages;
+            let firstOrNot = data.data.first;
+            let lastOrNot = data.data.last;
+           	
+           	if(firstOrNot != true)
+            	$("#pagination").append(`
+            			<li><a onclick="fetch_data('/user/admin/get',0)">第一页</a></li>
+            			<li><a onclick="fetch_data('/user/admin/get',${page-1})">${page}</a></li>
+            `);
+           	$("#pagination").append(`
+           			<li><a>当前页 :${page+1}</a></li>
+           	`);
+           	if(lastOrNot != true)
+            	$("#pagination").append(`
+            			<li><a onclick="fetch_data('/user/admin/get',${page+1})">${page+2}</a></li>
+            			<li><a onclick="fetch_data('/user/admin/get',${totalPages-1})">最后一页</a></li>
+            `);
         });
     }
     $(document).ready(function(){
@@ -230,7 +249,7 @@
                     }
                     else{
                     	$("#exampleModal").modal('hide');
-                    	fetch_data("/user/admin/get", 0);
+                    	fetch_data("/user/admin/get", current_page);
                     }
                 });
         	}

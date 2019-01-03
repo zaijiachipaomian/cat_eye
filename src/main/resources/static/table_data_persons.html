@@ -228,9 +228,10 @@
     <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 
     <script>
-    
+    var current_page=0;
     //从后台获取数据并渲染到页面
     function fetch_data(url, page) {
+    	current_page=page;
         $.get(url + '?page=' + page, {}, function (data, status) {
             var content = data.data.content;
             //alert(data.code);
@@ -306,7 +307,7 @@
              contentType:false,
              success:function(data){
                  alert("删除成功！！");
-                 fetch_data("/person/admin/get", 0);
+                 fetch_data("/person/admin/get", current_page);
              },
              error:function(e){
                  alert("错误！！");
@@ -360,7 +361,7 @@
                  success:function(data){
                      alert("插入或者成功！！");
                      $("#exampleModal").modal('hide');
-                     fetch_data("/person/admin/get", 0);
+                     fetch_data("/person/admin/get", current_page);
                  },
                  error:function(e){
                      alert("错误！！");

@@ -210,7 +210,7 @@
         .star_bg {
             width: 120px;
             height: 20px;
-            background: url(hat.png) repeat-x;
+            background: url('/static/image/hat.png') repeat-x;
             position: relative;
             overflow: hidden;
         }
@@ -224,7 +224,7 @@
         }
 
         .star:hover {
-            background: url(hat.png) repeat-x 0 -20px !important;
+            background: url('/static/image/hat.png') repeat-x 0 -20px !important;
             left: 0;
             z-index: 2;
         }
@@ -284,7 +284,7 @@
         }
 
         .score:checked + .star {
-            background: url(hat.png) repeat-x 0 -20px;
+            background: url('/static/image/hat.png') repeat-x 0 -20px;
             left: 0;
             z-index: 1;
         }
@@ -315,7 +315,7 @@
 
         /* for IE6-IE8 JS 交互 */
         .star_checked {
-            background: url(hat.png) repeat-x 0 -20px;
+            background: url('/static/image/hat.png') repeat-x 0 -20px;
             left: 0;
             z-index: 1;
         }
@@ -350,7 +350,7 @@
             </button>
             <div id="logoDiv">
                 <a class="navbar-brand" href="#">
-
+                    <img id="logoImg" src="/static/image/logo.png">
                 </a>
             </div>
         </div>
@@ -385,7 +385,7 @@
         </div>
     </div>
 </nav>
-<div class="col-sm-12" >
+<div class="col-sm-12">
     <div class="col-sm-9" style="margin-top: 60px">
         <div class="col-sm-3" style="margin-left: 125px;">
             <div id="dale_movie_subject_top_icon" ad-status="loaded"></div>
@@ -419,7 +419,7 @@
 <div class="col-sm-12" style="margin-top: 20px;padding-left: 100px;">
     <div style="float: left;width: 62%">
         <div class="introduction">
-            <div class="mod-title" >
+            <div class="mod-title">
                 <h4>剧情简介</h4>
             </div>
             <div class="mod-content">
@@ -476,15 +476,15 @@
             </div>
             <div style="float: left;margin-left: 20px">评价：</div>
             <div id="starBg" class="star_bg" style="float:left;">
-                <input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+                <input type="radio" id="starScore1" class="score score_1" value="6" name="score">
                 <a href="#starScore1" class="star star_1" title="烂片"><label for="starScore1">烂片</label></a>
-                <input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+                <input type="radio" id="starScore2" class="score score_2" value="7" name="score">
                 <a href="#starScore2" class="star star_2" title="不好看"><label for="starScore2">不好看</label></a>
-                <input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+                <input type="radio" id="starScore3" class="score score_3" value="8" name="score">
                 <a href="#starScore3" class="star star_3" title="一般"><label for="starScore3">一般</label></a>
-                <input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+                <input type="radio" id="starScore4" class="score score_4" value="9" name="score">
                 <a href="#starScore4" class="star star_4" title="好看"><label for="starScore4">好看</label></a>
-                <input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+                <input type="radio" id="starScore5" class="score score_5" value="10" name="score">
                 <a href="#5" class="star star_5" title="佳作"><label for="starScore5">佳作</label></a>
             </div>
         </div>
@@ -505,7 +505,8 @@
                     console.log("sps " + sps);
                     let movie_id = sps[sps.length - 1];
                     let comment = $("#comment");
-
+                    comment.val($.cookie("comment")=="null"?"":$.cookie("comment"));
+                    $.cookie("comment",null); // 删除cookie
                     console.log("movie_id " + movie_id);
 
 
@@ -513,7 +514,24 @@
                     submit_comment.click(function () {
                         let content = comment.val();
                         let date = new Date();
-                        let data = {"movie_id": movie_id, "content": content, "date": date, "score": 5};
+                        // 获取评论的分数
+                        let score = $("input:radio[name='score']:checked:last").attr("value");
+                        if(content.length < 1){
+
+                            alert("不允许空评论" +score);
+                            return;
+                        }
+                        let username = $.cookie("username");
+
+                        if (username == "" || username == undefined) {
+                            console.log("用户没有登陆");
+                            // 页面重定向....
+                            window.location.href = "/user/login";
+                            $.cookie("comment", content);
+                            return;
+                        }
+
+                        let data = {"movie_id": movie_id, "content": content, "date": date, "score": score};
                         $.post("/comment/add/" + movie_id, data, function (data, res) {
                             console.log(data.code + " data" + data.data);
                             comment.val("");
@@ -768,12 +786,12 @@
             let pagination = $(".pagination");
             pagination.children().remove();
             for (let i = 0; i < pages; i++) {
-                pagination.append(`<li><a data-val="${i}" href="javascript:void(0)">${i+1}</a></li>`)
+                pagination.append(`<li><a data-val="${i}" href="javascript:void(0)">${i + 1}</a></li>`)
             }
 
             // 添加点击事件
             pagination.children().click(function () {
-                console.log("连接的点击事件" +$(this).children().attr("data-val"));
+                console.log("连接的点击事件" + $(this).children().attr("data-val"));
                 fetch_comment($(this).children().attr("data-val"));
 
             })

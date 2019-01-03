@@ -50,17 +50,22 @@ public class NewsController {
 									 @RequestParam(name = "fileName", required = false)  MultipartFile file) {
 		System.out.println(movieId);
 		System.out.println(news.toString());
+		News oldNews = null;
 		try {
-			News oldNews = null;
-			if(newsRepository.existsById(news.getId())) {
-				oldNews = newsRepository.findById(news.getId()).get();
-			}
-			
+			if(news.getId()!=null) {
+				if(newsRepository.existsById(news.getId())) {
+					oldNews = newsRepository.findById(news.getId()).get();
+				}
+			}	
 			String picUrl = FileUpload.fileUpload(file);
 			if(!picUrl.equals("false"))
 				news.setPic(picUrl);
-			else
-				news.setPic(oldNews.getPic());
+			else {
+				if(oldNews!=null) {
+					news.setPic(oldNews.getPic());
+				}
+			}	
+			
 			Movie movie = movieRepository.findById(movieId).get();
 			movie.addNews(news);
 			movieRepository.save(movie);

@@ -104,7 +104,7 @@
                                  data-whatever="添加类型">
                         添加类型</button></div>
                     <div class="page-pagination">
-                        <ul class="pagination">
+                        <ul id="pagination" class="pagination">
                             <li><a href="#">&laquo;</a></li>
                             <li><a href="#">1</a></li>
                             <li><a href="#">2</a></li>
@@ -150,6 +150,7 @@
     <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 
     <script>
+    var current_page=0;
     //删除类型
     function deleteType(id){
     	var truthBeTold = window.confirm("是否确认删除");
@@ -159,16 +160,17 @@
                 	alert(data.data);
                 }
                 else{
-                	fetch_data("/type/list", 0);
+                	fetch_data("/type/list/pageable", current_page);
                 }
             });
     	} 
     	else
     	 	return 0;
    	}
-    function fetch_data(url, offset) {
-        $.get(url, {}, function (data, status) {
-            let content = data;
+    function fetch_data(url, page) {
+    	current_page=page;
+        $.get(url + '?page=' + page, {}, function (data, status) {
+            let content = data.data.content;
             // 移除子节点
             $("#data_data").children().remove();
             for (let i = 0; i < content.length; i++) {
@@ -190,12 +192,31 @@
                         </td>
                     </tr>`);
             }
+            
+            $("#pagination").children().remove();
+            let totalPages = data.data.totalPages;
+            let firstOrNot = data.data.first;
+            let lastOrNot = data.data.last;
+           	
+           	if(firstOrNot != true)
+            	$("#pagination").append(`
+            			<li><a onclick="fetch_data('/type/list/pageable',0)">第一页</a></li>
+            			<li><a onclick="fetch_data('/type/list/pageable',${page-1})">${page}</a></li>
+            `);
+           	$("#pagination").append(`
+           			<li><a>当前页 :${page+1}</a></li>
+           	`);
+           	if(lastOrNot != true)
+            	$("#pagination").append(`
+            			<li><a onclick="fetch_data('/type/list/pageable',${page+1})">${page+2}</a></li>
+            			<li><a onclick="fetch_data('/type/list/pageable',${totalPages-1})">最后一页</a></li>
+            `);
 
         });
     }
     var recipient="";
     $(document).ready(function(){
-        fetch_data("/type/list", 0);
+        fetch_data("/type/list/pageable", 0);
 		$("#add_or_modify").click(function(){
 			let type_name = $("#type_name").val();
 			if (recipient != "添加类型"){
@@ -206,7 +227,7 @@
 	                }
 	                else{
 	                	$("#exampleModal").modal('hide');
-	                	fetch_data("/type/list", 0);
+	                	fetch_data("/type/list/pageable", current_page);
 	                }
 	            });
 			}
@@ -218,7 +239,7 @@
 	                }
 	                else{
 	                	$("#exampleModal").modal('hide');
-	                	fetch_data("/type/list", 0);
+	                	fetch_data("/type/list/pageable", current_page);
 	                }
 	            });
 			}
