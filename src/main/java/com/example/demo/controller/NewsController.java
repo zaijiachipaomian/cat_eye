@@ -51,9 +51,16 @@ public class NewsController {
 		System.out.println(movieId);
 		System.out.println(news.toString());
 		try {
+			News oldNews = null;
+			if(newsRepository.existsById(news.getId())) {
+				oldNews = newsRepository.findById(news.getId()).get();
+			}
+			
 			String picUrl = FileUpload.fileUpload(file);
 			if(!picUrl.equals("false"))
 				news.setPic(picUrl);
+			else
+				news.setPic(oldNews.getPic());
 			Movie movie = movieRepository.findById(movieId).get();
 			movie.addNews(news);
 			movieRepository.save(movie);
