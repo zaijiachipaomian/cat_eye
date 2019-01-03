@@ -438,7 +438,7 @@
             </div>
             <div class="mod-content">
                 <div class="comment-list-container" data-hot="10" style="margin-top: 0px">
-                    <div class="movie-list flex-container">
+                    <div class="movie-list flex-container movie-role">
                         <div class="movie-item">
                             <div class="cover-wp" data-isnew="false" data-id="25849049">
                                 <img class="movie_img" src="C:\Users\Administrator\Desktop\周润发.png">
@@ -516,6 +516,20 @@
                         let data = {"movie_id": movie_id, "content": content, "date": date, "score": 5};
                         $.post("/comment/add/" + movie_id, data, function (data, res) {
                             console.log(data.code + " data" + data.data);
+                            comment.val("");
+                            $(".comment-list-container-real").prepend(`
+                            <div class="col-sm-12" style="margin-bottom: 20px">
+                            <div style="width:15%;margin-left: -10px;float: left;">
+                                <img class="avator" src="">
+                                <br><span>${$.cookie("username")}</span>
+                                <span>${date}</span>
+                                <span></span>
+                            </div>
+                            <div style="width: 70%;float: left;">
+                                ${content}
+                            </div>
+                        </div>
+                            `);
                         })
                     });
 
@@ -668,6 +682,9 @@
 
             console.log("解包图集");
             let movie_pixes = $(".movie-pixes");
+
+            // 清空图集
+            movie_pixes.children().remove();
             if (photos == undefined) {
                 return;
             }
@@ -681,6 +698,28 @@
                                 </div>
                             </div>
                     `);
+            }
+
+        }
+
+        // 解包 角色类型和人物关系
+        function unpack_roles(persons, roles) {
+            $(".movie-role").children().remove();
+            let  movie_role = $(".movie-role");
+            console.log("解包角色");
+            for ( let i =0 ; i< persons.length ; i++){
+                let person = persons[i];
+                let role = roles[i] ;
+
+                movie_role.append(`
+                <div class="movie-item">
+                            <div class="cover-wp" data-isnew="false" data-id="25849049">
+                                <img class="movie_img" src="${person.avator}">
+                                <br>
+                                <p align="center">${person.name} (${role.role})</p>
+                            </div>
+                        </div>`);
+
             }
 
         }
@@ -706,6 +745,8 @@
                 unpack_comments(comments);
                 unpack_photos(photos);
                 unpack_news(news);
+
+                unpack_roles(movie.persons,data.roles);
             });
         }
 
