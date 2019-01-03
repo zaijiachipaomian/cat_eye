@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 public class News {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@Column(length = 50)
 	private String name;

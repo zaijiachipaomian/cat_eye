@@ -54,8 +54,10 @@ public class PrizeController {
 		System.out.println(movieId);
 		System.out.println(prize.toString());
 		try {
-			if(prizeRepository.existsById(prize.getId())) {
-				oldPrize=prizeRepository.findById(prize.getId()).orElse(null);
+			if(prize.getId()!=null) {
+				if(prizeRepository.existsById(prize.getId())) {
+					oldPrize=prizeRepository.findById(prize.getId()).orElse(null);
+				}
 			}
 			String logoUrl = FileUpload.fileUpload(file);
 			if(!logoUrl.equals("false"))
@@ -65,6 +67,7 @@ public class PrizeController {
 					prize.setLogoUrl(oldPrize.getLogoUrl());
 				}
 			}
+			
 			Movie movie = movieRepository.findById(movieId).get();
 			movie.addPrize(prize);
 			movieRepository.save(movie);
