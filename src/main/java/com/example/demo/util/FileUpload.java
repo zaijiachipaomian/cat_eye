@@ -63,10 +63,13 @@ public class FileUpload {
     public static List<String> multifileUpload(List<MultipartFile> files) {
     	ArrayList<String> urlList = new ArrayList<>();
         if(files.isEmpty()){
-            return urlList;
+            return null;
         }
         String path = System.getProperty("user.dir");
         for(MultipartFile file:files){
+            if(file.isEmpty()){
+                return null;
+            }
             int fileType = file.getOriginalFilename().lastIndexOf(".");
             String fileTypeStr = file.getOriginalFilename().substring(fileType, file.getOriginalFilename().length());
             String fileName = UUID.randomUUID().toString().replace("-", "").substring(0, 9).toLowerCase() + fileTypeStr;

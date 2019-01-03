@@ -217,7 +217,7 @@
     	 	return 0;
    	}
     function fetch_data(url, offset) {
-        $.get(url, {}, function (data, status) {
+        $.get(url , {}, function (data, status) {
             let content = data.data.content;
             // 移除子节点
             $("#data_data").children().remove();

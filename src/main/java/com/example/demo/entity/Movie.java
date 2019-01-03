@@ -266,7 +266,7 @@ public class Movie {
 		return photos;
 	}
 
-	@JsonBackReference
+	//@JsonBackReference
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
