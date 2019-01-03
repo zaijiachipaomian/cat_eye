@@ -53,6 +53,12 @@
         .page-pagination{
             display:inline-block;
         }
+        .form-group{
+        	height: 30px;
+        }
+        label {
+			line-height: 40px;
+		}
     </style>
 
 </head>
@@ -133,6 +139,7 @@
                 <div class="modal-body">
                     <form>
                     	<input type="text" hidden="true" id="new-id">
+                    	
                         <!---新闻名-->
                         <div class="form-group">
                             <label for="movie-area" class="control-label col-sm-2">新闻名：</label>
@@ -143,9 +150,9 @@
                         <br />
                         <!---图片url-->
                         <div class="form-group">
-                            <label for="movie-length" class="control-label col-sm-2">图片url：</label>
+                            <label for="movie-length" class="control-label col-sm-2">图片：</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="new-pic">
+                                <input type="file" class="form-control" id="new-pic">
                             </div>
                         </div>
                         <!--新闻url-->
@@ -153,6 +160,14 @@
                             <label for="movie-introduction" class="control-label col-sm-2">新闻url：</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="new-url">
+                            </div>
+                        </div>
+                        <div class="form-group" style="height: 5px;">
+                            <label style="line-height: 40px;" for="movie-introduction" class="control-label col-sm-2">电影：</label>
+                            <div class="col-sm-10" >
+                                <select style="height: 40px;" class="selectpicker show-tick form-control" id="statu" data-live-search="true">
+								    <option value="-1" selected="selected">请选择</option>
+								 </select>
                             </div>
                         </div>
                     </form>
@@ -180,7 +195,7 @@
     	$("#new-id").val(id);
         $("#movie-id").val($("#movie-id-"+id).text().trim());
         $("#new-name").val($("#new-name-" + id).text().trim());
-        $("#new-pic").val($("#new-pic-" + id).text().trim());
+        //$("#new-pic").val($("#new-pic-" + id).text().trim());
         $("#new-url").val($("#new-url-" + id).text().trim());
         
     }
@@ -212,7 +227,7 @@
            			<tr class="gradeX" style="height:56px!important;" >
                         <td id="new-${cn.id}">${cn.id}</td>
                         <td id="new-name-${cn.id}">${cn.name}</td>
-                        <td id="new-pic-${cn.id}">${cn.pic}</td>
+                        <td id="new-pic-${cn.id}"><img src="${cn.pic}"></img></td>
                         <td id="new-url-${cn.id}">${cn.url}</td>
                         <td class="flex-operation">
 
@@ -235,7 +250,7 @@
 		$("#add_or_modify").click(function(){
 			let type_name = $("#type_name").val();
 			if (recipient != "添加资讯"){
-				$.get("/admin/news/add?id="+recipient+"&name="+type_name, function (data, res) {
+				$.post("/admin/news/add?id="+recipient+"&name="+type_name, function (data, res) {
 	            	recipient="";
 	            	if(data.code!=200){
 	                	alert(data.data);
@@ -247,7 +262,7 @@
 	            });
 			}
 			else{
-				$.get("/admin/news/add", function (data, res) {
+				$.post("/admin/news/add", function (data, res) {
 	            	recipient="";
 	            	if(data.code!=200){
 	                	alert(data.data);
