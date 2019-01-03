@@ -189,6 +189,8 @@
     <!-- 自定义js -->
     <script src="/static/js/content.js?v=1.0.0"></script>
     <script>
+    //当前页
+    var current_page=0;
     function fetch_data_from_row(id) {
     	$("#id").val(id);
         $("#logoUrl").val($("#movie-id-"+id).text().trim());
@@ -209,7 +211,7 @@
                 contentType:false,
                 success:function(data){
                     alert("删除成功！！");
-                    fetch_data("/admin/prize/get/list", 0);
+                    fetch_data("/admin/prize/get/list", current_page);
                 },
                 error:function(e){
                     alert("错误！！");
@@ -220,6 +222,7 @@
     	 	return 0;
    	}
     function fetch_data(url, page) {
+    	current_page=page;
         $.get(url + '?page=' + page, {}, function (data, status) {
             let content = data.data.content;
             // 移除子节点
@@ -299,7 +302,7 @@
 	                    console.log("over..");
 	                    alert('插入或者更新成功!');
 	                    $("#exampleModal").modal('hide');
-	                    fetch_data("/admin/prize/get/list", 0);
+	                    fetch_data("/admin/prize/get/list",current_page);
 	                },
 	                error:function(e){
 	                    alert("错误！！");

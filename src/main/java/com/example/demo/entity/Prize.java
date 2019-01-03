@@ -14,7 +14,7 @@ public class Prize {
 	private Long id;
 	private String name;
 	private String logoUrl;
-	@Column(length = 50)
+	@Column(length = 100)
 	private String detail;
 	@ManyToOne
 	private Movie movie;
