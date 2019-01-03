@@ -514,6 +514,7 @@
                     submit_comment.click(function () {
                         let content = comment.val();
                         let date = new Date();
+                        // 获取评论的分数
                         let score = $("input:radio[name='score']:checked:last").attr("value");
                         if(content.length < 1){
 
