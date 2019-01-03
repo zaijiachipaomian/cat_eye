@@ -590,7 +590,8 @@
         function unpack_comments(comments) {
             console.log("解包评论");
             let comment_list_container = $(".comment-list-container-real");
-
+            // 移除子项
+            comment_list_container.children().remove();
             for (let i = 0; i < comments.length; i++) {
                 let cm = comments[i];
                 var movieLengths = cm.date.split("T");
@@ -705,11 +706,11 @@
         // 解包 角色类型和人物关系
         function unpack_roles(persons, roles) {
             $(".movie-role").children().remove();
-            let  movie_role = $(".movie-role");
+            let movie_role = $(".movie-role");
             console.log("解包角色");
-            for ( let i =0 ; i< persons.length ; i++){
+            for (let i = 0; i < persons.length; i++) {
                 let person = persons[i];
-                let role = roles[i] ;
+                let role = roles[i];
 
                 movie_role.append(`
                 <div class="movie-item">
@@ -742,17 +743,55 @@
                 let movie = data.movie;
 
                 unpack_movie(movie);
-                unpack_comments(comments);
+                //unpack_comments(comments);
                 unpack_photos(photos);
                 unpack_news(news);
 
-                unpack_roles(movie.persons,data.roles);
+                unpack_roles(movie.persons, data.roles);
             });
         }
 
         // 马上执行的方法
         run_now(window);
 
+        let urlHref = window.location.href;
+
+        let sps = urlHref.split("/");
+
+        let movie_id = sps[sps.length - 1];
+        console.log("movie id " + movie_id);
+
+        // 解包分页
+        function unpack_page(pages) {
+            let pagination = $(".pagination");
+            pagination.children().remove();
+            for (let i = 0; i < pages; i++) {
+                pagination.append(`<li><a data-val="${i}" href="javascript:void(0)">${i+1}</a></li>`)
+            }
+
+            // 添加点击事件
+            pagination.children().click(function () {
+                console.log("连接的点击事件" +$(this).children().attr("data-val"));
+                fetch_comment($(this).children().attr("data-val"));
+
+            })
+        }
+
+        // 拉取页面信息
+        function fetch_comment(index) {
+            let url = "/comment/movie/" + movie_id + "?page=" + index;
+
+            $.get(url, {}, function (data, res) {
+                console.log(data.comment.content + data.comment.totalPages);
+                // 解包评论
+                unpack_comments(data.comment.content);
+                // 解包 分页
+                unpack_page(data.comment.totalPages);
+
+            });
+        }
+
+        fetch_comment(0);
     });
 
 
