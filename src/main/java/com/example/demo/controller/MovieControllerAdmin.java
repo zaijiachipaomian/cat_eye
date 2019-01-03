@@ -68,36 +68,42 @@ public class MovieControllerAdmin {
 			@RequestParam(name = "filesName", required = false) List<MultipartFile> files,
 			@RequestParam(name = "typeIds", required = false) List<Long> typeIds,
 			@RequestParam(name = "personRoles", required = false) String movieRoles ){
-		System.out.println(movieRoles);
-		movie.getMovieRoles().clear();
-		movie.getPersons().clear();
-		movie.getPhotos().clear();
-		if(typeIds != null) {
-			System.out.println(typeIds);
-			List<Type> types = typeRepository.findAllById(typeIds);
-			System.out.println(types);
-			movie.setTypes(types);
-		}
-		if(movieRoles != null) {
-			List<MovieRole> movieRoleList = JSON.parseArray(movieRoles, MovieRole.class);
-			System.out.println(movieRoleList);
-			for(MovieRole movieRole : movieRoleList) {
-				movie.addMovieRole(movieRole);
-				movie.addPerson(personRepository.findById(movieRole.getPersonId()).get());
+		try {
+			System.out.println(movieRoles);
+			movie.getMovieRoles().clear();
+			movie.getPersons().clear();
+			movie.getPhotos().clear();
+			if(typeIds != null) {
+				System.out.println(typeIds);
+				List<Type> types = typeRepository.findAllById(typeIds);
+				System.out.println(types);
+				movie.setTypes(types);
 			}
+			if(movieRoles != null) {
+				List<MovieRole> movieRoleList = JSON.parseArray(movieRoles, MovieRole.class);
+				System.out.println(movieRoleList);
+				for(MovieRole movieRole : movieRoleList) {
+					movie.addMovieRole(movieRole);
+					movie.addPerson(personRepository.findById(movieRole.getPersonId()).get());
+				}
+			}
+			//批量文件上传成功，返回文件的路径加名字的List,否则返回null
+			List<String> urlList = null;
+			String result = null;
+			if(!files.isEmpty())
+				urlList = FileUpload.multifileUpload(files);
+			if(file != null)
+				result = FileUpload.fileUpload(file);
+			boolean insertResult = movieService.addMovie(movie, urlList ,result);
+			if(insertResult)
+				return new Response(200,"电影插入成功");
+			else
+				return new Response(400,"电影插入失败");
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
-		//批量文件上传成功，返回文件的路径加名字的List,否则返回null
-		List<String> urlList = null;
-		String result = null;
-		if(files != null)
-			urlList = FileUpload.multifileUpload(files);
-		if(file != null)
-			result = FileUpload.fileUpload(file);
-		boolean insertResult = movieService.addMovie(movie, urlList ,result);
-		if(insertResult)
-			return new Response(200,"电影插入成功");
-		else
-			return new Response(400,"电影插入失败");
+		return new Response(400,"电影插入失败");
 	}
 	/**
 	 * 通过ID删除电影

@@ -117,12 +117,12 @@
                             <th>名称</th>
                             <th>地区</th>
                             <th>海报</th>
-                            <th>发布日期</th>
                             <th>时长</th>
                             <th>介绍</th>
                             <th>图片</th>
-                            <th>类型ID</th>
-                            <th>电影角色</th>
+                            <th>类型</th>
+                            <th>角色</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody id="data_data">
@@ -159,7 +159,7 @@
                     </button>
                 </div>
                 <div class="page-pagination">
-                    <ul class="pagination">
+                    <ul id="pagination" class="pagination">
                         <li><a href="#">&laquo;</a></li>
                         <li><a href="#">1</a></li>
                         <li><a href="#">2</a></li>
@@ -188,7 +188,7 @@
                 </button>
                 <h4 class="modal-title" id="exampleModalLabel">增加或者修改</h4>
             </div>
-            <div class="modal-body" style="height: 400px !important;">
+            <div class="modal-body" style="height: 500px !important;">
                 <form method="post" id="movie_form" enctype="multipart/form-data">
 
                     <!-- 电影的id -->
@@ -251,7 +251,6 @@
                     </div>
                     <br/>
                     <!--电影类型的IDS type-select -->
-                    
                     <div class="form-group">
                           <label for="movie-typeIds" class="control-label col-sm-2">电影类型:</label>
                           <div class="col-sm-10">
@@ -260,21 +259,21 @@
 							  </select>
                           </div>
                     </div>
-<!--                     <div class="form-group">
-                        <label for="movie-typeIds" class="control-label col-sm-2">类型:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="movie-typeIds" name="typeIds">
-                        </div>
-                    </div> -->
                     <!--电影的角色-->
                     <div class="form-group">
-
                         <label for="movie-movieRoles" class="control-label col-sm-2">角色:</label>
-
-
-                        <div class="col-sm-10">
-                            <input type="text" value='[{ "personId" : 1 , "role" : "群众演员" },{ "personId" : 1 ,  "role" : "演员" }]' class="form-control" id="movie-movieRoles" name="personRoles">
+                        <a id="addMovieRole">添加角色</a>
+                        <div class="col-sm-5" id="movieRoleSelector">
+                             <input type="text"  class="form-control" id="movie-movieRoles" name="personRoles">
+                        	  <div class="movie-role-selects">
+                        	  	<div class="movie-role-select">
+	                        	  <select class="form-control movieRole_selector">
+								  </select>
+								  <input type="text" class="movie_role_input">
+								</div>
+							  </div>
                         </div>
+                        
                     </div>
                     <br/>
                 </form>
@@ -287,7 +286,77 @@
     </div>
 </div>
 <script>
+function fetch_data(url, page) {
+    $.get(url + '?page=' + page, {}, function (data, status) {
+        let content = data.data.content;
+        // 移除子节点
+        $("#data_data").children().remove();
+        for (let i = 0; i < content.length; i++) {
+            let cn = content[i];
+            let photos = cn.photos;
+            let persons = cn.persons;
+            let types = cn.types;
+            let photosVal = "";
+            let typesVal = "";
+            let personVal = "";
+            for(let j = 0; j < photos.length; j++){
+            	photosVal = photosVal + '<img height="70px;" width="70px;" src="' + photos[j].url + '">';
+            }
+            for(let j = 0; j < types.length; j++){
+            	typesVal = typesVal + " <br> " + types[j].name;
+            }
+            for(let j = 0; j < persons.length; j++){
+            	personVal = personVal + '<img height="70px;" width="70px;" src="' + persons[j].avator + '">';
+            }
+            //alert(photosVal);
+            //alert(typesVal);
+            //alert(personVal);
+            
+            $("#data_data").append(`
+               <tr class="gradeX" style="height:56px!important;" >
+                            <td id="movie-${cn.id}">${cn.id}</td>
+                            <td style="width:50px;" id="movie-${cn.id}-name">${cn.name}</td>
+                            <td id="movie-${cn.id}-area">${cn.area}</td>
+                            <td id="movie-${cn.id}-poster"><img height="150px;" width="120px;" alt="${cn.avator}" src="${cn.poster}"></td>
+                            
+                            <td id="movie-${cn.id}-length">${cn.length}</td>
+                            <td style="width:260px;" id="movie-${cn.id}-introduction">${cn.introduction}</td>
+                            <td style="width:100px;" id="movie-${cn.id}-photos">${photosVal}</td>
+                            <td id="movie-${cn.id}-types">${typesVal}</td>
+                            <td id="movie-${cn.id}-types">${personVal}</td>
 
+                            <td class="flex-operation">
+
+                             <a class="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${cn.id}">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"  ></span>编辑
+                             </a>
+                             <a class="button" onclick="deleteMovie('${cn.id}')">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
+                             </a>
+
+                            </td>
+                        </tr>`);
+        }
+        $("#pagination").children().remove();
+        let totalPages = data.data.totalPages;
+        let firstOrNot = data.data.first;
+        let lastOrNot = data.data.last;
+       	
+       	if(firstOrNot != true)
+        	$("#pagination").append(`
+        			<li><a onclick="fetch_data('/films/',0)">第一页</a></li>
+        			<li><a onclick="fetch_data('/films/',${page-1})">${page}</a></li>
+        `);
+       	$("#pagination").append(`
+       			<li><a>当前页 :${page+1}</a></li>
+       	`);
+       	if(lastOrNot != true)
+        	$("#pagination").append(`
+        			<li><a onclick="fetch_data('/films/',${page+1})">${page+2}</a></li>
+        			<li><a onclick="fetch_data('/films/',${totalPages-1})">最后一页</a></li>
+        `);
+    });
+}
 
     function fetch_data_from_row(id) {
         $("#movie-id").val(id);
@@ -303,40 +372,33 @@
 
     }
 
+  	//删除电影人
+    function deleteMovie(id){
+    	var truthBeTold = window.confirm("是否确认删除");
+    	if (truthBeTold) {
+       	 $.ajax({
+             url:"/admin/films/delete/"+id,
+             type:"delete",
+             processData:false,
+             contentType:false,
+             success:function(data){
+                 alert("删除成功！！");
+                 //fetch_data("/person/admin/get", 0);
+                 fetch_data("/films/", 0);
+             },
+             error:function(e){
+                 alert("错误！！");
+             }
+         });    
+    	} 
+    	else
+    	 	return 0;
+   	}
+    
     $(document).ready(function () {
         console.log("data....");
 
-        function fetch_data(url, offset) {
-            $.get(url, {}, function (data, status) {
-                let content = data.data.content;
-                // 移除子节点
-                $("#data_data").children().remove();
-                for (let i = 0; i < content.length; i++) {
-                    let cn = content[i];
-                    $("#data_data").append(`
-                       <tr class="gradeX" style="height:56px!important;" >
-                                    <td id="movie-${cn.id}">${cn.id}</td>
-                                    <td id="movie-${cn.id}-name">${cn.name}
-                                    </td>
-                                    <td id="movie-${cn.id}-area">${cn.area}</td>
-                                    <td class="center" id="movie-${cn.id}-length">${cn.length}</td>
-                                    <td class="center" style="line-height: 32px;!important; overflow: hidden;" id="movie-${cn.id}-introduction">${cn.introduction}</td>
-
-                                    <td class="flex-operation">
-
-                                     <a class="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${cn.id}">
-                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"  ></span>编辑
-                                     </a>
-                                     <div class="button">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>移除
-                                     </div>
-
-                                    </td>
-                                </tr>`);
-                }
-
-            });
-        }
+        
 
         fetch_data("/films/", 0);
 
@@ -374,6 +436,26 @@
     //点击提交的时候对表单数据进行提交
     $(document).ready(function () {
         $("#add_or_modify").click(function () {
+       	 let selector = $(".movieRole_selector");
+    	 let val = "";
+     	 let role_input = $(".movie_role_input");
+    	 let head = '[';
+    	 let tail = ']';
+    	 let sum = '';
+    	 //[{ "personId" : 1 , "role" : "群众演员" },{ "personId" : 1 ,  "role" : "演员" }]
+    	 for (let i =0 ; i< selector.length; i++){
+    		 val = $(selector[i]).val();
+    		 let tempInput = $(role_input[i]).val();
+    		 tempInput = '"' + tempInput + '"' 
+    		 sum = sum + ` { "personId": ${val} , "role" : ${tempInput} } `;
+    		 if(i != selector.length-1)
+    			 sum = sum + " , "
+    	 }
+    	 sum = head + sum + tail;
+    	 //alert(sum);
+    	 $("#movie-movieRoles").val(sum); 
+        	
+        	
             var form = new FormData(document.getElementById("movie_form"));
             $.ajax({
                 url: "/admin/films/add",
@@ -385,23 +467,51 @@
                     alert("插入或者成功！！");
                     $("#exampleModal").modal('hide');
                     //fetch_data("/person/admin/get", 0);
+                    fetch_data("/films/", 0);
                 },
                 error: function (e) {
                     alert("错误！！");
                 }
-            });
+            }); 
         });
+        
+         $("#addMovieRole").click(function () {
 
+        	 let html = $(".movie-role-select:first").html();
+        	 //alert(html);
+        	 $(".movie-role-selects").append('<div class="movie-role-select">' + html + '</div>');
+        	
+        	 
+        }); 
+
+         
+         
+/* 		  <select class="form-control" name="personRoles" id="movie-movieRoles">
+			<option selected="selected">123</option>
+	  </select>
+	  <input type="text"> */
+        
         
         $.get("/type/list", {}, function (data, status) {
             let content = data;
-            alert(content);
+            //alert(content);
             var sel=$("#movie-typeIds")
             for (let i = 0; i < content.length; i++) {
                 let cn = content[i];
                 sel.append(`<option value="${cn.id}">${cn.name}</option>`);
             }
         });
+        
+         $.get("/person/admin/get?size=1000", {}, function (data, status) {
+            let content = data.data.content;
+            var sel=$(".movieRole_selector")
+            for (let i = 0; i < content.length; i++) {
+                let cn = content[i];
+                sel.append(`<option value="${cn.id}">${cn.name}</option>`);
+            }
+        }); 
+        
+        
         //页面加载完毕时，调用这个函数加载数据
         //fetch_data("/person/admin/get",0);
     });
