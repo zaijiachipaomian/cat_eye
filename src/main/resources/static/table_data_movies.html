@@ -226,7 +226,7 @@
             console.log("data....");
             function fetch_data(url, offset) {
                 $.get(url, {}, function (data, status) {
-                    let content = data.content;
+                    let content = data.data.content;
                     // 移除子节点
                     $("#data_data").children().remove();
                     for (let i = 0; i < content.length; i++) {
@@ -280,7 +280,7 @@
                 return;
             }
 
-            $("#movie-name").val($("#movie" + recipient).val());
+            //$("#movie-name").val($("#movie" + recipient).val());
             $("")
             console.log($(event).parent() + recipient);
             fetch_data_from_row(recipient);
@@ -301,9 +301,6 @@
                 $.post("/admin/films/add", data, function (data, res) {
                     console.log("data " + data);
                 });
-
-
-
             });
         });
     </script>
