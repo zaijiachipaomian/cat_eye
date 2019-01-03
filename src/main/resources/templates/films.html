@@ -210,7 +210,7 @@
         .star_bg {
             width: 120px;
             height: 20px;
-            background: url(hat.png) repeat-x;
+            background: url('/static/image/hat.png') repeat-x;
             position: relative;
             overflow: hidden;
         }
@@ -224,7 +224,7 @@
         }
 
         .star:hover {
-            background: url(hat.png) repeat-x 0 -20px !important;
+            background: url('/static/image/hat.png') repeat-x 0 -20px !important;
             left: 0;
             z-index: 2;
         }
@@ -284,7 +284,7 @@
         }
 
         .score:checked + .star {
-            background: url(hat.png) repeat-x 0 -20px;
+            background: url('/static/image/hat.png') repeat-x 0 -20px;
             left: 0;
             z-index: 1;
         }
@@ -315,7 +315,7 @@
 
         /* for IE6-IE8 JS 交互 */
         .star_checked {
-            background: url(hat.png) repeat-x 0 -20px;
+            background: url('/static/image/hat.png') repeat-x 0 -20px;
             left: 0;
             z-index: 1;
         }
@@ -514,7 +514,12 @@
                     submit_comment.click(function () {
                         let content = comment.val();
                         let date = new Date();
+                        let score = $("input:radio[name='score']:checked:last").attr("value");
+                        if(content.length < 1){
 
+                            alert("不允许空评论" +score);
+                            return;
+                        }
                         let username = $.cookie("username");
 
                         if (username == "" || username == undefined) {
@@ -525,7 +530,7 @@
                             return;
                         }
 
-                        let data = {"movie_id": movie_id, "content": content, "date": date, "score": 5};
+                        let data = {"movie_id": movie_id, "content": content, "date": date, "score": score};
                         $.post("/comment/add/" + movie_id, data, function (data, res) {
                             console.log(data.code + " data" + data.data);
                             comment.val("");
