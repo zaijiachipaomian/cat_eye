@@ -385,7 +385,7 @@
         </div>
     </div>
 </nav>
-<div class="col-sm-12" >
+<div class="col-sm-12">
     <div class="col-sm-9" style="margin-top: 60px">
         <div class="col-sm-3" style="margin-left: 125px;">
             <div id="dale_movie_subject_top_icon" ad-status="loaded"></div>
@@ -419,7 +419,7 @@
 <div class="col-sm-12" style="margin-top: 20px;padding-left: 100px;">
     <div style="float: left;width: 62%">
         <div class="introduction">
-            <div class="mod-title" >
+            <div class="mod-title">
                 <h4>剧情简介</h4>
             </div>
             <div class="mod-content">
@@ -505,7 +505,8 @@
                     console.log("sps " + sps);
                     let movie_id = sps[sps.length - 1];
                     let comment = $("#comment");
-
+                    comment.val($.cookie("comment")=="null"?"":$.cookie("comment"));
+                    $.cookie("comment",null); // 删除cookie
                     console.log("movie_id " + movie_id);
 
 
@@ -513,6 +514,17 @@
                     submit_comment.click(function () {
                         let content = comment.val();
                         let date = new Date();
+
+                        let username = $.cookie("username");
+
+                        if (username == "" || username == undefined) {
+                            console.log("用户没有登陆");
+                            // 页面重定向....
+                            window.location.href = "/user/login";
+                            $.cookie("comment", content);
+                            return;
+                        }
+
                         let data = {"movie_id": movie_id, "content": content, "date": date, "score": 5};
                         $.post("/comment/add/" + movie_id, data, function (data, res) {
                             console.log(data.code + " data" + data.data);
@@ -768,12 +780,12 @@
             let pagination = $(".pagination");
             pagination.children().remove();
             for (let i = 0; i < pages; i++) {
-                pagination.append(`<li><a data-val="${i}" href="javascript:void(0)">${i+1}</a></li>`)
+                pagination.append(`<li><a data-val="${i}" href="javascript:void(0)">${i + 1}</a></li>`)
             }
 
             // 添加点击事件
             pagination.children().click(function () {
-                console.log("连接的点击事件" +$(this).children().attr("data-val"));
+                console.log("连接的点击事件" + $(this).children().attr("data-val"));
                 fetch_comment($(this).children().attr("data-val"));
 
             })
