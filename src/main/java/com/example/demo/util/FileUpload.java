@@ -36,12 +36,13 @@ public class FileUpload {
         String path = System.getProperty("user.dir");
         //\src\main\resources\static
         File dest = new File(path + "/src/main/resources/static/images/" + fileName);
-        //System.out.println(dest.getAbsolutePath());
+        System.out.println(dest.getAbsolutePath());
         if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
             dest.getParentFile().mkdir();
         }
         try {
             file.transferTo(dest); //保存文件
+            System.out.println(dest.getAbsolutePath());
             //return dest.getAbsolutePath();
             return "/static/images/" + fileName;
         } catch (IllegalStateException e) {
