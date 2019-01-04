@@ -1,55 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>XCCCY</title>
-<meta http-equiv="content-Type" content="text/html" charset="utf-8">
-<link rel="stylesheet" type="text/css" href="/static/css/index_login.css">
+    <title>XCCCY</title>
+    <meta http-equiv="content-Type" content="text/html" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/index_login.css">
 
-<script type="text/javascript" src="/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="/static/js/index_login.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/index_login.js"></script>
 
 </head>
 <body>
-	<div class="content">
-		<div class="ucSimpleHeader">
-			<a href="##" class="meizuLogo"></a>
-			<div class="trigger">
-				<a href="login.html">登录</a>
-				<span>&nbsp;|&nbsp;</span>
-				<a href="##">注册</a>
-			</div>
-		</div>
-		<div class="ucSimpleHeader">
-			<a href="##" class="exo1Logo"></a>
-		</div>
-		<form id="#mainForm1" class="mainForm mainForm1">
-			<div class="number">
-				<a href="##" class="linkAGreen">注册</a>
-			</div>
-			<div class="normalInput">
-				<input type="text" class="phone" id="phone"maxlength="11" placeholder="手机号">	
-			</div>
-			<span class="error error1"></span>
-			<div class="normalInput">
-				<input type="text" class="username" id="username" maxlength="11" placeholder="用户名">	
-			</div>
-			<span class="error error4"></span>
-			<div class="normalInput">
-				<input type="text" class="password" id="password" maxlength="16" autocomplete="off" placeholder="密码">
-				<input type="password" class="password1" maxlength="16" autocomplete="off" placeholder="密码">
-				<a id="pwdBtn" href="##" class="pwdBtnShow" isshow="false">
-					<i class="i_icon"></i>
-				</a>
-			</div>
-			<span class="error error3"></span>			
-			<div class="normalInput">
-				<input type="text" class="kapkey" maxlength="6" placeholder="验证码">
-				<span class="formLine"></span>
-				<a href="#" id="getKey" class="linkAGreen" style="pointer-events: none;" onclick="sendemail()">短信验证码</a>
-			</div>
-			<span class="error error2"></span>			
-			<a href="##" class="fullBtnGreen">注册</a>
-		</form>
+<div class="content">
+    <div class="ucSimpleHeader">
+        <a href="##" class="meizuLogo"></a>
+        <div class="trigger">
+            <a href="login.html">登录</a>
+            <span>&nbsp;|&nbsp;</span>
+            <a href="##">注册</a>
+        </div>
+    </div>
+    <div class="ucSimpleHeader">
+        <a href="##" class="exo1Logo"></a>
+    </div>
+    <form id="#mainForm1" class="mainForm mainForm1">
+        <div class="number">
+            <a href="##" class="linkAGreen">注册</a>
+        </div>
+        <div class="normalInput">
+            <input type="text" class="phone" id="phone" maxlength="11" placeholder="手机号">
+        </div>
+        <span class="error error1"></span>
+        <div class="normalInput">
+            <input type="text" class="username" id="username" maxlength="11" placeholder="用户名">
+        </div>
+        <span class="error error4"></span>
+        <div class="normalInput">
+            <input type="text" class="password" id="password" maxlength="16" autocomplete="off" placeholder="密码">
+            <input type="password" class="password1" maxlength="16" autocomplete="off" placeholder="密码">
+            <a id="pwdBtn" href="##" class="pwdBtnShow" isshow="false">
+                <i class="i_icon"></i>
+            </a>
+        </div>
+        <span class="error error3"></span>
+        <div class="normalInput">
+            <input type="text" id="valid-code" class="kapkey" maxlength="6" placeholder="验证码">
+            <span class="formLine"></span>
+            <a href="#" id="getKey" class="linkAGreen" style="pointer-events: none;" onclick="sendemail()">短信验证码</a>
+        </div>
+        <span class="error error2"></span>
+        <a href="javascript:void(0);" id="btn-register" class="fullBtnGreen">注册</a>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            console.log("hello world");
+            let textPhone = $("#phone");
+            let textPassword = $("#password");
+            let textUserName = $("#username");
+            let textValidCode = $("#valid-code");
+            let regPhone = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+
+            $("#btn-register").click(function () {
+                console.log("注册功能");
+                let phone = textPhone.val();
+                let username = textUserName.val();
+                let password = textPassword.val();
+                let validCode = textValidCode.val();
+
+                console.log("手机号码" + phone + "  username " + username + " password " + password + " valid  " + validCode)
+
+                // 正则验证手机号码
+                let ok = regValid(regPhone, phone);
+                if (!ok) {
+                    alert("手机号码的格式正确");
+                    return false;
+                }
+
+                // 用户名
+                if (username.length < 8 || username.length > 16) {
+                    alert("用户名请保持在 8 到 16 个字符");
+                    return false;
+                }
+
+                // 验证码
+                if (validCode.length == 0) {
+                    alert("验证码输入不正确");
+                    return false;
+                }
+
+                // 密码的长度
+                if (password.length < 8 || password.length > 16) {
+                    alert("用户密码输入不正确");
+                    return false;
+                }
+
+                let data = {"username": username, "password": password, "yzm": validCode, "phone": phone};
+                let url = "/user/reg";
+                // post 请求
+                $.post(url, data, function (data, res) {
+                    if (data.code != 200) {
+                        alert("注册失败" + data.data);
+                        return;
+                    }
+                    window.location.href ="/user/login";
+                })
+            });
+
+            // 正则验证手机号码
+            function regValid(pattern, text) {
+                return pattern.test(text);
+            }
+        });
+    </script>
 </div>
 </body>
 
