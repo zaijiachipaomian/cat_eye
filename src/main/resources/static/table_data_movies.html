@@ -286,7 +286,9 @@
     </div>
 </div>
 <script>
+var current_page=0;
 function fetch_data(url, page) {
+	current_page=page;
     $.get(url + '?page=' + page, {}, function (data, status) {
         let content = data.data.content;
         // 移除子节点
@@ -384,7 +386,7 @@ function fetch_data(url, page) {
              success:function(data){
                  alert("删除成功！！");
                  //fetch_data("/person/admin/get", 0);
-                 fetch_data("/films/", 0);
+                 fetch_data("/films/", current_page);
              },
              error:function(e){
                  alert("错误！！");
@@ -467,7 +469,7 @@ function fetch_data(url, page) {
                     alert("插入或者成功！！");
                     $("#exampleModal").modal('hide');
                     //fetch_data("/person/admin/get", 0);
-                    fetch_data("/films/", 0);
+                    fetch_data("/films/", current_page);
                 },
                 error: function (e) {
                     alert("错误！！");
